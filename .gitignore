@@ -85,3 +85,11 @@ samtools.zip
 
 # Chinese project subdirs with large data / venv
 **/ONT_bam/
+
+# GWAS / gsMap bulky local outputs (keep small cauchy / hit tables)
+**/*spatial_ldsc_spot_level.csv.gz
+**/*.Status.glm.logistic.hybrid
+**/laisk_*.tsv.gz
+**/finngen_*.gz
+**/*sumstats.gz
+!analyses/gwas/results/*cauchy*.csv.gz

@@ -11,7 +11,8 @@ pregnancy-loss-program/
 ├── README.md                 # 本说明（总项目）
 ├── .gitignore
 └── analyses/
-    └── sv/                   # 结构变异（SV）相关分析（当前已收录）
+    ├── sv/                   # 结构变异（SV）相关分析
+    └── gwas/                 # RPL GWAS 再分析 × gsMap 定位
 ```
 
 ## 模块一览
@@ -19,6 +20,7 @@ pregnancy-loss-program/
 | 模块 | 路径 | 说明 |
 |------|------|------|
 | **SV 分析** | [`analyses/sv/`](analyses/sv/) | ONT 结构变异、liftover、AnnotSV 注释、SV–甲基化关联等 |
+| **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
 
@@ -32,6 +34,16 @@ pregnancy-loss-program/
 cd analyses/sv
 python sv_methylation_pipeline.py        # 全部分块
 python sv_methylation_pipeline.py 2 6    # 仅跑指定 chunk
+```
+
+## GWAS × gsMap 模块快速入口
+
+详细说明见：[`analyses/gwas/README.md`](analyses/gwas/README.md)
+
+```bash
+cd analyses/gwas
+python scripts/reanalyze_gwas_suggestive.py   # suggestive P<1e-4 + λ_GC
+# WSL: bash scripts/run_gsmap_suggestive87.sh
 ```
 
 ## 贡献约定
