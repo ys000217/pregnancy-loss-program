@@ -1,0 +1,87 @@
+# --- secrets / env ---
+.env
+.env.*
+*.pem
+*.key
+credentials*
+*secret*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# --- R / IDE ---
+.Rhistory
+.RData
+.Rproj.user/
+.claude/
+.idea/
+.vscode/
+
+# --- huge raw data (do not push) ---
+AnnotSV_annotations/
+PMD_all/
+PMD_all.zip
+ONT/
+figure*/
+figures/
+results_*/
+spatial*/
+nauture*/
+甲基化*/
+胚胎*/
+
+*.fasta
+*.fasta.gz
+*.fai
+*.vcf
+*.vcf.gz
+*.unmap
+*.bed
+*.bed.gz
+*.gtf
+*.gtf.gz
+*.npy
+*.bam
+*.bai
+*.paf
+*.chain
+
+# large TSV / matrix outputs
+clinical_649.GRCh38.annotsv.tsv
+clinical_649.GRCh38.annotsv.unannotated.tsv
+sv_methylation_results.tsv
+sv_methylation_pvals.npy
+sv_carriers.tsv
+gene_window_patients.tsv
+genes_windows.tsv
+genes_grch38.tsv
+all_samples_sigma_merged.tsv
+all_samples_stats.tsv
+S957.*
+GRCh38*
+0002C*
+gencode*
+
+# temp / debug dumps
+_*.txt
+_*.xml
+*.tmp
+*.sauv
+*.log
+
+# zip archives
+*.zip
+samtools.zip
+
+# venv anywhere
+**/.venv/
+**/venv/
+**/site-packages/
+**/node_modules/
+
+# Chinese project subdirs with large data / venv
+**/ONT_bam/
