@@ -22,7 +22,9 @@
 |---|---|
 | `scripts/reanalyze_gwas_suggestive.py` | 读 PLINK hybrid：λ_GC、曼哈顿/QQ、按 suggestive 线导出位点 |
 | `scripts/build_suggestive87_sumstats.py` | 将 87 个命中 liftOver→rsID，写入 gsMap 格式 sumstats（\|Z\|=8 boost） |
-| `scripts/run_gsmap_suggestive87.sh` | WSL 下跑 `gsmap run_spatial_ldsc` + `run_cauchy_combination` |
+| `scripts/run_gsmap_suggestive87.sh` | WSL：小鼠胚胎 quick_mode（示例 ST）× suggestive-87 |
+| `scripts/run_gsmap_sug87_CS17.sh` | WSL：人胚胎 CS17 HESTA Stereo-seq × suggestive-87 |
+| `scripts/summarize_cs17_sug87.py` | 汇总 CS17 Cauchy / spot 指标并拷贝小结果 |
 | `scripts/gsmap_healthcheck.py` | mean χ² / λ_GC / 与 1000G EUR 重叠体检 |
 | `scripts/meta_rpl_ea.py` 等 | 东亚 meta 相关脚本（可选；表型差异大时不作敏感性主依据） |
 
@@ -35,7 +37,8 @@ python scripts/reanalyze_gwas_suggestive.py
 # WSL：构建 sumstats + gsMap（需 gsmap 环境与本地资源路径）
 source /home/administrator/gsmap_env/bin/activate
 python scripts/build_suggestive87_sumstats.py
-bash scripts/run_gsmap_suggestive87.sh
+bash scripts/run_gsmap_suggestive87.sh      # 小鼠胚胎示例
+bash scripts/run_gsmap_sug87_CS17.sh       # 人胚胎 CS17 HESTA
 ```
 
 本地大文件与 gsMap 资源路径见 `docs/DATA_PATHS.md`（不提交原始 hybrid / 大矩阵）。
@@ -50,15 +53,17 @@ bash scripts/run_gsmap_suggestive87.sh
 | `RPL_suggestive87_mapping_report.txt` | 87 位点 → hg19/rsID/sumstats 映射 |
 | `RPL_cauchy_celltype_level.csv.gz` | 既往全基因组 RPL gsMap Cauchy |
 | `RPL_OLA1boost_cauchy_celltype_level.csv.gz` | 既往 OLA1 抬升实验 Cauchy |
-| `RPL_sug87_cauchy_celltype_level.csv.gz` | **本次** suggestive-87 抬升后 Cauchy（best p_cauchy=0.116，阴性） |
-| `RPL_sug87_gsmap_summary.md` | 本次 gsMap 定位摘要 |
+| `RPL_sug87_cauchy_celltype_level.csv.gz` | suggestive-87 × 小鼠胚胎（best p_cauchy=0.116，阴性） |
+| `RPL_sug87_gsmap_summary.md` | 小鼠胚胎 gsMap 定位摘要 |
+| `CS17_RPL_sug87_cauchy.csv.gz` | suggestive-87 × **人胚胎 CS17** Cauchy（best p_cauchy=0.146，Eye，阴性） |
+| `CS17_RPL_sug87_summary.txt` | CS17 spot / Cauchy 摘要 |
 
 ## 四、gsMap 解读要点
 
-gsMap / S-LDSC 依赖**全基因组多基因信号**（mean χ² ≫ 1）。本队列 mean χ²≈1.0–1.08；即便将可映射的 suggestive SNP 抬到 \|Z\|=8，燃料仍远低于身高/智力等阳性性状。因此细胞类型定位预期多为阴性——以 Cauchy `p_cauchy` 与 spot 级 z² 为准。
+gsMap / S-LDSC 依赖**全基因组多基因信号**（mean χ² ≫ 1）。本队列 mean χ²≈1.0–1.08；即便将可映射的 suggestive SNP 抬到 \|Z\|=8，在小鼠胚胎示例与人胚胎 CS17 Stereo-seq 上均为阴性。换相关人胚胎片子仍不显著，进一步支持瓶颈在 GWAS 侧燃料不足。
 
 ## 五、不入库内容
 
 - `*.Status.glm.logistic.hybrid`、公开大型 sumstats（Laisk / FinnGen 等）
-- gsMap 资源目录、`.h5ad`、完整 LD score
+- gsMap 资源目录、`.h5ad`、完整 LD score、spot 级 spatial_ldsc 大表
 - Python `.venv/`

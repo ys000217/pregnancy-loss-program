@@ -1,0 +1,7 @@
+best_p_cauchy=0.1461549353596558
+best_celltype=Eye
+n_spots=44531
+mean_z2=0.893729912222004
+median_z2=0.5915579916271578
+min_spot_p=0.0028604924593473
+n_pass_bonferroni=0

@@ -19,3 +19,9 @@ Windows `D:\` ≡ WSL `/mnt/d/`。
 
 - `D:\ONT\figure3\gwas\gsmap_RPL_results\`
 - `D:\ONT\figure3\gwas\gsmap_RPL_meta_EA_results\`
+- `D:\ONT\figure3\gwas\gsmap_CS17_sug87_results\`
+
+## 人胚胎 Stereo-seq（CS17）
+
+- h5ad：`F:\spatio-transcriptome-humanembryos\CS17_E1S1_HESTA.h5ad`
+- gsMap 工作目录：`D:\gsMap\CS17_HESTA\`
