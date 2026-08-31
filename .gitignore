@@ -31,7 +31,7 @@ figures/
 results_*/
 spatial*/
 nauture*/
-甲基�?/
+甲基化*/
 胚胎*/
 
 *.fasta
@@ -98,11 +98,14 @@ samtools.zip
 !analyses/cnv/ref/hard_mask.grch38.refseq.bed
 
 # high-var CpG local matrices, logs, cluster PDFs (scripts live in analyses/highvar_cpg/)
-????CpG/**/*.tsv
-????CpG/**/*.list
-????CpG/**/*.out
-????CpG/**/*.err
-????CpG/**/*.rds
-????CpG/clustering_output/
-????CpG/log/
+筛选高变CpG/**/*.tsv
+筛选高变CpG/**/*.list
+筛选高变CpG/**/*.out
+筛选高变CpG/**/*.err
+筛选高变CpG/**/*.rds
+筛选高变CpG/clustering_output/
+筛选高变CpG/log/
+
+# external_data: raw downloads / large processed matrices (scripts + small metadata stay)
+analyses/external_data/data/
 
