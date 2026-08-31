@@ -14,7 +14,8 @@ pregnancy-loss-program/
     ├── sv/                   # 结构变异（SV）相关分析
     ├── gwas/                 # RPL GWAS 再分析 × gsMap 定位
     ├── cnv/                  # 10x 配对 ONT + WGS germline CNV
-    └── highvar_cpg/          # ONT 高变 CpG 筛选与聚类
+    ├── highvar_cpg/          # ONT 高变 CpG 筛选与聚类
+    └── external_data/        # 流产/RPL GWAS + 胎盘 meQTL 显著 hit
 ```
 
 ## 模块一览
@@ -25,6 +26,7 @@ pregnancy-loss-program/
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；LARGE_HIGH / SHARED_SV 分层 |
 | **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | 全队列分出 abnormal 枝；NC 敏感性确认 30 例 abnormal-like；主流样本仅 8/9/10 周层内高变 |
+| **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS 与胎盘 meQTL 显著 hit 表（带 PMID）；供本队列定向复现 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
 
@@ -68,6 +70,16 @@ bash scripts/remake_merge.sh 0002C          # 仅重跑合并过滤
 ```bash
 # 服务器：步骤 2 已完成（NC 敏感性）；步骤 3 仅 8/9/10 周层内重算
 # jsub < analyses/highvar_cpg/scripts/10_GA_stratified_mainstream_highvar_cpg.sh
+```
+
+## 外部数据模块快速入口
+
+详细说明见：[`analyses/external_data/README.md`](analyses/external_data/README.md)；文献：[`analyses/external_data/docs/REFERENCES.md`](analyses/external_data/docs/REFERENCES.md)
+
+```bash
+cd analyses/external_data
+# metadata/gwas_hits.tsv   — 流产/RPL 显著 SNP（Laisk / Sonehara / 中国候选基因）
+# metadata/meqtl_hits.tsv  — 胎盘 meQTL ∩ GWAS 窗（Delahaye 2018 S6）
 ```
 
 ## 贡献约定
