@@ -31,7 +31,7 @@ figures/
 results_*/
 spatial*/
 nauture*/
-甲基化*/
+甲基�?/
 胚胎*/
 
 *.fasta
@@ -95,5 +95,5 @@ samtools.zip
 !analyses/gwas/results/*cauchy*.csv.gz
 
 # CNV pipeline RefSeq hard mask (override *.bed)
-!cnv/ref/hard_mask.grch38.refseq.bed
+!analyses/cnv/ref/hard_mask.grch38.refseq.bed
 

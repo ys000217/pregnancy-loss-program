@@ -12,7 +12,8 @@ pregnancy-loss-program/
 ├── .gitignore
 └── analyses/
     ├── sv/                   # 结构变异（SV）相关分析
-    └── gwas/                 # RPL GWAS 再分析 × gsMap 定位
+    ├── gwas/                 # RPL GWAS 再分析 × gsMap 定位
+    └── cnv/                  # 10x 配对 ONT + WGS germline CNV
 ```
 
 ## 模块一览
@@ -21,6 +22,7 @@ pregnancy-loss-program/
 |------|------|------|
 | **SV 分析** | [`analyses/sv/`](analyses/sv/) | ONT 结构变异、liftover、AnnotSV 注释、SV–甲基化关联等 |
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
+| **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；LARGE_HIGH / SHARED_SV 分层 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
 
@@ -44,6 +46,17 @@ python sv_methylation_pipeline.py 2 6    # 仅跑指定 chunk
 cd analyses/gwas
 python scripts/reanalyze_gwas_suggestive.py   # suggestive P<1e-4 + λ_GC
 # WSL: bash scripts/run_gsmap_suggestive87.sh
+```
+
+## CNV 模块快速入口
+
+详细说明见：[`analyses/cnv/README.md`](analyses/cnv/README.md)
+
+```bash
+cd analyses/cnv
+source config.sh
+bash scripts/remake_merge.sh 0002C          # 仅重跑合并过滤
+# FORCE=1 ONLY=0002C bash scripts/submit_per_sample.sh
 ```
 
 ## 贡献约定
