@@ -16,8 +16,7 @@ pregnancy-loss-program/
     ├── cnv/                  # 10x 配对 ONT + WGS germline CNV
     ├── highvar_cpg/          # ONT 高变 CpG 筛选与聚类
     ├── burden/               # SNV/SV burden、AnnotSV P/LP、全基因组 SV 位点富集
-    ├── external_data/        # 流产/RPL GWAS、妊娠表型 GWS、胎盘 meQTL
-    └── cell_composition/     # 胎盘细胞比例：孕周趋势与三分组比较
+    └── external_data/        # 流产/RPL GWAS、妊娠表型 GWS、胎盘 meQTL
 ```
 
 ## 模块一览
@@ -30,7 +29,6 @@ pregnancy-loss-program/
 | **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | abnormal 枝 + 30 例 abnormal-like；步骤 3（8/9/10 周）待跑 |
 | **SNV/SV burden** | [`analyses/burden/`](analyses/burden/) | mut/Mb、P/LP 负担；PASS SV 位点富集；strict abnormal-specific = 0 |
 | **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS、Liu 2026 GWS 子集、胎盘 meQTL；外部 hit gsMap 探索 |
-| **细胞组成** | [`analyses/cell_composition/`](analyses/cell_composition/) | 6–12 周细胞比例趋势；三分组比较（多不显著） |
 
 ## SV 模块快速入口
 
@@ -81,10 +79,6 @@ Rscript analyses/burden/scripts/run_all.R
 ## 外部数据
 
 见 [`analyses/external_data/README.md`](analyses/external_data/README.md)
-
-## 细胞组成
-
-见 [`analyses/cell_composition/README.md`](analyses/cell_composition/README.md)
 
 ## 贡献约定
 

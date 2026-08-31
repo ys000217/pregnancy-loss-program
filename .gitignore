@@ -115,3 +115,6 @@ abnormal_nonpmd_stats/
 # Cursor IDE
 .cursor/
 
+# local-only copies not part of this program
+_local_cell_composition_not_in_repo/
+
