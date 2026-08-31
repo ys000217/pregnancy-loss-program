@@ -1,0 +1,11 @@
+metric	value
+n_samples	601.0
+n_sites_tested	2280019.0
+n_tests	4540786.0
+n_sig_pairs	3416.0
+n_selected_sites	2698.0
+n_genes_hit	1121.0
+p_threshold	7.524288202816965e-05
+lambda_gc	1.049
+frac_hyper	0.463
+frac_hypo	0.537

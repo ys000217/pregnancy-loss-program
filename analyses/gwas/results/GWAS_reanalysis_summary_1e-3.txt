@@ -1,0 +1,8 @@
+input=combine_gwas_result_v1.Status.glm.logistic.hybrid
+n_variants=304796
+lambda_GC=1.014589
+genomewide_P=5e-08
+suggestive_P=0.001
+n_genomewide=0
+n_suggestive=386
+chr_distribution={'1': 31, '10': 8, '11': 32, '12': 9, '13': 12, '14': 6, '16': 7, '17': 2, '18': 10, '19': 2, '2': 98, '20': 2, '21': 4, '22': 3, '3': 34, '4': 31, '5': 25, '6': 17, '7': 27, '8': 2, '9': 24}

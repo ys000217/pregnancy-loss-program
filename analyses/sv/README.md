@@ -1,83 +1,74 @@
-﻿> **模块位置：** 本目录是妊娠丢失主仓库中的 **SV 分析子模块**（nalyses/sv/）。  
+﻿> **模块位置：** 本目录是妊娠丢失主仓库中的 **SV 分析子模块**（`analyses/sv/`）。  
 > 总项目说明见仓库根目录 [README.md](../../README.md)。
-# 项目脚本索引（README）
 
-> 本文件梳理本次分析涉及的脚本、数据与产出，便于后续查阅与复现。
+# SV × 甲基化与致病元件富集
+
+胎盘 ONT 甲基化 × 种系结构变异（SV）关联、abnormal×DMR 阴性检验、AnnotSV 致病断点相关 pair 的染色质元件富集。
 
 ## 一、主流程脚本
 
 | 脚本 | 功能 |
 |---|---|
-| `sv_methylation_pipeline.py` | **核心主流程**。胎盘 ONT 甲基化 × 种系结构变异(SV) 关联分析，分 8 个 chunk（0-7），可单独或按区间运行 |
-
-**运行方式**
+| `sv_methylation_pipeline.py` | **核心主流程**。分 8 个 chunk（0–7） |
+| `pathogenic_element_enrichment.py` | AnnotSV ACMG 4/5 断点 × 显著 pair → Roadmap 7 类 / 基因窗口富集（fig2a/b） |
+| `enrichment_prom_enh.py` / `regen_fig2.py` | 转调致病元件富集脚本的兼容入口 |
 
 ```bash
+cd analyses/sv
 python sv_methylation_pipeline.py        # 全部 chunk 0-7
-python sv_methylation_pipeline.py 2      # 只跑 chunk 2
-python sv_methylation_pipeline.py 2 6    # 跑 chunk 2-6
+python sv_methylation_pipeline.py 2 6    # 仅指定区间
+python pathogenic_element_enrichment.py  # 致病断点 × 染色质富集
 ```
 
-**关键配置（脚本顶部）**
+**关键配置（主流程脚本顶部）**
 
-- `EXCLUDE_ABNORMAL`：`True`=主分析（剔除 47 个 abnormal，601 样本）；`False`=敏感性分析（保留 648 样本 + abnormal 协变量）
-- M 值转换用 `log2`（`mtransform` 函数），严格按 Du et al. 2010
-- 模型：`M ~ n_SV + Gestational_Week`（主效应）；交互另加 `Status`、`n_SV×Status`
+- `EXCLUDE_ABNORMAL`：`True`=主分析（剔 47 abnormal，601 样本）；`False`=敏感性（648 + abnormal 协变量）
+- M 值：`log2` logit（Du et al. 2010）
+- 模型：`M ~ n_SV + Gestational_Week`；交互另加 `Status`、`n_SV×Status`
 
-**chunk 说明**
+## 二、诊断与 abnormal×DMR 脚本
 
-| chunk | 输入 → 输出 |
+| 脚本 | 结论 |
 |---|---|
-| 0 | gencode GTF → `genes_grch38.tsv`（一次性，可跳过） |
-| 1 | VCF → `sv_carriers.tsv`（SV 携带矩阵） |
-| 2 | 基因表 → `genes_windows.tsv`（蛋白编码基因 4 窗口） |
-| 3 | 窗口 × SV 断点 → `gene_window_patients.tsv`（每患者 SV 计数） |
-| 4 | 11GB 矩阵全基因组回归 → `sv_methylation_results.tsv` + `sv_methylation_pvals.npy` |
-| 5 | BH-FDR 筛选 → `sv_methylation_sig_pairs.tsv` + `sv_methylation_selected_sites.tsv` |
-| 6 | SV × case/control 交互 → `interaction_results.tsv` + `interaction_significant.tsv` |
-| 7 | 汇报图 + 汇总 → `figures/*.png` + `report_summary.tsv` |
+| `diagnose_beta_m_dist.py` 等 | M 值适合线性回归；同方差近似成立 |
+| `check_sv_index_alignment2.py` | SV 编号 0% 不一致 |
+| `dmr_sv_colocalization.py` / `dmr_sv_enrichment_test.py` / `dmr_sv_quantitative.py` | abnormal 特异 SV **不能**解释 hyper-DMR（三条阴性） |
 
-## 二、本次新建的诊断/分析脚本
+## 三、目录布局（本仓库）
 
-| 脚本 | 做了什么 | 结论 |
-|---|---|---|
-| `diagnose_beta_m_dist.py` | β vs M 分布 + 均值-方差图 | M 值适合线性回归 |
-| `check_invariant_cpg.py` | 量化不变量 CpG 占比 | 0%（无退化风险） |
-| `diagnose_var_vs_nsv.py` | 方差 vs 自变量 n_SV 的同方差诊断 | 近似同方差 |
-| `check_sv_index_alignment.py` | SV 编号对齐校验（第1版，方法有误，废弃） | — |
-| `check_sv_index_alignment2.py` | SV 编号对齐校验（正确版，按 SVTYPE） | 0% 不一致 |
-| `summary_abnormal_dmr.py` | DMR 文件规模/方向摘要 | — |
-| `dmr_sv_colocalization.py` | 阶段1：abnormal 特异 SV × hyper-DMR 共定位 | 非特异（65% 共定位，无区分度） |
-| `dmr_sv_enrichment_test.py` | 受控富集检验（富集 SV vs 背景 SV 的 DMR 邻近度） | 阴性（方向甚至相反） |
-| `dmr_sv_quantitative.py` | 阶段2：读 11GB 矩阵，验证 SV 携带是否预测 DMR 甲基化 | 阴性（FDR=0） |
+```
+analyses/sv/
+├── README.md
+├── *.py                      # 脚本
+├── metadata/                 # 小临床/协变量表（可提交）
+├── results/                  # 可提交的汇总与富集表
+│   └── plots/                # 诊断图（勿放根目录 figures/，已被 gitignore）
+└── docs/                     # 汇报稿
+```
 
-## 三、关键数据文件
+大矩阵 / 全量回归 / AnnotSV 全文 **不入库**（见根 `.gitignore`）。本地运行时大输入路径仍写在脚本顶部（如 `D:\ONT\figure2`、11GB 甲基化矩阵）。
 
-| 文件 | 说明 |
+## 四、主要结果（已入库摘要）
+
+| 文件 | 内容 |
 |---|---|
-| `clinical_649.tsv` | 临床表（Group1=case/control，Group2=SPL/RPL，Group4=abnormal，孕周） |
-| `matrix_covariates.tsv` | 样本协变量（Status/FID/Age/Gestational_Week/细胞比例/PC） |
-| `matrix_fid.txt` | 648 个样本 ID（矩阵列顺序） |
-| `sv_carriers.tsv` | 每个 SV 的携带者列表 |
-| `E:\genotype_data\liftover\GRCh38_breakpoints.unique.bed` | SV 断点（GRCh38） |
-| `E:\甲基化数据矩阵\甲基化CpG位点矩阵.txt` | 11GB 甲基化矩阵（位点×样本） |
-| `figure2\abnormal_*_{spl,rpl}_g{8,9,10}\segments_genome.bed` | modkit DMR 结果（spl_g9 作废） |
+| `results/report_summary.tsv` | 主分析汇总（约 601 样本口径） |
+| `results/sv_methylation_sig_pairs.tsv` | FDR 显著 SV–CpG pair |
+| `results/sv_methylation_selected_sites.tsv` | 入选位点 |
+| `results/interaction_significant.tsv` | 显著交互 |
+| `results/pathogenic_sv_acmg45.tsv` | AnnotSV ACMG 4+5（full）目录 |
+| `results/pair_7class_enrichment.tsv` | Roadmap 7 类：全部显著 vs 致病断点相关 |
+| `results/pair_gene_window_enrichment.tsv` | up/dn/body 富集 |
+| `results/sig_pairs_with_chromatin.tsv` | 显著 pair + 染色质类 + `patho_related` |
+| `results/dmr_sv_*.tsv` | abnormal DMR×SV 共定位/定量摘要 |
+| `results/plots/diagnosis_*.png` | β/M、均值方差、同方差诊断图 |
+| `metadata/clinical_649.tsv` 等 | 临床与矩阵列顺序 |
 
-## 四、主要产出
+### 结论速览
 
-| 目录/文件 | 说明 |
-|---|---|
-| `results_main\` | 主分析结果（601 样本）+ `figures\` 6 张图 |
-| `figures\` | 敏感性分析（648 样本）6 张图 |
-| `report_summary.tsv` | 汇总表（当前为敏感性分析） |
-| `sv_methylation_results.tsv` | 全量检验结果 |
-| `sv_methylation_sig_pairs.tsv` / `selected_sites.tsv` | 显著结果 |
-| `interaction_significant.tsv` | 显著交互 |
-| `diagnosis_*.png` | 诊断图（分布/均值方差/同方差） |
+1. **SV × 甲基化主效应稳健**（约数千显著 pair / ~10³ 基因量级；主分析与敏感性一致）。
+2. **稳健交互基因**：OR11H12、FMO2、MMEL1（对照中 SV→低甲基化，病例中效应减弱）。
+3. **abnormal 全局高甲基化不能用种系 SV 解释**（DMR 共定位 / 富集 / 定量三条阴性）。
+4. **致病断点相关显著 pair 的 Het-ZNF 富集**：统计上相对「致病相关非显著背景」过 FDR，但 **17/17 条 Het-ZNF pair 来自单一基因 HRNR（dn）**；去掉 HRNR 后无 Het-ZNF。宜按**基因级**解读，不宜写成「致病 pair 系统富集异染色质」。效应多为负（SV↑ → M↓），与 abnormal–PMD 高甲基化叙事方向不同，**不能**直接当作 abnormal–PMD–染色质假说的证据。
 
-## 五、最终结论速览
-
-1. **SV × 甲基化主分析**：完成，主分析与敏感性结果高度一致（2,588 vs 2,711 位点）。
-2. **M 值正确性**：log2 logit 是公认标准，经诊断确认适合线性回归。
-3. **SV 编号对齐**：正确，0% 不一致。
-4. **abnormal 成因（DMR × SV 联合）**：三条证据全部阴性，SV 无法解释 abnormal 的全局高甲基化。
+汇报材料：`docs/分析汇报_PPT.md`、`docs/分析汇报_主分析.docx`。

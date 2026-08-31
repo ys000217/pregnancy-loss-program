@@ -1,0 +1,7 @@
+"Cell_type","Test_type","Global_P","Sig_Comparison"
+"Endothelial","Kruskal-Wallis",0.5985,"No significant comparison"
+"Hofbauer","Kruskal-Wallis",0.7496,"No significant comparison"
+"nRBC","Kruskal-Wallis",0.565,"No significant comparison"
+"Stromal","ANOVA",0.1272,"No significant comparison"
+"Syncytiotrophoblast","Kruskal-Wallis",0.4265,"No significant comparison"
+"Trophoblasts","Kruskal-Wallis",0.1237,"No significant comparison"

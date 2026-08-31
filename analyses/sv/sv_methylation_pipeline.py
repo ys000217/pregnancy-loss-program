@@ -672,7 +672,11 @@ def chunk6_interaction():
 # CHUNK 7: 汇报图 + 汇总表
 # 输入  : RESULTS / SIGPAIRS / SELSITES / PVALS / PSTAR / INTSIG
 # 输出  : FIGDIR/*.png + report_summary.tsv
-# 说明  : 6 张图: 曼哈顿 / 窗口柱状 / Top基因 / 携带者分布 / 火山 / QQ
+# 说明  : 图: 曼哈顿 / 基因窗口柱状(2a) / Roadmap窗口柱状(2b) / Top基因 /
+#          携带者分布 / 火山 / QQ
+#          prom/enh 不与 up/dn/body 混画。
+#          致病 SV 断点 + pair 在 Roadmap 18-state 上的分布/富集见独立脚本:
+#            analyses/sv/pathogenic_element_enrichment.py
 # ============================================================================
 def chunk7_figures():
     os.makedirs(FIGDIR, exist_ok=True)
@@ -714,18 +718,32 @@ def chunk7_figures():
     ax.legend(loc="upper right")
     plt.tight_layout(); plt.savefig(os.path.join(FIGDIR, "fig1_manhattan.png"), dpi=150); plt.close()
 
-    # ---- Fig2 窗口柱状 ----
+    # ---- Fig2 窗口柱状（基因窗口 vs Roadmap 7 类分图；含致病断点相关对照）----
+    # 正式图由 analyses/sv/pathogenic_element_enrichment.py 生成：
+    #   fig2a: up/dn/body × (全部显著 | 致病断点相关)，* = 集合内富集
+    #   fig2b: Roadmap 7 类 × (全部显著 | 致病断点相关)，* = 相对基因组富集
     labels = {"up": "Upstream 100kb", "dn": "Downstream 100kb", "body": "Gene body",
               "prom": "Promoter", "enh": "Enhancer"}
-    wc = sig.window.value_counts().reindex(["up", "dn", "body", "prom", "enh"])
-    fig, ax = plt.subplots(figsize=(6.5, 4))
-    ax.bar([labels[w] for w in wc.index], wc.values,
-           color=["#4c72b0", "#55a868", "#c44e52", "#dd8452", "#64b5cd"])
-    for i, v in enumerate(wc.values):
-        ax.text(i, v + 30, str(v), ha="center")
-    ax.set_ylabel("# significant CpG-window pairs (FDR<10%)")
-    ax.set_title("SV effect by window")
-    plt.tight_layout(); plt.savefig(os.path.join(FIGDIR, "fig2_window_bar.png"), dpi=150); plt.close()
+    try:
+        import runpy
+        runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "pathogenic_element_enrichment.py"),
+                       run_name="__main__")
+    except Exception as e:
+        print("[chunk7] pathogenic_element_enrichment failed (%s); "
+              "fallback simple gene-window bar" % e, flush=True)
+        wc = sig.window.value_counts().reindex(["up", "dn", "body"]).fillna(0).astype(int)
+        fig, ax = plt.subplots(figsize=(5.5, 4))
+        ax.bar([labels[w] for w in wc.index], wc.values,
+               color=["#4c72b0", "#55a868", "#c44e52"])
+        for i, v in enumerate(wc.values):
+            ax.text(i, v + max(int(wc.max()), 1) * 0.01 + 5, str(int(v)), ha="center")
+        ax.set_ylabel("# significant CpG-window pairs (FDR<10%)")
+        ax.set_title("SV effect by gene window")
+        plt.tight_layout()
+        plt.savefig(os.path.join(FIGDIR, "fig2a_window_gene_bar.png"), dpi=150)
+        plt.savefig(os.path.join(FIGDIR, "fig2_window_bar.png"), dpi=150)
+        plt.close()
 
     # ---- Fig3 Top 基因 ----
     gc = sel.gene_name.value_counts().head(20)

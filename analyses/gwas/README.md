@@ -57,10 +57,14 @@ bash scripts/run_gsmap_sug87_CS17.sh       # 人胚胎 CS17 HESTA
 | `RPL_sug87_gsmap_summary.md` | 小鼠胚胎 gsMap 定位摘要 |
 | `CS17_RPL_sug87_cauchy.csv.gz` | suggestive-87 × **人胚胎 CS17** Cauchy（best p_cauchy=0.146，Eye，阴性） |
 | `CS17_RPL_sug87_summary.txt` | CS17 spot / Cauchy 摘要 |
+| `GWAS_suggestive_hits_1e-3.csv` / `GWAS_reanalysis_summary_1e-3.txt` | 更松阈值 P&lt;1×10⁻³ 的探索性再分析（非正式主结论） |
+| `CS17_RPL_sug1e3_*.csv.gz` / `*_summary.txt` | suggestive-1e-3 × CS17（探索；主叙述仍以 87 / 1e-4 为准） |
 
 ## 四、gsMap 解读要点
 
 gsMap / S-LDSC 依赖**全基因组多基因信号**（mean χ² ≫ 1）。本队列 mean χ²≈1.0–1.08；即便将可映射的 suggestive SNP 抬到 \|Z\|=8，在小鼠胚胎示例与人胚胎 CS17 Stereo-seq 上均为阴性。换相关人胚胎片子仍不显著，进一步支持瓶颈在 GWAS 侧燃料不足。
+
+**正式主结论**：suggestive **P&lt;1×10⁻⁴ → 87 位点**；0 个过 5×10⁻⁸；λ_GC≈1.015；主峰 chr2 OLA1 附近。
 
 ## 五、不入库内容
 

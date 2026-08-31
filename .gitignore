@@ -109,3 +109,9 @@ samtools.zip
 # external_data: raw downloads / large processed matrices (scripts + small metadata stay)
 analyses/external_data/data/
 
+# abnormal PMD / non-PMD per-sample bin stats (large; keep local)
+abnormal_nonpmd_stats/
+
+# Cursor IDE
+.cursor/
+

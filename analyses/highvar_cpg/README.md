@@ -39,6 +39,16 @@ job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成
 
 合计约 **467**。服务器脚本：**10**（尚未跑）。
 
+### 结果状态（入库文档口径）
+
+| 步骤 | 状态 | 关键产物 |
+|------|------|----------|
+| 1 全队列高变聚类 | **完成** | 本地 `筛选高变CpG/`（大矩阵 gitignore）；名单与逻辑见上文 |
+| 2 NC 敏感性 → 30 例 abnormal-like | **完成** | [`metadata/abnormal_like_normal_case_30.txt`](metadata/abnormal_like_normal_case_30.txt) |
+| 3 8/9/10 周主流层内高变 | **待跑** | `scripts/10_GA_stratified_mainstream_highvar_cpg.sh` |
+
+**生物学要点：** 高变空间主轴是 abnormal / abnormal-like vs 主流混合群，而不是 control vs normal_case 的干净分开；30 例 abnormal-like 与临床 abnormal 定义不符，但甲基化表型可复现。
+
 ## 服务器流水线（JSUB）
 
 脚本在 `scripts/`。01–08 全队列准备；**09** 为 NC 敏感性测试；**10** 为主流样本孕周分层。

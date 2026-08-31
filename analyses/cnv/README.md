@@ -2,6 +2,10 @@
 
 进度与下一步见 [`PLAN.md`](PLAN.md)。上机先配环境：`env/environment.yml`，然后 `bash scripts/check_env.sh`。
 
+## 当前状态
+
+**流水线与置信度规则已入库；队列 callset / LARGE_HIGH 汇总尚未作为结果表提交。** 下一步仍是服务器配环境 → `manifest.tsv` → 单样本通流程 → 队列。
+
 妊娠丢失队列：每个样本同时有 **~10x ONT**（已比对 BAM）和 **~10x Illumina PE WGS**（原始 FASTQ）。这不是 30x WGS，也不是 scRNA inferCNV。单平台在 10x 都会漏小事件、涨假阳性；**配对交叉验证是这条流水线的主过滤器**。
 
 ## 10x 下能报什么、不能报什么

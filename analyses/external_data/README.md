@@ -45,6 +45,19 @@ cd analyses/external_data
 Rscript scripts/rebuild_meqtl_window_hits.R
 ```
 
+## 外部 hit × gsMap 尝试（`results/gsmap_external/`）
+
+将 `gwas_hits` 分成流产/RPL 与妊娠表型两类，注入 CS17 用 sumstats 的探索脚本与构建报告：
+
+| 文件 | 说明 |
+|------|------|
+| `EXT_miscarriage_hits.tsv` / `EXT_pregnancy_hits.tsv` | 两类可注入位点 |
+| `EXT_two_class_build_report.txt` | 可映射数、mean χ² / fuel（仍极低，约 0.08） |
+| `scripts/build_ext_gsmap_sumstats.py` | 构建脚本 |
+| `scripts/run_gsmap_ext_two_class_CS17.sh` | CS17 跑法 |
+
+与本队列 GWAS 相同瓶颈：外部 hit 抬升仍缺乏多基因燃料，**不能**期待稳健细胞定位。
+
 ## 目录
 
 ```
@@ -59,9 +72,12 @@ analyses/external_data/
 │   └── meqtl_hits.tsv
 ├── scripts/
 │   ├── rebuild_meqtl_window_hits.R
-│   └── append_liu2026_gwas_hits.R
+│   ├── append_liu2026_gwas_hits.R
+│   ├── build_ext_gsmap_sumstats.py
+│   └── run_gsmap_ext_two_class_CS17.sh
 ├── data/          # gitignore：原始补充表 / 全量 mQTL
 └── results/
+    └── gsmap_external/
 ```
 
 ## 不入库

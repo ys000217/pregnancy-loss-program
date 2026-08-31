@@ -1,0 +1,9 @@
+suggestive_P=0.001
+n_hits=386
+n_lifted=383
+n_rsid=360
+n_in_sumstats=296
+n_boosted=296
+boost_abs_Z=8.0
+mean_chi2_after=1.153148
+fuel=0.153148

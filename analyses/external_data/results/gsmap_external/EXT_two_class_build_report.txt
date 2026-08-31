@@ -1,0 +1,6 @@
+miscarriage	n_hits=10	n_boosted_existing=0	n_appended=8	n_injectable=8	n_in_hm3_weights=4	mean_chi2=1.082811	fuel=0.082811
+  weights: rs2275913,rs231775,rs3087243,rs763780
+  not_in_bim: rs143445068,rs183453668
+pregnancy	n_hits=34	n_boosted_existing=0	n_appended=22	n_injectable=22	n_in_hm3_weights=9	mean_chi2=1.087115	fuel=0.087115
+  weights: rs10830962,rs10983700,rs12579302,rs13015993,rs17767383,rs2077218,rs2413450,rs4237150,rs6538195
+  not_in_bim: rs116875075,rs117464115,rs145816106,rs181128092,rs190595112,rs3760052,rs4764725,rs60846954,rs61342118,rs76038336,rs76267595,rs9411372

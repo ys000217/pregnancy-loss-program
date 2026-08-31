@@ -1,0 +1,8 @@
+set	category	n_obs	n_total	frac_obs	frac_expected	fold	pval	qval	enriched
+nonsig_sampled_background	Prom	0	6	0.0	0.00989920377027442	0.0	1.0	1.0	False
+nonsig_sampled_background	Enh	0	6	0.0	0.05657937787751339	0.0	1.0	1.0	False
+nonsig_sampled_background	Tx	0	6	0.0	0.16823073683622303	0.0	1.0	1.0	False
+nonsig_sampled_background	Biv	0	6	0.0	0.005164926011950713	0.0	1.0	1.0	False
+nonsig_sampled_background	Repr	0	6	0.0	0.0927800799650426	0.0	1.0	1.0	False
+nonsig_sampled_background	Het-ZNF	2	6	0.3333333333333333	0.1259896534142562	2.645719900802707	0.16870208757654268	1.0	False
+nonsig_sampled_background	Quies	4	6	0.6666666666666666	0.5413560221247397	1.2314754790204454	0.4241245691731472	1.0	False
