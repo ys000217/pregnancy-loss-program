@@ -44,7 +44,7 @@ fi
 if [[ -z "${HARD_MASK_BED:-}" || ! -s "${HARD_MASK_BED}" ]]; then
   echo "ERROR hard mask missing — copy the BED before remake:" >&2
   echo "  mkdir -p ${ROOT}/ref" >&2
-  echo "  # from Windows: D:\\ONT\\cnv\\ref\\hard_mask.grch38.refseq.bed" >&2
+  echo "  # from Windows: D:\\ONT\\analyses\\cnv\\ref\\hard_mask.grch38.refseq.bed" >&2
   echo "  # to:           ${ROOT}/ref/hard_mask.grch38.refseq.bed" >&2
   exit 1
 fi
