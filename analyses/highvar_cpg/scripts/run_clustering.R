@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
-# Hierarchical clustering: top variable CpGs, external FM vs Class3
+# 步骤 1（已完成）：全体样本高变 CpG 聚类。
+# 结论：abnormal 富集枝可分，并带上 30 例 later 标为 abnormal-like 的 normal_case。
 # Approach A: control + normal_case + abnormal_case together
 # No imputation: pairwise complete Pearson correlation for distances
 

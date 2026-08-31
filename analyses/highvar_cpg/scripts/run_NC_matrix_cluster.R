@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
-# Cluster normal_case vs control using NC-specific high-var CpG matrix
+# 步骤 2 敏感性测试（已完成）：去掉 abnormal 后用 NC 专用高变矩阵聚类。
+# 30 例 normal_case 小簇仍在 → abnormal-like，不是临床 abnormal。
 # Input: CpG_matrix_NC.tsv + NC_matrix_sample_annotation.tsv
 # No imputation; pairwise Pearson distance; Ward.D2
 

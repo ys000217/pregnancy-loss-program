@@ -1,3 +1,4 @@
+# 步骤 1 与步骤 2 的样本重叠：NC k=2 小簇 = 全队列 k=3 簇 3 的非 abnormal 成员。
 suppressPackageStartupMessages(library(data.table))
 base <- "D:/ONT/筛选高变CpG"
 nc <- fread(file.path(base, "clustering_output/NC_matrix_analysis/cluster_assignments_k2.tsv"))

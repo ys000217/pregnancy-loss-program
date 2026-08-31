@@ -6,8 +6,10 @@
 #JSUB -e nc_hvar_cpg.%J.err
 
 # =============================================================================
-# normal_case + control 专用高变 CpG 流程（单脚本）
-# - 剔除 abnormal_case
+# 步骤 2（敏感性测试，已完成，不必为改叙述而重跑）
+# 剔除临床 abnormal 后，在 control + normal_case 上重算高变 CpG。
+# 目的：确认全队列 abnormal 枝上的 30 例 normal_case 在去掉 abnormal 后仍成簇
+# （abnormal-like）。后续主流样本按孕周重算见 10_GA_stratified_*.sh。
 # - 不使用全队列 CpG_95pct.list / CpG_variance.tsv / top100k matrix
 # - 输入：02 产出的 CpG_long_tmp_serial/{sample}.tsv + 临床表
 #

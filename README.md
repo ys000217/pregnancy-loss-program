@@ -24,7 +24,7 @@ pregnancy-loss-program/
 | **SV 分析** | [`analyses/sv/`](analyses/sv/) | ONT 结构变异、liftover、AnnotSV 注释、SV–甲基化关联等 |
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；LARGE_HIGH / SHARED_SV 分层 |
-| **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | ONT 甲基化高变位点、全队列 / NC 专用聚类 |
+| **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | 全队列分出 abnormal 枝；NC 敏感性确认 30 例 abnormal-like；主流样本仅 8/9/10 周层内高变 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
 
@@ -66,11 +66,8 @@ bash scripts/remake_merge.sh 0002C          # 仅重跑合并过滤
 详细说明见：[`analyses/highvar_cpg/README.md`](analyses/highvar_cpg/README.md)
 
 ```bash
-# 服务器：NC 专用高变矩阵（剔除 abnormal 后重算方差）
-# jsub < analyses/highvar_cpg/scripts/09_NC_normal_control_highvar_cpg.sh
-
-# 本地：对已下载的 CpG_matrix_NC.tsv 聚类
-Rscript analyses/highvar_cpg/scripts/run_NC_matrix_cluster.R
+# 服务器：步骤 2 已完成（NC 敏感性）；步骤 3 仅 8/9/10 周层内重算
+# jsub < analyses/highvar_cpg/scripts/10_GA_stratified_mainstream_highvar_cpg.sh
 ```
 
 ## 贡献约定
