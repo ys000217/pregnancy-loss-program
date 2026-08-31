@@ -15,7 +15,7 @@ pregnancy-loss-program/
     ├── gwas/                 # RPL GWAS 再分析 × gsMap 定位
     ├── cnv/                  # 10x 配对 ONT + WGS germline CNV
     ├── highvar_cpg/          # ONT 高变 CpG 筛选与聚类
-    └── external_data/        # 流产/RPL GWAS + 胎盘 meQTL 显著 hit
+    └── external_data/        # 流产/RPL GWAS、妊娠表型 GWS 子集、胎盘 meQTL
 ```
 
 ## 模块一览
@@ -26,7 +26,7 @@ pregnancy-loss-program/
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；LARGE_HIGH / SHARED_SV 分层 |
 | **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | 全队列分出 abnormal 枝；NC 敏感性确认 30 例 abnormal-like；主流样本仅 8/9/10 周层内高变 |
-| **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS 与胎盘 meQTL 显著 hit 表（带 PMID）；供本队列定向复现 |
+| **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS、Liu 2026 妊娠表型 GWS 子集、胎盘 meQTL 显著 hit（带 PMID）；供本队列定向复现 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
 

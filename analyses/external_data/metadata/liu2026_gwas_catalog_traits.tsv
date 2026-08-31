@@ -1,0 +1,112 @@
+accession	trait	n_init
+GCST90837213	Alpha fetoprotein in second trimester screening	51073
+GCST90837214	Alpha fetoprotein in multiple of the median in second trimester screening	51079
+GCST90837215	Albumin/Globulin ratio in pregnancy	94893
+GCST90837216	Albumin in pregnancy	97444
+GCST90837217	Alanine transaminase in pregnancy	90105
+GCST90837218	Gestational anemia	96338
+GCST90837219	Aspartate aminotransferase in pregnancy	91194
+GCST90837220	Basophils absolute value in pregnancy	99665
+GCST90837221	Basophil percentage in pregnancy	99446
+GCST90837222	Birth length	71816
+GCST90837223	Birth weight	77084
+GCST90837224	Body mass index in pregnancy	106875
+GCST90837225	Caesarean section	72820
+GCST90837226	Cytomegalovirus IgG antibody quantitative in pregnancy	27618
+GCST90837227	Cytomegalovirus IgM antibody quantitative in pregnancy	18454
+GCST90837228	Creatinine in pregnancy	97424
+GCST90837229	Diastolic blood pressure in pregnancy	77868
+GCST90837230	Gestational day of delivery	76047
+GCST90837231	Estriol in second trimester screening	51472
+GCST90837232	Estriol multiple of the median in second trimester screening	51856
+GCST90837233	Eosinophil absolute value in pregnancy	94874
+GCST90837234	Eosinophil percentage in pregnancy	94977
+GCST90837235	Folate in pregnancy	46391
+GCST90837236	Ferritin in pregnancy	51170
+GCST90837237	Beta human chorionic gonadotropin in first trimester screening	52791
+GCST90837238	Beta human chorionic gonadotropin in second trimester screening	49710
+GCST90837239	Beta human chorionic gonadotropin multiple of the median in first trimester screening	51106
+GCST90837240	Beta human chorionic gonadotropin multiple of the median in second trimester screening	50013
+GCST90837241	Fasting plasma glucose in pregnancy	56665
+GCST90837242	Free thyroxine in pregnancy	72569
+GCST90837243	Gestational diabetes mellitus	77566
+GCST90837244	Globulin in pregnancy	98131
+GCST90837245	Gestational thrombocytopenia	95034
+GCST90837246	Glycated hemoglobin in pregnancy	66799
+GCST90837247	Hemoglobin A2 in pregnancy	49199
+GCST90837248	Hepatitis B core antibodies in pregnancy	93034
+GCST90837249	Hepatitis B e antibody in pregnancy	93034
+GCST90837250	Hemoglobin F in pregnancy	19744
+GCST90837251	Hepatitis B surface antibody in pregnancy	93034
+GCST90837252	Hepatitis B surface antigen in pregnancy	93014
+GCST90837253	Chronic hepatitis B infection in pregnancy	43694
+GCST90837254	Hematocrit in pregnancy	94370
+GCST90837255	Height in pregnancy	108202
+GCST90837256	Hemoglobin concentration in pregnancy	94659
+GCST90837257	Herpes simplex virus type I IgG antibody qualitative in pregnancy	26197
+GCST90837258	Intrahepatic cholestasis of pregnancy_10	99659
+GCST90837259	Intrahepatic cholestasis of pregnancy_13	99659
+GCST90837260	Iron deficiency in pregnancy	49574
+GCST90837261	Iron deficiency anemia in pregnancy	32578
+GCST90837262	Isolated Hypothyroxinemia in pregnancy	50848
+GCST90837263	In vitro fertilization	107235
+GCST90837264	Lymphocyte absolute value in pregnancy	99851
+GCST90837265	Lymphocyte percentage in pregnancy	99794
+GCST90837266	Maternal age at pregnancy	109941
+GCST90837267	Mean corpuscular hemoglobin in pregnancy	90166
+GCST90837268	Mean corpuscular volume in pregnancy	93949
+GCST90837269	Mean corpuscular hemoglobin concentration in pregnancy	91288
+GCST90837270	Mild Anemia in pregnancy	84642
+GCST90837271	Severe or moderate anemia in pregnancy	66900
+GCST90837272	Monocyte absolute value in pregnancy	99434
+GCST90837273	Monocyte percentage in pregnancy	99391
+GCST90837274	Mean platelet volume in pregnancy	96062
+GCST90837275	Nuchal translucency in first trimester screening	99752
+GCST90837276	Neutrophils absolute value in pregnancy	99840
+GCST90837277	Neutrophils percentage in pregnancy	46339
+GCST90837278	Nuchal translucency multiple of the median in first trimester screening	45958
+GCST90837279	Oral glucose tolerance test 1 hour in pregnancy	82645
+GCST90837280	Oral glucose tolerance test 2 hour in pregnancy	83399
+GCST90837281	Oral glucose tolerance test 0 hour in pregnancy	82302
+GCST90837282	Platelet-large cell ratio in pregnancy	96333
+GCST90837283	Pappalysin in first trimester screening	53528
+GCST90837284	Pappalysin multiple of the median in first trimester screening	53645
+GCST90837285	Platelet crit in pregnancy	95572
+GCST90837286	Platelet distribution width in pregnancy	94541
+GCST90837287	Platelet count in pregnancy	98500
+GCST90837288	Red blood cell count in pregnancy	94461
+GCST90837289	Red blood cell volume distribution width variation in pregnancy	98021
+GCST90837290	Red blood cell volume distribution width in pregnancy	92912
+GCST90837291	Rubella virus IgG antibody qualitative in pregnancy	24966
+GCST90837292	Rubella virus IgG antibody quantitative in pregnancy	23632
+GCST90837293	Systolic blood pressure in pregnancy	78535
+GCST90837294	Severity of Anemia in pregnancy	41134
+GCST90837295	Gestational day of delivery excluding stillbirth and non-vaginal in pregnancy	49038
+GCST90837296	Subclinical Hyperthyroxinemia in pregnancy	73623
+GCST90837297	Subclinical hypothyroidism in pregnancy	74045
+GCST90837298	Platelet count in first trimester	66814
+GCST90837299	Trisomy 13 risk score in NIPT screening	110051
+GCST90837300	Trisomy 18 risk score in NIPT screening	110343
+GCST90837301	Trisomy 18 risk score in second trimester Tang screening	55326
+GCST90837302	Trisomy 18 risk score in first trimester Tang screening	52866
+GCST90837303	Platelet count in second trimester	66797
+GCST90837304	Trisomy 21 risk score in NIPT screening	110189
+GCST90837305	Trisomy 21 risk score in first trimester Tang screening	49627
+GCST90837306	Trisomy 21 risk score in second trimester Tang screening	47619
+GCST90837307	Platelet count in third trimester in pregnancy	66705
+GCST90837308	Thyroid peroxidase antibody positive in pregnancy	68846
+GCST90837309	Total bile acid in pregnancy	93073
+GCST90837310	Total bilirubin in pregnancy	94620
+GCST90837311	Total cholesterol in pregnancy	66758
+GCST90837312	Triglyceride in pregnancy	65479
+GCST90837313	Total protein in pregnancy	97889
+GCST90837314	Thyroid peroxidase antibody in pregnancy	52482
+GCST90837315	Thyroid stimulating hormone in pregnancy	73346
+GCST90837316	Uric acid in pregnancy	94108
+GCST90837317	Unspecified anemia in pregnancy	21918
+GCST90837318	Urea in pregnancy	96704
+GCST90837319	Vitamin B12 in pregnancy	44831
+GCST90837320	Vitamin B12 deficiency in pregnancy	43430
+GCST90837321	25-hydroxyvitamin D (D2+D3) in pregnancy	53285
+GCST90837322	White blood cell count in pregnancy	99936
+GCST90837323	Weight in pregnancy	106972

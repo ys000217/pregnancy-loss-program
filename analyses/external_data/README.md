@@ -5,12 +5,15 @@
 
 本模块收集**流产 / RPL 相关 GWAS 与胎盘 meQTL（SNP–CpG）的显著结果**，供本队列定向复现。每条 hit 带 PMID/DOI；文献清单见 [`docs/REFERENCES.md`](docs/REFERENCES.md)。
 
+另收录 **Liu 2026** 中国妊娠表型 GWAS（非流产病例对照；东亚妊娠背景、妊娠特异效应）的 **Catalog 已报告 GWS 子集**，不作 4,688 位点全表。
+
 ## 当前交付
 
 | 文件 | 内容 | n |
 |------|------|---|
-| [`metadata/gwas_hits.tsv`](metadata/gwas_hits.tsv) | 流产/RPL 显著或候选 SNP（**GRCh38**） | 12 |
-| [`metadata/meqtl_hits.tsv`](metadata/meqtl_hits.tsv) | 胎盘 meQTL ∩ GWAS 窗（**GRCh38**，自 hg19 liftOver） | 84 |
+| [`metadata/gwas_hits.tsv`](metadata/gwas_hits.tsv) | 流产/RPL 显著或候选 SNP + Liu2026 妊娠表型 GWS 子集（**GRCh38**） | 51 |
+| [`metadata/liu2026_gwas_catalog_traits.tsv`](metadata/liu2026_gwas_catalog_traits.tsv) | Liu 2026 全部 111 表型与 GWAS Catalog 登记号 | 111 |
+| [`metadata/meqtl_hits.tsv`](metadata/meqtl_hits.tsv) | 胎盘 meQTL ∩ 流产/RPL GWAS 窗（**GRCh38**，自 hg19 liftOver） | 84 |
 | [`docs/REFERENCES.md`](docs/REFERENCES.md) | 参考文献与 PMID | — |
 | [`docs/DATA_PATHS.md`](docs/DATA_PATHS.md) | 原始补充表本地路径 | — |
 
@@ -18,8 +21,8 @@
 
 | 级别 | 含义 | 示例 |
 |------|------|------|
-| **P0** | 东亚正式 GWAS / 与东亚 MHC 直接相关的胎盘 meQTL | Sonehara `rs9263738`；MHC/FGF9 窗内 meQTL |
-| **P1** | 欧洲大样本流产 GWS + 对应窗 meQTL | Laisk GWS 位点 |
+| **P0** | 东亚正式 GWAS / 与东亚 MHC 直接相关的胎盘 meQTL | Sonehara `rs9263738`；Liu 2026 妊娠疾病 GWS；MHC/FGF9 窗内 meQTL |
+| **P1** | 欧洲大样本流产 GWS + 对应窗 meQTL；Liu 2026 妊娠期血压 | Laisk GWS 位点 |
 | **P2** | 候选基因或 Firth 未过信号 | 中国 CTLA4/FOXP3/IL17；Laisk `rs138993181` |
 
 ## 复现用法（概要）
@@ -52,9 +55,11 @@ analyses/external_data/
 │   └── DATA_PATHS.md
 ├── metadata/
 │   ├── gwas_hits.tsv
+│   ├── liu2026_gwas_catalog_traits.tsv
 │   └── meqtl_hits.tsv
 ├── scripts/
-│   └── rebuild_meqtl_window_hits.R
+│   ├── rebuild_meqtl_window_hits.R
+│   └── append_liu2026_gwas_hits.R
 ├── data/          # gitignore：原始补充表 / 全量 mQTL
 └── results/
 ```

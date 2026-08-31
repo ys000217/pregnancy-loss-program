@@ -20,9 +20,15 @@
    PMID: [38847697](https://pubmed.ncbi.nlm.nih.gov/38847697/) · DOI: [10.1097/MD.0000000000038333](https://doi.org/10.1097/MD.0000000000038333)  
    → 中国小样本候选基因：`rs2275913`（IL17A）、`rs763780`（IL17F）。优先级 P2。
 
+5. **Liu S** et al. Genome-wide association analyses of gestational phenotypes identify context-specific genetic effects. *Nature Genetics*. 2026;58:1845–1854.  
+   PMID: [42509370](https://pubmed.ncbi.nlm.nih.gov/42509370/) · DOI: [10.1038/s41588-026-02677-w](https://doi.org/10.1038/s41588-026-02677-w)  
+   → 中国妊娠队列（最多约 12.2 万人）对 **111** 个妊娠表型做 GWAS；约 **4,688** 个独立全基因组显著信号（其中约 1,703 个新）。**不是**流产/RPL 病例对照。约 7.8% 变异在 30 个表型上呈妊娠特异效应。  
+   本模块：GWAS Catalog `GCST90837213`–`GCST90837323` 中，妊娠并发症/贫血/甲状腺及血压的 **已入库 GWS 子集**（`p ≤ 5×10⁻⁸`）写入 `gwas_hits.tsv`（39 行）；**未**导入全部 4,688 位点。论文示例妊娠特异白蛋白位点 `rs4764725-C`（C12orf42）已收录。  
+   浏览器：[PheWeb](https://monn.pheweb.com/)；代码：[liusylab/MONN-Genetics](https://github.com/liusylab/MONN-Genetics)。111 表型清单见 `metadata/liu2026_gwas_catalog_traits.tsv`。Catalog 当时未列出出生体重、剖宫产、IVF、ICP、分娩孕周等表型的 association 记录。
+
 ## 胎盘 meQTL（SNP–CpG）
 
-5. **Delahaye F** et al. Genetic variants influence on the placenta regulatory landscape. *PLoS Genetics*. 2018;14(11):e1007785.  
+6. **Delahaye F** et al. Genetic variants influence on the placenta regulatory landscape. *PLoS Genetics*. 2018;14(11):e1007785.  
    PMID: [30452450](https://pubmed.ncbi.nlm.nih.gov/30452450/) · DOI: [10.1371/journal.pgen.1007785](https://doi.org/10.1371/journal.pgen.1007785)  
    → S6 Table：permutation 通过的 4,342 个胎盘 cis-mQTL。本模块提取与流产/RPL GWAS lead ±1 Mb（hg19）重叠的子集入 `meqtl_hits.tsv`。
 
@@ -37,6 +43,6 @@
 ## 坐标说明
 
 - **统一构建：GRCh38**（`genome_build=GRCh38`）。
-- `gwas_hits.tsv`：主坐标 `chrom`/`pos` 来自 NCBI dbSNP GRCh38 `chrpos`；`pos_hg19_legacy` 仅审计用。
+- `gwas_hits.tsv`：主坐标 `chrom`/`pos` 为 GRCh38（流产/RPL 位点来自 dbSNP；Liu 2026 来自 Ensembl / GWAS Catalog）；`pos_hg19_legacy` 仅审计用。
 - `meqtl_hits.tsv`：Delahaye S6 原文为 hg19；已用 UCSC `liftOver` + `hg19ToHg38.over.chain.gz` 全部替换为主坐标 `snp_pos` / `cpg_*`；`*_hg19_legacy` 保留原文。
 - 复现时请直接使用 GRCh38 列，勿再使用 legacy 列。

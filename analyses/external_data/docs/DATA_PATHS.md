@@ -18,6 +18,7 @@
 | SONEHARA2024 | PMID 39019884 | 日本 uRPL GWAS lead | 东亚优先复现 | 同上 | 已登记 |
 | FAN2018 | PMID 29476189 | 中国 CTLA4/FOXP3 候选 SNP | P2 | 同上 | 已登记 |
 | LIU2024 | PMID 38847697 | 中国 IL17 候选 SNP | P2 | 同上 | 已登记 |
+| LIU2026 | PMID 42509370 | 中国妊娠表型 GWAS（111 性状） | 东亚妊娠背景；非流产 GWAS | `metadata/gwas_hits.tsv`（GWS 子集）；`metadata/liu2026_gwas_catalog_traits.tsv` | 已登记 |
 | DELAHAYE2018_S6 | PMID 30452450 | 胎盘 cis-mQTL S6（4342） | 窗过滤 → meQTL hits | `data/raw/Delahaye2018_PLoSGenet_S6_mQTL.xlsx` | 已下载；子集已入库 |
 | DELAHAYE2018_FULL_TSV | 同上 | S6 转 TSV | 本地查询 | `data/processed/delahaye2018_placenta_mqtl_4342.tsv` | 本地 |
 
@@ -25,6 +26,7 @@
 
 - Delahaye S6：PLOS Genetics 补充文件 `journal.pgen.1007785.s018`（表名 `T6_mQTLs`）。  
 - Laisk 位点：主文统计量 + dbSNP 坐标；完整 Supplementary Data 可按需再下。
+- Liu 2026：GWAS Catalog REST `findByPublicationIdPubmedId?pubmedId=42509370`（111 studies）+ 各 `studies/{GCST}/associations`；坐标 Ensembl GRCh38，hg19 用 `hg38ToHg19.over.chain.gz` liftOver。Nature 补充表 ESM 当时无法直接下（GCS AccessDenied）。全量 sumstats / PheWeb 不入库。重建子集：`Rscript scripts/append_liu2026_gwas_hits.R`（依赖 `data/raw/` 缓存）。
 - liftOver：`D:\gsMap\tools\liftOver` + `D:\gsMap\tools\hg19ToHg38.over.chain.gz`（UCSC）。meQTL 已全部转为 GRCh38。
 
 ## 备注
