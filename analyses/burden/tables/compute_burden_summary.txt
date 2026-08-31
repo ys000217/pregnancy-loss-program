@@ -1,0 +1,6 @@
+sv_variants_pass	61011
+unique_plp_sv	124
+unique_plp_pop_rare	45
+unique_plp_strict_rare	16
+pop_af_rare_threshold	0.01
+cohort_af_rare_threshold	0.05
