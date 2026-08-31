@@ -1,0 +1,28 @@
+# conda environment for 10x paired ONT + WGS CNV
+#
+# NOTE: manta is NOT in this file. Bioconda manta still depends on Python 2.7
+# and breaks co-install with Python 3. WGS breakpoint SV uses DELLY by default;
+# see env/README.md if you want Manta from a standalone tarball.
+#
+# Create:
+#   conda env create -f env/environment.yml
+#   conda activate cnv10x
+#   bash scripts/check_env.sh
+name: cnv10x
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - fastp
+  - bwa-mem2
+  - samtools>=1.19
+  - sambamba
+  - mosdepth>=0.3
+  - sniffles>=2.2
+  - delly
+  - cnvpytor
+  - bcftools>=1.19
+  - bedtools>=2.31
+  - htslib

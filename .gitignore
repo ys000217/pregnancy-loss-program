@@ -93,3 +93,7 @@ samtools.zip
 **/finngen_*.gz
 **/*sumstats.gz
 !analyses/gwas/results/*cauchy*.csv.gz
+
+# CNV pipeline RefSeq hard mask (override *.bed)
+!cnv/ref/hard_mask.grch38.refseq.bed
+
