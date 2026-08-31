@@ -1,4 +1,4 @@
-# SNV / SV burden â€?statistics, mut/Mb, and plots
+# SNV / SV burden: statistics, mut/Mb, and plots
 
 suppressPackageStartupMessages({
   library(GenomicFeatures)
@@ -179,7 +179,7 @@ stats_gw <- bind_rows(lapply(sort(unique(burden_gw$GW_bin)), function(gw) {
 }))
 write_tsv(stats_gw, file.path(tab_dir, "group_comparison_stats_by_gw.tsv"))
 
-# plots â€?primary
+# plots: primary
 plot_burden_box(
   burden,
   "SNV_mut_per_Mb",
@@ -365,4 +365,4 @@ plot_locus_enrichment(
 
 message("Analysis and plots complete.")
 message(sprintf("Tables: %s", tab_dir))
-message(sprintf("plots: %s", fig_dir))
+message(sprintf("Plots: %s", fig_dir))

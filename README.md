@@ -15,7 +15,7 @@ pregnancy-loss-program/
     ├── gwas/                 # RPL GWAS 再分析 × gsMap 定位
     ├── cnv/                  # 10x 配对 ONT + WGS germline CNV
     ├── highvar_cpg/          # ONT 高变 CpG 筛选与聚类
-    ├── burden/               # SNV/SV 突变负荷与全基因组 SV 位点富集
+    ├── burden/               # SNV/SV mutation burden and genome-wide SV locus enrichment
     └── external_data/        # 流产/RPL GWAS、妊娠表型 GWS 子集、胎盘 meQTL
 ```
 
@@ -27,7 +27,7 @@ pregnancy-loss-program/
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试 |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；LARGE_HIGH / SHARED_SV 分层 |
 | **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | 全队列分出 abnormal 枝；NC 敏感性确认 30 例 abnormal-like；主流样本仅 8/9/10 周层内高变 |
-| **突变负荷** | [`analyses/burden/`](analyses/burden/) | 无偏 SNV mut/Mb、SV/P-LP 负荷；全基因组 PASS SV 逐位点富集（严格 abnormal 特异 = 0） |
+| **SNV/SV burden** | [`analyses/burden/`](analyses/burden/) | Unbiased SNV mut/Mb, SV/P-LP burden, genome-wide PASS SV locus enrichment (strict abnormal-specific = 0) |
 | **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS、Liu 2026 妊娠表型 GWS 子集、胎盘 meQTL 显著 hit（带 PMID）；供本队列定向复现 |
 
 后续其它模块（例如甲基化图谱、临床表型、空间组学等）可继续放在 `analyses/` 下各自子目录中。
@@ -74,9 +74,9 @@ bash scripts/remake_merge.sh 0002C          # 仅重跑合并过滤
 # jsub < analyses/highvar_cpg/scripts/10_GA_stratified_mainstream_highvar_cpg.sh
 ```
 
-## 突变负荷模块快速入口
+## SNV/SV burden module
 
-详细说明见：[`analyses/burden/README.md`](analyses/burden/README.md)
+See [`analyses/burden/README.md`](analyses/burden/README.md)
 
 ```bash
 Rscript analyses/burden/scripts/run_all.R

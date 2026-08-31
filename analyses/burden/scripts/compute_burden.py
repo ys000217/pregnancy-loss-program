@@ -13,7 +13,7 @@ from math import comb
 from pathlib import Path
 
 # Input data live under figure2 / ONT root (large files not in git).
-# Outputs default to this module: analyses/burden/{tables,figures}.
+# Outputs default to this module: analyses/burden/{tables,plots}.
 MODULE = Path(__file__).resolve().parents[1]
 ROOT = Path(os.environ.get("BURDEN_ROOT", "D:/ONT/figure2"))
 ONT = ROOT.parent

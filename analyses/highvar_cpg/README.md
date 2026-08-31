@@ -72,15 +72,13 @@ job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成
 | 脚本 | 作用 |
 |------|------|
 | `run_clustering.R` | 步骤 1：全队列 top-N、Ward 树、Class3 对照 |
-| `run_kscan_normal_subcluster.R` | 全队列 k 扫描（silhouette 选 k；FM 为外部指标 vs Class3/Group2） |
-| `run_NC_matrix_cluster.R` | 步骤 2：`CpG_matrix_NC.tsv` 敏感性测试（silhouette 内部；FM vs Class3 外部） |
+| `run_kscan_normal_subcluster.R` | 全队列 k 扫描 |
+| `run_NC_matrix_cluster.R` | 步骤 2：`CpG_matrix_NC.tsv` 敏感性测试 |
 | `check_cluster_overlap.R` | 全队列 abnormal 枝 vs NC 小簇重叠 |
 | `check_nc_outputs.R` | 检查 09 产出、abnormal 泄漏 |
 | `plot_gradient_scatter.R` | 全队列 / NC 的 PCA 与 PCoA 点图 |
 | `summarize_nc_outlier_gw.R` | 30 例孕周分布 |
 | `run_normal_control_hvar.R` | 旧路径（全队列 top100k 内重排方差，有位点池偏倚） |
-
-聚类评估约定：**Fowlkes–Mallows 仅作外部指标**（聚类标签 vs 已知 Class3/Group2）；**轮廓系数**作内部指标（选 k / 紧密度）。不要用不同 top-N 或不同 k 的无监督分区互相比 FM。
 
 ```bash
 Rscript analyses/highvar_cpg/scripts/run_NC_matrix_cluster.R

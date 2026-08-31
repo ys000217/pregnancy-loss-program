@@ -81,4 +81,4 @@ message("Step 3/3: analyze_and_plot.R")
 source(plot_script)
 
 message("Done. Tables: ", file.path(module, "tables"))
-message("plots: ", file.path(module, "plots"))
+message("Plots: ", file.path(module, "plots"))

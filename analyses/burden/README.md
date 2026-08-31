@@ -1,43 +1,46 @@
-# SNV / SV 突变负荷与全基因�?SV 位点富集
+# SNV / SV mutation burden and genome-wide SV locus enrichment
 
-无偏 SNV（编码区非同�?mut/Mb）、SV 计数负荷、AnnotSV P/LP SV（含罕见子集），以及全基因组 PASS SV 逐位�?Fisher 富集�?
+Unbiased SNV burden (nonsynonymous mut/Mb), SV count burden, AnnotSV P/LP SVs
+(including rare subsets), and genome-wide PASS SV per-locus Fisher enrichment.
 
-大文件（VCF、AnnotSV、ANNOVAR）不入库；默认从 `D:/ONT/figure2` �?`D:/ONT` 读取（可用环境变量覆盖）�?
+Large files (VCF, AnnotSV, ANNOVAR) are not in git. Defaults read from
+`D:/ONT/figure2` and `D:/ONT` (override with environment variables).
 
-## 输入（本地，不入库）
+## Local inputs (not in git)
 
-| 文件 | 用�?|
+| File | Role |
 |------|------|
-| `figure2/sample_phenotype_648.tsv` | 648 样本 Condition（abnormal / normal / control�?|
-| `figure2/WGS_ONT_Intersection_648samples.vcf.gz` | 无偏 SNV callset |
-| `figure2/S956.snp.annovar.hg38_multianno.txt.gz` | SNV ANNOVAR 注释 |
-| `clinical_649.GRCh38.correct.vcf` | 无偏 SV callset |
-| `clinical_649.GRCh38.annotsv.tsv` | AnnotSV（ACMG、人�?AF�?|
+| `figure2/sample_phenotype_648.tsv` | 648 samples: Condition (abnormal / normal / control) |
+| `figure2/WGS_ONT_Intersection_648samples.vcf.gz` | Unbiased SNV callset |
+| `figure2/S956.snp.annovar.hg38_multianno.txt.gz` | SNV ANNOVAR annotation |
+| `clinical_649.GRCh38.correct.vcf` | Unbiased SV callset |
+| `clinical_649.GRCh38.annotsv.tsv` | AnnotSV (ACMG, population AF) |
 
-环境变量�?
+Environment variables:
 
-- `BURDEN_ROOT`：表型与 SNV 数据根目录（默认 `D:/ONT/figure2`�?
-- `BURDEN_OUT` / `BURDEN_PLOT`：输出表/图目录（默认本模�?`tables/`、`plots/`�?
+- `BURDEN_ROOT`: phenotype and SNV data root (default `D:/ONT/figure2`)
+- `BURDEN_OUT` / `BURDEN_PLOT`: output tables and plots (default `tables/`, `plots/`)
 
-## 主要结果（摘要）
+## Main results (summary)
 
-- **SNV mut/Mb**：按 Condition / case–control 比较（见 `tables/group_comparison_stats.tsv`�?
-- **SV 总负�?/ P/LP / 罕见 P/LP**：每样本计数与组间检�?
-- **全基因组 PASS SV 位点**�?5,388 位点；三组两两独�?Fisher + 各自 FDR
-- **Abnormal 特异**（严格）：`fdr(ab vs ctrl)<0.05` �?`ab_rate>ctrl` �?`ab_rate>norm` �?`fdr(ab vs norm)<0.05` �?**0 位点**
-- ab vs ctrl FDR&lt;0.05 �?63 个，多数�?`case_vs_control` 模式（normal 也升高），不�?abnormal 特异
+- **SNV mut/Mb**: by Condition and case vs control (`tables/group_comparison_stats.tsv`)
+- **SV total / P/LP / rare P/LP**: per-sample counts and group tests
+- **Genome-wide PASS SV loci**: 55,388 sites; three pairwise Fishers with separate FDR
+- **Abnormal-specific (strict)**: `fdr(ab vs ctrl)<0.05` AND `ab_rate>ctrl` AND `ab_rate>norm` AND `fdr(ab vs norm)<0.05` ? **0 loci**
+- 63 sites with FDR(ab vs ctrl)<0.05; most are `case_vs_control` (normal also elevated), not abnormal-specific
 
-完整逐位点表 `sv_locus_enrichment_all_pass.tsv`（约 14 MB）留在本�?`figure2/burden_analysis/tables/`，不入库�?
+The full per-locus table `sv_locus_enrichment_all_pass.tsv` (~14 MB) stays local
+in `figure2/burden_analysis/tables/` and is not committed.
 
-## 运行
+## Run
 
 ```bash
-# 需能访问上述大文件
+# Requires local access to the large input files
 Rscript analyses/burden/scripts/run_all.R
-# 或分�?
+# or stepwise
 python analyses/burden/scripts/compute_burden.py
 python analyses/burden/scripts/compute_sv_locus_enrichment.py
 Rscript analyses/burden/scripts/analyze_and_plot.R
 ```
 
-工作副本也可保留�?`figure2/burden_analysis/`（`figure*/` �?`.gitignore` 忽略）�?
+A working copy may also remain under `figure2/burden_analysis/` (`figure*/` is gitignored).

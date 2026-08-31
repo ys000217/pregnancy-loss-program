@@ -78,7 +78,6 @@ pearson_dist_samples <- function(m) {
 }
 
 fowlkes_mallows <- function(lab1, lab2) {
-  # External validation only: cluster partition vs known Class3 labels.
   lab1 <- as.integer(factor(lab1))
   lab2 <- as.integer(factor(lab2))
   tab <- table(lab1, lab2)
@@ -100,20 +99,15 @@ kscan <- rbindlist(lapply(K_RANGE, function(k) {
   labs <- cutree(hc, k = k)
   sil <- mean(silhouette(labs, d)[, "sil_width"])
   xt <- table(cluster = labs, Class3 = cls[colnames(mat)])
+  # enrichment: max control fraction in any cluster, max normal fraction
   data.table(
     k = k,
     avg_silhouette = sil,
-    FM_vs_Class3 = fowlkes_mallows(labs, cls[colnames(mat)]),
     crosstab = paste(capture.output(print(xt)), collapse = " | ")
   )
 }))
-fwrite(kscan[, .(k, avg_silhouette, FM_vs_Class3)], file.path(OUT, "kscan_silhouette.tsv"), sep = "\t")
-fwrite(
-  kscan[, .(k, FM_vs_Class3, avg_silhouette)],
-  file.path(OUT, "fm_external_vs_class3.tsv"),
-  sep = "\t"
-)
-print(kscan[, .(k, avg_silhouette, FM_vs_Class3)])
+fwrite(kscan[, .(k, avg_silhouette)], file.path(OUT, "kscan_silhouette.tsv"), sep = "\t")
+print(kscan[, .(k, avg_silhouette)])
 
 best_k <- kscan[which.max(avg_silhouette), k]
 message("Best k by silhouette: ", best_k)
@@ -127,6 +121,21 @@ abline(v = best_k, lty = 2, col = "red")
 legend("topright", legend = c("k=2 (binary)", paste0("best k=", best_k)),
        lty = 2, col = c("grey50", "red"), bty = "n")
 dev.off()
+
+# FM across k
+fm_k <- list()
+labs_k <- lapply(K_RANGE, function(k) cutree(hc, k = k))
+names(labs_k) <- paste0("k", K_RANGE)
+for (i in seq_along(K_RANGE)) {
+  for (j in seq_along(K_RANGE)) {
+    if (j <= i) next
+    fm_k[[length(fm_k) + 1L]] <- data.table(
+      set_a = names(labs_k)[i], set_b = names(labs_k)[j],
+      FM_index = fowlkes_mallows(labs_k[[i]], labs_k[[j]])
+    )
+  }
+}
+fwrite(rbindlist(fm_k), file.path(OUT, "fm_k_stability.tsv"), sep = "\t")
 
 # Primary: k=2 (binary control vs normal_case question)
 message("=== Primary k=2 vs Class3 ===")
@@ -234,7 +243,6 @@ summary_dt <- data.table(
   best_k_silhouette = best_k,
   max_silhouette = kscan[which.max(avg_silhouette), avg_silhouette],
   silhouette_k2 = kscan[k == 2, avg_silhouette],
-  FM_vs_Class3_k2 = kscan[k == 2, FM_vs_Class3],
   mapped_accuracy_k2 = acc,
   baseline_majority = baseline
 )
@@ -246,8 +254,6 @@ writeLines(c(
   "- Distance: 1 - pairwise Pearson; method: Ward.D2",
   "- No imputation",
   paste0("- Best k by silhouette: ", best_k, " (sil=", round(summary_dt$max_silhouette, 3), ")"),
-  paste0("- Fowlkes-Mallows (external): cluster labels vs Class3; k=2 FM=", round(summary_dt$FM_vs_Class3_k2, 3)),
-  "- Silhouette: internal cluster quality (not FM)",
   paste0("- k=2 mapped accuracy: ", round(acc, 3), " vs majority baseline ", round(baseline, 3))
 ), file.path(OUT, "README.txt"))
 
