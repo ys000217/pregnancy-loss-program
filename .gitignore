@@ -97,3 +97,12 @@ samtools.zip
 # CNV pipeline RefSeq hard mask (override *.bed)
 !analyses/cnv/ref/hard_mask.grch38.refseq.bed
 
+# high-var CpG local matrices, logs, cluster PDFs (scripts live in analyses/highvar_cpg/)
+????CpG/**/*.tsv
+????CpG/**/*.list
+????CpG/**/*.out
+????CpG/**/*.err
+????CpG/**/*.rds
+????CpG/clustering_output/
+????CpG/log/
+
