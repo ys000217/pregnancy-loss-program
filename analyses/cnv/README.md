@@ -63,7 +63,7 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 
 | 标签 | 规则 | 含义 |
 |------|------|------|
-| **LARGE_HIGH** | 两边同类型，RO≥50%，长度 ≥100 kb，**不落在硬区 mask**，且（≤10 Mb，或 >10 Mb 但两边 depth + 至少一边 SV） | **病例对照主表**；写入 `cnv.high.bed` |
+| **LARGE_HIGH** | 两边同类型，RO≥50%，长度 ≥100 kb，**不落在硬区 mask**。100 kb–1 Mb：100 kb 双边 depth；≥1 Mb：有 500 kb 时需 500 kb 支持；**>10 Mb / 非整倍体：双边 depth 即可，不强制 SV 断点** | **病例对照主表**；写入 `cnv.high.bed` |
 | **SHARED_SV** | 两边都有 SV 断点，长度 &lt;100 kb | 小 SV 负担分析；**不要**和大片段混计 |
 | **MEDIUM** | 跨平台同向重叠但不满足上两档 | 候选，需 IGV |
 | **ONT_SV** | 仅 ONT Sniffles DEL/DUP，≥50 bp | 小 CNV 的预期来源 |

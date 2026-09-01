@@ -3,7 +3,7 @@
 
 Confidence tiers (cohort-facing):
   LARGE_HIGH  both platforms, same type, RO>=0.5, size>=100kb, outside hard mask,
-              on primary autosomes, and size<=MAX unless both-depth (+ SV) passes cap
+              on primary autosomes; >10 Mb needs both-platform depth only (no SV required)
   SHARED_SV   both platforms have SV breakpoints, size < 100kb (small SV burden)
   MEDIUM      cross-platform same-type overlap that is neither LARGE_HIGH nor SHARED_SV
   ONT_SV / ONT_DEPTH / WGS_DEPTH / MASKED / DROP
@@ -302,10 +302,15 @@ def hard_blocked(cl: Cluster, masks: dict[str, list[Interval]], mask_frac: float
     return mask_coverage_fraction(cl.chrom, cl.start, cl.end, masks) >= mask_frac
 
 
-def passes_size_cap(cl: Cluster, max_event: int, ont_depth: bool, wgs_depth: bool, ont_sv: bool, wgs_sv: bool) -> bool:
+def passes_size_cap(cl: Cluster, max_event: int, ont_depth: bool, wgs_depth: bool) -> bool:
+    """Events > MAX (default 10 Mb): dual-platform depth is enough.
+
+    Aneuploidy / chromosome-arm dosage usually has no Sniffles/DELLY breakpoint.
+    Requiring SV here would drop the most important pregnancy-loss events.
+    """
     if cl.size <= max_event:
         return True
-    return ont_depth and wgs_depth and (ont_sv or wgs_sv)
+    return ont_depth and wgs_depth
 
 
 def assign_confidence(
@@ -333,7 +338,7 @@ def assign_confidence(
         if size >= min_depth:
             if blocked:
                 return "MASKED"
-            if not passes_size_cap(cl, max_event, ont_depth, wgs_depth, ont_sv, wgs_sv):
+            if not passes_size_cap(cl, max_event, ont_depth, wgs_depth):
                 return "MASKED"
             # ≥1 Mb: when 500 kb callsets were provided, require large-bin depth support
             if require_large_bin_for_mb and size >= LARGE_BIN_MIN and (ont_depth or wgs_depth):
@@ -346,12 +351,12 @@ def assign_confidence(
         return "ONT_SV"
 
     if ont_depth and not ont_sv and not wgs and size >= min_depth:
-        if blocked or not passes_size_cap(cl, max_event, True, False, False, False):
+        if blocked or not passes_size_cap(cl, max_event, True, False):
             return "MASKED"
         return "ONT_DEPTH"
 
     if wgs_depth and not ont and size >= min_depth:
-        if blocked or not passes_size_cap(cl, max_event, False, True, False, False):
+        if blocked or not passes_size_cap(cl, max_event, False, True):
             return "MASKED"
         return "WGS_DEPTH"
 
