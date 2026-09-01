@@ -47,6 +47,15 @@ export MERGE_RO=0.50
 # Merge filters (set before mask probe so a failed probe cannot skip these under set -u)
 export MAX_CNV_EVENT="${MAX_CNV_EVENT:-10000000}"
 export MERGE_MASK_FRAC="${MERGE_MASK_FRAC:-0.50}"
+# CNVpytor call QC (disable with CNVPYTOR_QC=0)
+export CNVPYTOR_QC="${CNVPYTOR_QC:-1}"
+export CNVPYTOR_Q0_MAX="${CNVPYTOR_Q0_MAX:-0.5}"
+export CNVPYTOR_PN_MAX="${CNVPYTOR_PN_MAX:-0.5}"
+export CNVPYTOR_EVAL_MAX="${CNVPYTOR_EVAL_MAX:-1e-4}"
+# Spectre mosdepth window (bp). mosdepth itself has no default --by; Spectre needs ~1 kb.
+export SPECTRE_MOSDEPTH_BY="${SPECTRE_MOSDEPTH_BY:-1000}"
+# Sex chromosomes dropped in merge by default (autosomes only)
+export KEEP_SEX_CHROM="${KEEP_SEX_CHROM:-0}"
 # Hard mask: Prefer explicit HARD_MASK_BED, then share path, then repo ref/ (_CNV_ROOT from lib_source_config).
 # Do not use BASH_SOURCE here — config is often sourced via /dev/stdin (CR strip) and that breaks set -e.
 if [[ -z "${HARD_MASK_BED:-}" || ! -s "${HARD_MASK_BED}" ]]; then

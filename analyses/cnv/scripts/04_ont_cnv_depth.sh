@@ -18,10 +18,15 @@ call_cnvpytor() {
   cnvpytor_rd_his_call "${root}" "${bam}" "${outdir}" "${SAMPLE}" "${chroms[@]}"
 }
 
+# Spectre (optional): if installed, run with its own mosdepth windows.
+# mosdepth has NO default --by (omit --by = per-base, unsuitable for Spectre).
+# Spectre expects ~1 kb coverage bins — do NOT reuse QC 100 kb mosdepth.
+# Override with SPECTRE_MOSDEPTH_BY if needed (default 1000).
 if command -v spectre >/dev/null 2>&1; then
-  cov_prefix="${WORKDIR}/qc/${SAMPLE}.ont"
+  spectre_by="${SPECTRE_MOSDEPTH_BY:-1000}"
+  cov_prefix="${WORKDIR}/qc/${SAMPLE}.ont.spectre.${spectre_by}"
   if [[ ! -s "${cov_prefix}.regions.bed.gz" ]]; then
-    mosdepth --by "${BIN_PRIMARY}" -Q "${MOSDEPTH_MAPQ}" -t 4 "${cov_prefix}" "${ONT_BAM}"
+    mosdepth -n --by "${spectre_by}" -Q "${MOSDEPTH_MAPQ}" -t 4 "${cov_prefix}" "${ONT_BAM}"
   fi
   spectre CNVCaller \
     --coverage "${cov_prefix}.regions.bed.gz" \

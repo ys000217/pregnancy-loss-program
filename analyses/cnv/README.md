@@ -69,10 +69,12 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 | **ONT_SV** | 仅 ONT Sniffles DEL/DUP，≥50 bp | 小 CNV 的预期来源 |
 | **ONT_DEPTH** | 仅 ONT depth，≥100 kb，未 mask，≤10 Mb | 单平台，优先级低 |
 | **WGS_DEPTH** | 仅 WGS depth，≥100 kb，未 mask，≤10 Mb | 单平台探索 |
-| **MASKED** | 本可进 depth/LARGE，但命中硬区或 XX 的 chrY，或超长且证据不足 | 审计用，不当阳性 |
-| **DROP** | 仅 WGS 小 SV；或单边 depth &lt;100 kb | 不报 |
+| **MASKED** | 本可进 depth/LARGE，但命中硬区，或超长且证据不足，或 ≥1 Mb depth 无 500 kb 支持 | 审计用，不当阳性 |
+| **DROP** | 仅 WGS 小 SV；单边 depth &lt;100 kb；**性染色体（默认）**；非 primary contig | 不报 |
 
-硬区 BED：`ref/hard_mask.grch38.refseq.bed`（近端着丝粒短臂、着丝粒±2 Mb、1q12/9qh/16qh、Y 异染色质）。manifest 的 `sex=F/XX` 时整条 chrY 进 MASKED。
+硬区 BED：`ref/hard_mask.grch38.refseq.bed`（近端着丝粒短臂、着丝粒±2 Mb、1q12/9qh/16qh 等）。**缺 mask 时 merge 直接失败**（`--require-hard-mask`）。默认**丢弃性染色体**（chrX/Y）；需要时设 `KEEP_SEX_CHROM=1`。
+
+CNVpytor 进 merge 前默认质量过滤：`Q0≤0.5`、`pN≤0.5`、`e-val1≤1e-4`（可用 `CNVPYTOR_QC=0` 关闭）。100 kb + 500 kb 双分辨率都会进 merge；≥1 Mb 且含 depth 证据时要求有 500 kb 支持。
 
 **不要**再把旧版笼统的 `HIGH`（含上千条亚 kb SV∩SV）直接做富集。
 
@@ -80,13 +82,15 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 
 ```
 cnv_work/
-  manifest.tsv
+  manifest.from_ont.tsv          # 正式入口（含 ont_bam）
   wgs_bam/{sample}.markdup.bam
   qc/{sample}.{ont,wgs}.mosdepth.*
   ont_sv/{sample}.sniffles.vcf.gz
-  ont_cnv/{sample}.cnvpytor.100k.tsv
+  ont_cnv/{sample}.cnvpytor.100000.tsv
+  ont_cnv/{sample}.cnvpytor.500000.tsv
   wgs_sv/{sample}.wgs_sv.cnv.vcf.gz
-  wgs_cnv/{sample}.cnvpytor.100k.tsv
+  wgs_cnv/{sample}.cnvpytor.100000.tsv
+  wgs_cnv/{sample}.cnvpytor.500000.tsv
   merged/{sample}.cnv.bed
   merged/{sample}.cnv.high.bed          # LARGE_HIGH only
   merged/{sample}.cnv.shared_sv.bed     # SHARED_SV (<100 kb both-SV)
@@ -96,12 +100,17 @@ cnv_work/
 ## 怎么跑
 
 1. 改 `config.sh` 里的 `REF_FASTA`（必须与 ONT BAM 的 `@SQ` 一致）和 `TR_BED`。
-2. 编 `manifest.tsv`（见 `examples/manifest.tsv`）。先扫 FASTQ，再把第一列改成 ONT 目录名（如 `0002C`）：
+2. 生成**正式** manifest（必须含 `ont_bam`）。`00_scan_fastq.py` 只扫 WGS；配对 BAM 用 `00c`：
 
 ```bash
 source config.sh
-python3 scripts/00_scan_fastq.py --ngs-root "${NGS_RAWDATA}" -o "${MANIFEST}"
-# 手工把 ont_id 对上 ONT_processed_data/modbam_Dorodo/{id}/
+python3 scripts/00_scan_fastq.py --ngs-root "${NGS_RAWDATA}" -o "${WORKDIR}/manifest.wgs.tsv"
+python3 scripts/00c_ont_wgs_coverage.py \
+  --ont-root "${ONT_BAM_ROOT}" \
+  --ont-extra "${ONT_RAW_MERGED_ROOT}" \
+  --wgs-manifest "${WORKDIR}/manifest.wgs.tsv" \
+  -o "${MANIFEST}"   # 默认 WORKDIR/manifest.from_ont.tsv，含 ont_bam
+# 示例列见 examples/manifest.tsv
 ```
 
 3. 单样本：
@@ -119,9 +128,9 @@ bash scripts/remake_merge.sh 0002C
 # 同步后务必: sed -i 's/\r$//' scripts/*.sh scripts/*.py config.sh
 ```
 
-4. 队列：对 `manifest.tsv` 第一列循环提交作业（不要在 `NGS_Rawdata/` 里跑）。已有 `cnv.high.bed` 的样本会被 SKIP；改规则后用 `FORCE=1` 或先 `remake_merge.sh`。
+4. 队列：对 `manifest.from_ont.tsv` 的 `ont_id` 循环提交（不要在 `NGS_Rawdata/` 里跑）。已有 `cnv.high.bed` 的样本会被 SKIP；改规则后用 `FORCE=1` 或先 `remake_merge.sh`。
 
-依赖：`bwa-mem2` `samtools` `sambamba` 或 `picard` `fastp` `mosdepth` `sniffles` `delly` `cnvpytor` `bcftools` `bedtools`（**Manta 不要 conda 装进 cnv10x**，见 `env/README.md`）；可选 `spectre` `AnnotSV`。
+依赖：`bwa-mem2` `samtools` `sambamba`（推荐）`fastp` `mosdepth` `sniffles` `delly` `cnvpytor` `bcftools` `bedtools`（**Manta 不要 conda 装进 cnv10x**，见 `env/README.md`）；可选 `spectre` `AnnotSV`。深度主 caller 是 **CNVpytor**；若环境有 Spectre 会额外跑（专用 mosdepth `--by 1000`，与 QC 的 100 kb 分开）。
 
 ## 和 ONT 甲基化的衔接
 

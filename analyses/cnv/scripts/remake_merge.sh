@@ -57,18 +57,25 @@ merge_args=(
   --wgs-sv "${WORKDIR}/wgs_sv/${ont_id}.wgs_sv.cnv.vcf.gz"
   --ont-cnvpytor "${WORKDIR}/ont_cnv/${ont_id}.cnvpytor.${BIN_PRIMARY}.tsv"
   --wgs-cnvpytor "${WORKDIR}/wgs_cnv/${ont_id}.cnvpytor.${BIN_PRIMARY}.tsv"
+  --ont-cnvpytor-large "${WORKDIR}/ont_cnv/${ont_id}.cnvpytor.${BIN_LARGE}.tsv"
+  --wgs-cnvpytor-large "${WORKDIR}/wgs_cnv/${ont_id}.cnvpytor.${BIN_LARGE}.tsv"
   --ro "${MERGE_RO:-0.50}"
   --min-depth "${MIN_DEPTH_CNV:-100000}"
   --max-event "${MAX_CNV_EVENT:-10000000}"
   --mask-frac "${MERGE_MASK_FRAC:-0.50}"
+  --cnvpytor-q0-max "${CNVPYTOR_Q0_MAX:-0.5}"
+  --cnvpytor-pn-max "${CNVPYTOR_PN_MAX:-0.5}"
+  --cnvpytor-eval-max "${CNVPYTOR_EVAL_MAX:-1e-4}"
   --sex "${sex:-}"
+  --require-hard-mask
   --hard-mask "${HARD_MASK_BED}"
   -o "${WORKDIR}/merged"
 )
-
-spectre_hit="$(find "${WORKDIR}/ont_cnv/spectre" -name "${ont_id}*.bed" -print -quit 2>/dev/null || true)"
-if [[ -n "${spectre_hit}" ]]; then
-  merge_args+=(--ont-spectre "${spectre_hit}")
+if [[ "${CNVPYTOR_QC:-1}" != "1" ]]; then
+  merge_args+=(--no-cnvpytor-qc)
+fi
+if [[ "${KEEP_SEX_CHROM:-0}" == "1" ]]; then
+  merge_args+=(--keep-sex-chrom)
 fi
 
 python3 "${SCRIPTS}/07_merge_paired.py" "${merge_args[@]}"

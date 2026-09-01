@@ -1,2 +1,2 @@
-ont_id	wgs_r1	wgs_r2	sex
-0002C	/abs/path/to/0002C_1.fq.gz	/abs/path/to/0002C_2.fq.gz	F
+ont_id	ont_bam	wgs_r1	wgs_r2	sex
+0002C	/abs/path/to/0002C.merged.bam	/abs/path/to/0002C_1.fq.gz	/abs/path/to/0002C_2.fq.gz	F

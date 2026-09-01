@@ -3,17 +3,13 @@
 
 Confidence tiers (cohort-facing):
   LARGE_HIGH  both platforms, same type, RO>=0.5, size>=100kb, outside hard mask,
-              and size<=MAX unless both-depth (+ optional SV) passes the size cap
+              on primary autosomes, and size<=MAX unless both-depth (+ SV) passes cap
   SHARED_SV   both platforms have SV breakpoints, size < 100kb (small SV burden)
   MEDIUM      cross-platform same-type overlap that is neither LARGE_HIGH nor SHARED_SV
-  ONT_SV      ONT Sniffles only
-  ONT_DEPTH   ONT depth only, >=100kb, unmasked, within size cap
-  WGS_DEPTH   WGS depth only, >=100kb, unmasked, within size cap
-  MASKED      would be depth/LARGE candidate but hits hard mask or sex-Y rule
-  DROP        not written (WGS-only small SV, tiny singleton depth, oversize uncapped)
+  ONT_SV / ONT_DEPTH / WGS_DEPTH / MASKED / DROP
 
-Legacy name HIGH is no longer emitted. AnnotSV / cohort tables use LARGE_HIGH
-({sample}.cnv.high.bed).
+Sex chromosomes (X/Y) are dropped by default (DROP_SEX_CHROM).
+Hard mask is required for LARGE_HIGH (--require-hard-mask).
 """
 from __future__ import annotations
 
@@ -21,17 +17,31 @@ import argparse
 import csv
 import gzip
 import re
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
 RO_DEFAULT = 0.5
-MIN_SV = 50
 MIN_DEPTH = 100_000
 MAX_EVENT_DEFAULT = 10_000_000
 MASK_FRAC = 0.50
+LARGE_BIN_MIN = 1_000_000  # ≥1 Mb: prefer 500 kb depth support when available
 
-CHRY = "NC_000024.10"
-FEMALE_SEX = {"f", "female", "xx", "2", "woman"}
+# RefSeq primary autosomes only (sex chr dropped unless --keep-sex-chrom)
+PRIMARY_AUTOSOMES = {
+    "NC_000001.11", "NC_000002.12", "NC_000003.12", "NC_000004.12",
+    "NC_000005.10", "NC_000006.12", "NC_000007.14", "NC_000008.11",
+    "NC_000009.12", "NC_000010.11", "NC_000011.10", "NC_000012.12",
+    "NC_000013.11", "NC_000014.9", "NC_000015.10", "NC_000016.10",
+    "NC_000017.11", "NC_000018.10", "NC_000019.10", "NC_000020.11",
+    "NC_000021.9", "NC_000022.11",
+}
+SEX_CHROMS = {"NC_000023.11", "NC_000024.10"}
+
+# CNVpytor -call columns (0-based): type, region, size, level, e1, e2, e3, e4, q0, pN, dG
+DEFAULT_Q0_MAX = 0.5
+DEFAULT_PN_MAX = 0.5
+DEFAULT_EVAL_MAX = 1e-4
 
 
 @dataclass
@@ -39,10 +49,11 @@ class Call:
     chrom: str
     start: int  # 0-based
     end: int
-    svtype: str  # DEL or DUP
+    svtype: str
     source: str
     size: int = 0
     extra: str = ""
+    bin_size: int = 0  # 100000 / 500000 for depth calls
 
     def __post_init__(self) -> None:
         if self.size <= 0:
@@ -64,6 +75,13 @@ class Cluster:
     @property
     def sources(self) -> set[str]:
         return {m.source for m in self.members}
+
+    @property
+    def has_large_bin_depth(self) -> bool:
+        return any(
+            m.source in ("ont_depth", "wgs_depth") and m.bin_size >= 500_000
+            for m in self.members
+        )
 
 
 @dataclass(frozen=True)
@@ -119,8 +137,26 @@ def parse_sv_vcf(path: Path, source: str) -> list[Call]:
     return calls
 
 
-def parse_cnvpytor(path: Path, source: str, min_size: int) -> list[Call]:
-    """CNVpytor -call TSV: type, region, size, cnv_level, pvals..."""
+def _f(parts: list[str], i: int, default: float | None = None) -> float | None:
+    if len(parts) <= i:
+        return default
+    try:
+        return float(parts[i])
+    except ValueError:
+        return default
+
+
+def parse_cnvpytor(
+    path: Path,
+    source: str,
+    min_size: int,
+    bin_size: int,
+    q0_max: float,
+    pn_max: float,
+    eval_max: float,
+    apply_qc: bool,
+) -> list[Call]:
+    """CNVpytor -call TSV with optional Q0 / pN / e-val1 filters."""
     calls: list[Call] = []
     if not path.exists():
         return calls
@@ -146,8 +182,20 @@ def parse_cnvpytor(path: Path, source: str, min_size: int) -> list[Call]:
             start, end = min(a, b) - 1, max(a, b)
             if end - start < min_size:
                 continue
+            if apply_qc:
+                q0 = _f(parts, 8)
+                pn = _f(parts, 9)
+                e1 = _f(parts, 4)
+                if q0 is not None and q0 > q0_max:
+                    continue
+                if pn is not None and pn > pn_max:
+                    continue
+                if e1 is not None and e1 > eval_max:
+                    continue
             level = parts[3] if len(parts) > 3 else ""
-            calls.append(Call(chrom, start, end, svtype, source, extra=str(level)))
+            calls.append(
+                Call(chrom, start, end, svtype, source, extra=str(level), bin_size=bin_size)
+            )
     return calls
 
 
@@ -176,6 +224,20 @@ def parse_spectre_bed(path: Path, source: str, min_size: int) -> list[Call]:
     return calls
 
 
+def merge_intervals(intervals: list[Interval]) -> list[Interval]:
+    if not intervals:
+        return []
+    intervals = sorted(intervals, key=lambda x: (x.start, x.end))
+    out = [intervals[0]]
+    for iv in intervals[1:]:
+        last = out[-1]
+        if iv.start <= last.end:
+            out[-1] = Interval(last.chrom, last.start, max(last.end, iv.end))
+        else:
+            out.append(iv)
+    return out
+
+
 def load_mask_bed(path: Path | None) -> dict[str, list[Interval]]:
     by_chrom: dict[str, list[Interval]] = {}
     if path is None or not path.exists():
@@ -189,8 +251,8 @@ def load_mask_bed(path: Path | None) -> dict[str, list[Interval]]:
                 continue
             chrom, start, end = cols[0], int(cols[1]), int(cols[2])
             by_chrom.setdefault(chrom, []).append(Interval(chrom, start, end))
-    for chrom in by_chrom:
-        by_chrom[chrom].sort(key=lambda x: (x.start, x.end))
+    for chrom in list(by_chrom):
+        by_chrom[chrom] = merge_intervals(by_chrom[chrom])
     return by_chrom
 
 
@@ -198,16 +260,10 @@ def mask_coverage_fraction(chrom: str, start: int, end: int, masks: dict[str, li
     size = end - start
     if size <= 0:
         return 0.0
-    intervals = masks.get(chrom, [])
     covered = 0
-    for iv in intervals:
-        inter = max(0, min(end, iv.end) - max(start, iv.start))
-        covered += inter
+    for iv in masks.get(chrom, []):
+        covered += max(0, min(end, iv.end) - max(start, iv.start))
     return min(1.0, covered / size)
-
-
-def is_female(sex: str) -> bool:
-    return (sex or "").strip().lower() in FEMALE_SEX
 
 
 def reciprocal_overlap(a: Call | Cluster, b: Call | Cluster) -> float:
@@ -242,28 +298,23 @@ def cluster_calls(calls: list[Call], ro: float) -> list[Cluster]:
     return clusters
 
 
-def hard_blocked(cl: Cluster, sex: str, masks: dict[str, list[Interval]], mask_frac: float) -> bool:
-    if is_female(sex) and cl.chrom == CHRY:
-        return True
+def hard_blocked(cl: Cluster, masks: dict[str, list[Interval]], mask_frac: float) -> bool:
     return mask_coverage_fraction(cl.chrom, cl.start, cl.end, masks) >= mask_frac
 
 
 def passes_size_cap(cl: Cluster, max_event: int, ont_depth: bool, wgs_depth: bool, ont_sv: bool, wgs_sv: bool) -> bool:
-    """Mb-scale events need both-depth; oversize without SV support is dropped."""
     if cl.size <= max_event:
         return True
-    both_depth = ont_depth and wgs_depth
-    any_sv = ont_sv or wgs_sv
-    return both_depth and any_sv
+    return ont_depth and wgs_depth and (ont_sv or wgs_sv)
 
 
 def assign_confidence(
     cl: Cluster,
     min_depth: int,
     max_event: int,
-    sex: str,
     masks: dict[str, list[Interval]],
     mask_frac: float,
+    require_large_bin_for_mb: bool,
 ) -> str | None:
     src = cl.sources
     ont_sv = "ont_sv" in src
@@ -274,7 +325,7 @@ def assign_confidence(
     wgs = wgs_sv or wgs_depth
     both_sv = ont_sv and wgs_sv
     size = cl.size
-    blocked = hard_blocked(cl, sex, masks, mask_frac)
+    blocked = hard_blocked(cl, masks, mask_frac)
 
     if ont and wgs:
         if both_sv and size < min_depth:
@@ -284,8 +335,11 @@ def assign_confidence(
                 return "MASKED"
             if not passes_size_cap(cl, max_event, ont_depth, wgs_depth, ont_sv, wgs_sv):
                 return "MASKED"
+            # ≥1 Mb: when 500 kb callsets were provided, require large-bin depth support
+            if require_large_bin_for_mb and size >= LARGE_BIN_MIN and (ont_depth or wgs_depth):
+                if not cl.has_large_bin_depth:
+                    return "MASKED"
             return "LARGE_HIGH"
-        # cross-platform <100 kb without both SV (rare)
         return "MEDIUM"
 
     if ont_sv and not wgs:
@@ -304,6 +358,14 @@ def assign_confidence(
     return None
 
 
+def keep_chrom(chrom: str, keep_sex: bool) -> bool:
+    if chrom in PRIMARY_AUTOSOMES:
+        return True
+    if keep_sex and chrom in SEX_CHROMS:
+        return True
+    return False
+
+
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--sample", required=True)
@@ -311,24 +373,64 @@ def main() -> None:
     p.add_argument("--wgs-sv", type=Path, required=True)
     p.add_argument("--ont-cnvpytor", type=Path, required=True)
     p.add_argument("--wgs-cnvpytor", type=Path, required=True)
+    p.add_argument("--ont-cnvpytor-large", type=Path, default=None, help="500 kb ONT CNVpytor TSV")
+    p.add_argument("--wgs-cnvpytor-large", type=Path, default=None, help="500 kb WGS CNVpytor TSV")
     p.add_argument("--ont-spectre", type=Path, default=None)
     p.add_argument("--ro", type=float, default=RO_DEFAULT)
     p.add_argument("--min-depth", type=int, default=MIN_DEPTH)
     p.add_argument("--max-event", type=int, default=MAX_EVENT_DEFAULT)
     p.add_argument("--hard-mask", type=Path, default=None)
     p.add_argument("--mask-frac", type=float, default=MASK_FRAC)
-    p.add_argument("--sex", default="", help="F/female/XX drops chrY; M/male/XY keeps Y under mask only")
+    p.add_argument("--require-hard-mask", action="store_true",
+                   help="Fail if hard-mask missing (needed for LARGE_HIGH)")
+    p.add_argument("--keep-sex-chrom", action="store_true",
+                   help="Keep chrX/Y; default drops sex chromosomes")
+    p.add_argument("--cnvpytor-q0-max", type=float, default=DEFAULT_Q0_MAX)
+    p.add_argument("--cnvpytor-pn-max", type=float, default=DEFAULT_PN_MAX)
+    p.add_argument("--cnvpytor-eval-max", type=float, default=DEFAULT_EVAL_MAX)
+    p.add_argument("--no-cnvpytor-qc", action="store_true", help="Disable Q0/pN/e-val filters")
+    p.add_argument("--sex", default="", help="Retained for summary only; sex chr dropped by default")
     p.add_argument("-o", "--outdir", type=Path, required=True)
     args = p.parse_args()
 
+    if args.require_hard_mask and (args.hard_mask is None or not args.hard_mask.exists() or not args.hard_mask.stat().st_size):
+        print("ERROR hard mask required but missing; set HARD_MASK_BED", file=sys.stderr)
+        sys.exit(2)
+
     masks = load_mask_bed(args.hard_mask)
+    apply_qc = not args.no_cnvpytor_qc
+    qc_kw = dict(
+        q0_max=args.cnvpytor_q0_max,
+        pn_max=args.cnvpytor_pn_max,
+        eval_max=args.cnvpytor_eval_max,
+        apply_qc=apply_qc,
+    )
+
     calls: list[Call] = []
     calls += parse_sv_vcf(args.ont_sv, "ont_sv")
     calls += parse_sv_vcf(args.wgs_sv, "wgs_sv")
-    calls += parse_cnvpytor(args.ont_cnvpytor, "ont_depth", args.min_depth)
-    calls += parse_cnvpytor(args.wgs_cnvpytor, "wgs_depth", args.min_depth)
+    calls += parse_cnvpytor(args.ont_cnvpytor, "ont_depth", args.min_depth, 100_000, **qc_kw)
+    calls += parse_cnvpytor(args.wgs_cnvpytor, "wgs_depth", args.min_depth, 100_000, **qc_kw)
+    if args.ont_cnvpytor_large:
+        calls += parse_cnvpytor(args.ont_cnvpytor_large, "ont_depth", args.min_depth, 500_000, **qc_kw)
+    if args.wgs_cnvpytor_large:
+        calls += parse_cnvpytor(args.wgs_cnvpytor_large, "wgs_depth", args.min_depth, 500_000, **qc_kw)
+    # Only enforce ≥1 Mb ↔ 500 kb concordance when both large TSVs actually exist
+    require_large_bin = bool(
+        args.ont_cnvpytor_large
+        and args.wgs_cnvpytor_large
+        and args.ont_cnvpytor_large.is_file()
+        and args.wgs_cnvpytor_large.is_file()
+        and args.ont_cnvpytor_large.stat().st_size > 0
+        and args.wgs_cnvpytor_large.stat().st_size > 0
+    )
+
     if args.ont_spectre:
         calls += parse_spectre_bed(args.ont_spectre, "ont_depth", args.min_depth)
+
+    before = len(calls)
+    calls = [c for c in calls if keep_chrom(c.chrom, args.keep_sex_chrom)]
+    dropped_chr = before - len(calls)
 
     clusters = cluster_calls(calls, args.ro)
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -336,14 +438,8 @@ def main() -> None:
     high_path = args.outdir / f"{args.sample}.cnv.high.bed"
     shared_path = args.outdir / f"{args.sample}.cnv.shared_sv.bed"
     counts = {
-        "LARGE_HIGH": 0,
-        "SHARED_SV": 0,
-        "MEDIUM": 0,
-        "ONT_SV": 0,
-        "ONT_DEPTH": 0,
-        "WGS_DEPTH": 0,
-        "MASKED": 0,
-        "DROP": 0,
+        "LARGE_HIGH": 0, "SHARED_SV": 0, "MEDIUM": 0, "ONT_SV": 0,
+        "ONT_DEPTH": 0, "WGS_DEPTH": 0, "MASKED": 0, "DROP": 0,
     }
 
     header = [
@@ -363,7 +459,7 @@ def main() -> None:
         w_shared.writerow(header)
         for cl in sorted(clusters, key=lambda x: (x.chrom, x.start)):
             conf = assign_confidence(
-                cl, args.min_depth, args.max_event, args.sex, masks, args.mask_frac
+                cl, args.min_depth, args.max_event, masks, args.mask_frac, require_large_bin
             )
             if conf is None:
                 counts["DROP"] += 1
@@ -388,24 +484,21 @@ def main() -> None:
     with summary.open("w") as fh:
         fh.write(
             "sample\tinput_calls\tclusters_kept\tLARGE_HIGH\tSHARED_SV\tMEDIUM\t"
-            "ONT_SV\tONT_DEPTH\tWGS_DEPTH\tMASKED\tDROP\tsex\n"
+            "ONT_SV\tONT_DEPTH\tWGS_DEPTH\tMASKED\tDROP\tsex\tdropped_non_autosome\n"
         )
-        kept = (
-            counts["LARGE_HIGH"]
-            + counts["SHARED_SV"]
-            + counts["MEDIUM"]
-            + counts["ONT_SV"]
-            + counts["ONT_DEPTH"]
-            + counts["WGS_DEPTH"]
-            + counts["MASKED"]
-        )
+        kept = sum(counts[k] for k in counts if k != "DROP")
         fh.write(
             f"{args.sample}\t{len(calls)}\t{kept}\t{counts['LARGE_HIGH']}\t{counts['SHARED_SV']}\t"
             f"{counts['MEDIUM']}\t{counts['ONT_SV']}\t{counts['ONT_DEPTH']}\t"
-            f"{counts['WGS_DEPTH']}\t{counts['MASKED']}\t{counts['DROP']}\t{args.sex or 'NA'}\n"
+            f"{counts['WGS_DEPTH']}\t{counts['MASKED']}\t{counts['DROP']}\t"
+            f"{args.sex or 'NA'}\t{dropped_chr}\n"
         )
     print(f"merged {args.sample}: {counts} -> {all_path}")
-    print(f"LARGE_HIGH={counts['LARGE_HIGH']} SHARED_SV={counts['SHARED_SV']} MASKED={counts['MASKED']}")
+    print(
+        f"LARGE_HIGH={counts['LARGE_HIGH']} SHARED_SV={counts['SHARED_SV']} "
+        f"MASKED={counts['MASKED']} dropped_non_autosome={dropped_chr} "
+        f"cnvpytor_qc={apply_qc} large_bin={require_large_bin}"
+    )
 
 
 if __name__ == "__main__":

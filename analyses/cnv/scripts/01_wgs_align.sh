@@ -67,10 +67,20 @@ if command -v sambamba >/dev/null 2>&1; then
     "${tmpdir}/${SAMPLE}.sorted.bam" \
     "${outdir}/${SAMPLE}.markdup.bam"
 else
+  # Proper samtools markdup needs name-order + fixmate -m before coordinate sort
+  echo "WARN sambamba missing; using samtools fixmate + markdup" >&2
+  samtools sort -n -@ 4 -o "${tmpdir}/${SAMPLE}.namesort.bam" "${tmpdir}/${SAMPLE}.sorted.bam"
+  samtools fixmate -m -@ 4 \
+    "${tmpdir}/${SAMPLE}.namesort.bam" \
+    "${tmpdir}/${SAMPLE}.fixmate.bam"
+  samtools sort -@ 4 -o "${tmpdir}/${SAMPLE}.coordsort.bam" "${tmpdir}/${SAMPLE}.fixmate.bam"
   samtools markdup -@ "${THREADS}" -s \
-    "${tmpdir}/${SAMPLE}.sorted.bam" \
+    "${tmpdir}/${SAMPLE}.coordsort.bam" \
     "${outdir}/${SAMPLE}.markdup.bam"
   samtools index -@ 4 "${outdir}/${SAMPLE}.markdup.bam"
+  rm -f "${tmpdir}/${SAMPLE}.namesort.bam" \
+        "${tmpdir}/${SAMPLE}.fixmate.bam" \
+        "${tmpdir}/${SAMPLE}.coordsort.bam"
 fi
 
 if [[ ! -s "${outdir}/${SAMPLE}.markdup.bam.bai" && ! -s "${outdir}/${SAMPLE}.markdup.bam.csi" ]]; then
