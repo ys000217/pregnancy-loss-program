@@ -63,7 +63,7 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 
 | 标签 | 规则 | 含义 |
 |------|------|------|
-| **LARGE_HIGH** | 两边同类型，RO≥50%，长度 ≥100 kb，**不落在硬区 mask**。100 kb–1 Mb：100 kb 双边 depth；≥1 Mb：有 500 kb 时需 500 kb 支持；**>10 Mb / 非整倍体：双边 depth 即可，不强制 SV 断点** | **病例对照主表**；写入 `cnv.high.bed` |
+| **LARGE_HIGH** | 两边同类型，RO≥50%，长度 ≥100 kb，**不落在硬区 mask**。100 kb–1 Mb：100 kb 双边 depth；≥1 Mb：有 500 kb 时需 500 kb 支持；**>10 Mb / 非整倍体：双边 depth 即可，不强制 SV 断点** | **病例对照主表**；写入 `cnv.high.bed`。跨样本位点用 `09_cluster_breakpoints` |
 | **SHARED_SV** | 两边都有 SV 断点，长度 &lt;100 kb | 小 SV 负担分析；**不要**和大片段混计 |
 | **MEDIUM** | 跨平台同向重叠但不满足上两档 | 候选，需 IGV |
 | **ONT_SV** | 仅 ONT Sniffles DEL/DUP，≥50 bp | 小 CNV 的预期来源 |
@@ -94,6 +94,8 @@ cnv_work/
   merged/{sample}.cnv.bed
   merged/{sample}.cnv.high.bed          # LARGE_HIGH only
   merged/{sample}.cnv.shared_sv.bed     # SHARED_SV (<100 kb both-SV)
+  cohort/cohort.large_high.clusters.tsv # 跨样本断点聚类（中位坐标）
+  cohort/cohort.large_high.members.tsv
   annot/{sample}.annotsv.tsv
 ```
 
@@ -129,6 +131,16 @@ bash scripts/remake_merge.sh 0002C
 ```
 
 4. 队列：对 `manifest.from_ont.tsv` 的 `ont_id` 循环提交（不要在 `NGS_Rawdata/` 里跑）。已有 `cnv.high.bed` 的样本会被 SKIP；改规则后用 `FORCE=1` 或先 `remake_merge.sh`。
+
+5. 全部样本 merge 完成后，做 **LARGE_HIGH 跨样本断点聚类**（负担/复发用这一张表，不要按每人一条原始 BED 行去计位点）：
+
+```bash
+source config.sh
+bash scripts/09_cluster_breakpoints.sh
+# 输出: ${WORKDIR}/cohort/cohort.large_high.clusters.tsv
+```
+
+规则：同染色体、同 DEL/DUP；两端都落在窗口内（默认 &lt;1 Mb 用 100 kb，两边都 ≥1 Mb 用 500 kb）；并且 RO≥50%。聚类坐标取成员 **中位** start/end，不用 union（避免把边界抖几 kb 的同一事件拉成长区间）。单样本内部 merge 仍是 `07` 的 50% RO，这一步不改 call。
 
 依赖：`bwa-mem2` `samtools` `sambamba`（推荐）`fastp` `mosdepth` `sniffles` `delly` `cnvpytor` `bcftools` `bedtools`（**Manta 不要 conda 装进 cnv10x**，见 `env/README.md`）；可选 `spectre` `AnnotSV`。深度主 caller 是 **CNVpytor**；若环境有 Spectre 会额外跑（专用 mosdepth `--by 1000`，与 QC 的 100 kb 分开）。
 

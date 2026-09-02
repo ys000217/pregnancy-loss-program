@@ -44,6 +44,9 @@ export QC_ABORT_MEDIAN="${QC_ABORT_MEDIAN:-3}"
 export QC_ABORT_BREADTH="${QC_ABORT_BREADTH:-0.40}"
 
 export MERGE_RO=0.50
+# Cohort LARGE_HIGH breakpoint clustering (09): both ends within pad, plus RO
+export CLUSTER_BP_PAD="${CLUSTER_BP_PAD:-100000}"
+export CLUSTER_BP_PAD_LARGE="${CLUSTER_BP_PAD_LARGE:-500000}"
 # Merge filters (set before mask probe so a failed probe cannot skip these under set -u)
 export MAX_CNV_EVENT="${MAX_CNV_EVENT:-10000000}"
 export MERGE_MASK_FRAC="${MERGE_MASK_FRAC:-0.50}"

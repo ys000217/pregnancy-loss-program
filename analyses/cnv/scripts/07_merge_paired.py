@@ -10,6 +10,7 @@ Confidence tiers (cohort-facing):
 
 Sex chromosomes (X/Y) are dropped by default (DROP_SEX_CHROM).
 Hard mask is required for LARGE_HIGH (--require-hard-mask).
+Cohort breakpoint clustering of LARGE_HIGH is 09_cluster_breakpoints.py, not this script.
 """
 from __future__ import annotations
 
