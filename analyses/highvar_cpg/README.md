@@ -27,17 +27,29 @@ k 加大只会把主流群切碎，不会把 control / normal 整体切开。全
 
 job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成，不必为改叙述而重跑。
 
-### 3. 再剔除 abnormal-like 后，只在 8 / 9 / 10 周层内重算（下一步）
+### 3. 8 / 9 / 10 周组内高变（此前未做）
 
-去掉 **47 例 abnormal + 30 例 abnormal-like** 后，按整周清点：5–7 周、11–12 周人数不足或几乎没有 control，**不进入本步**。只对人数够的三周，**各周单独**算覆盖与高变 CpG（不把不同周混在一层里）。
+按整周、在人数足够的 8/9/10 周**各算一套**高变 CpG。两套样本集合（脚本 **11**）：
 
-| 层 | Group3 | 预期 n（control / normal_case） |
-|----|--------|--------------------------------|
-| `W8` | 8 周 | 308（72 / 236） |
-| `W9` | 9 周 | 93（29 / 64） |
-| `W10` | 10 周 | 66（10 / 56）；control 偏少 |
+| 集合 | 含义 | W8 | W9 | W10 |
+|------|------|----|----|-----|
+| **all** | 该周全部样本（含 abnormal） | 339（abn 31 / ctrl 72 / nor 236） | 101（8 / 29 / 64） | 74（8 / 10 / 56） |
+| **noabn** | 该周去掉 clinical abnormal | 308（72 / 236） | 93（29 / 64） | 66（10 / 56） |
 
-合计约 **467**。服务器脚本：**10**（尚未跑）。
+脚本 **10**（再去掉 30 例 like）在这三周上与 **11-noabn 样本集相同**，因为 like 不在 8/9/10 周。可只跑 11。
+
+30 例 abnormal-like 孕周：7 周 2 例、11 周 9 例、12 周 19 例（SPL 10 / RPL 20）；**8/9/10 周为 0**。
+
+### 4. 8–10 周合并高变（此前未做；脚本 12）
+
+把 8+9+10 周**合成一层**再算覆盖与方差（相对脚本 11 只改「是否分周」）：
+
+| 集合 | 含义 | 预期 n |
+|------|------|--------|
+| **all** | 8–10 周全部样本（含 abnormal） | **514**（339+101+74） |
+| **noabn** | 8–10 周去掉 clinical abnormal | **467**（308+93+66） |
+
+产出一层目录：`W8_10/`。like 仍不在这三周，noabn 不必再剔 like。
 
 ### 结果状态（入库文档口径）
 
@@ -45,7 +57,8 @@ job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成
 |------|------|----------|
 | 1 全队列高变聚类 | **完成** | 本地 `筛选高变CpG/`（大矩阵 gitignore）；名单与逻辑见上文 |
 | 2 NC 敏感性 → 30 例 abnormal-like | **完成** | [`metadata/abnormal_like_normal_case_30.txt`](metadata/abnormal_like_normal_case_30.txt) |
-| 3 8/9/10 周主流层内高变 | **待跑** | `scripts/10_GA_stratified_mainstream_highvar_cpg.sh` |
+| 3 8/9/10 周分周 all + noabn | **待跑/已跑看服务器** | `scripts/11_week8910_all_and_noabn_highvar.sh` |
+| 4 8–10 周合并 all + noabn | **待跑** | `scripts/12_week8to10_pooled_all_and_noabn_highvar.sh` |
 
 **生物学要点：** 高变空间主轴是 abnormal / abnormal-like vs 主流混合群，而不是 control vs normal_case 的干净分开；30 例 abnormal-like 与临床 abnormal 定义不符，但甲基化表型可复现。
 
@@ -64,16 +77,20 @@ job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成
 | `07_extract_RPL_study_matrix_648.sh` | meQTL 用 648 样本 bed 矩阵 |
 | `08_build_top100k_matrix_for_pca.sh` | 全队列方差 top 100k 矩阵 |
 | `09_NC_normal_control_highvar_cpg.sh` | 剔除 abnormal 后重算覆盖/方差（敏感性测试） |
-| `10_GA_stratified_mainstream_highvar_cpg.sh` | 再剔除 30 例 abnormal-like，仅 8/9/10 周层内重算 |
+| `10_GA_stratified_mainstream_highvar_cpg.sh` | 剔除 abnormal+like 后仅 8/9/10 周（与 11-noabn 样本集相同） |
+| `11_week8910_all_and_noabn_highvar.sh` | **8/9/10 分周**：全样本 与 去 abnormal 各算组内高变 |
+| `12_week8to10_pooled_all_and_noabn_highvar.sh` | **8–10 周合并**：全样本 与 去 abnormal 各算高变 |
 
-09/10 注意：`chmod +x` 或 `bash script`；勿 `sort|head`（`pipefail` 下 SIGPIPE / exit 141）；临床表去掉 Windows `\r`。
+09–12 注意：用 `bash script` 或 `jsub < script`（勿 `./script`，Windows CRLF 会 `/bin/bash^M`）；勿 `sort|head`（`pipefail` SIGPIPE）；临床表去掉 `\r`。
 
 ```bash
-# 服务器（下一步）
-# jsub < analyses/highvar_cpg/scripts/10_GA_stratified_mainstream_highvar_cpg.sh
+# 服务器：8–10 周合并 all + 去 abnormal
+# jsub < analyses/highvar_cpg/scripts/12_week8to10_pooled_all_and_noabn_highvar.sh
 ```
 
-产出目录（服务器）：`.../prepare_methylation/mainstream_by_GA/{W8,W9,W10}/`
+产出：
+- 分周（11）：`.../week8910_hvar/{all,noabn}/{W8,W9,W10}/`
+- 合并（12）：`.../week8to10_pooled_hvar/{all,noabn}/W8_10/`
 
 ## 本地 R 分析
 
