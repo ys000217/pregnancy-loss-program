@@ -1,0 +1,8 @@
+汇报要点（描述性，不做组间显著性）
+- 表型：abnormal 47 / normal 356 / control 110；基因库为完整 EpiFactors（EpiGenes_main.xlsx）。
+- 47 例 abnormal 均有 panel 内非同义/剪接 SNV；每例 rare SNV 中位数约 15 （normal 16，control 16）。
+- Rare SNV 累及 324 个基因；其中 200 个基因 abnormal 比例同时高于 normal 与 control。
+- Panel 重叠 SV 中位数约 16 / 人，多数为内含子；abnormal 的 exon/splice SV 事件合计 57，ACMG≥4 事件合计 0。
+- 高比例非同义 SNV（如接近 100%）多为共享常见错义，不宜解读为 abnormal 特异。
+- 图件：plots/epifactors/fig1_epifactors_overview.pdf（主图）与 fig2_*.pdf；源数据在 source_data/。
+- 样本卡片：tables/epifactors/abnormal_sample_cards.tsv（n=47）。

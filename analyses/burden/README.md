@@ -29,15 +29,15 @@ Environment variables:
 |--------|-------|
 | Unique AnnotSV P/LP (ACMG 4+5, full) | **124** |
 | Population-rare P/LP (no gnomAD AF or AF&lt;1%) | **45** |
-| Strict rare (pop-rare + cohort AF&lt;5%) | **16** |
+| Strict rare (pop-rare + cohort AF&lt;5%) | **38** |
 | Genome-wide PASS SV loci tested | **55,388** |
 
 ### Sample-level burden
 
 - **SNV mut/Mb**: case vs control significant, but direction is case slightly *lower*; abnormal ≈ normal (not an abnormal-elevated burden story).
-- **SV total**: no group difference.
-- **P/LP and rare P/LP counts**: case vs control p≈0.016–0.019, again case median slightly *lower* than control; abnormal vs normal/control NS.
-- **Strict rare P/LP**: NS across comparisons.
+- **SV total (alt-carrying PASS SVs only)**: abnormal ≈ normal; vs control a modest difference in common polymorphic load (not P/LP).
+- **P/LP SV counts (alt-carrying)**: no significant group difference.
+- **Strict rare P/LP**: catalog size depends on cohort AF from true carriers.
 
 ### Per-locus enrichment
 
@@ -59,3 +59,37 @@ Rscript analyses/burden/scripts/analyze_and_plot.R
 ```
 
 A working copy may also remain under `figure2/burden_analysis/` (`figure*/` is gitignored).
+
+## EpiFactors catalog (this round)
+
+Single script: `scripts/epifactors_catalog.py` (open in the IDE). Interpreter:
+
+`analyses/burden/.venv/Scripts/python.exe`
+
+```bash
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/epifactors_catalog.py
+# full rescan of ANNOVAR + VCFs:
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/epifactors_catalog.py --catalog
+```
+
+Outputs: `tables/epifactors/` and `plots/epifactors/` (Nature-style PDF/PNG + source_data).
+Group rates are descriptive only (no p-values). Panel is the full `figure2/EpiGenes_main.xlsx` library.
+
+## Narrative figures (burden + SV loci + EpiFactors)
+
+**8–10 weeks** (g8/g9/g10; n=47/356/110):
+
+```bash
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/epifactors_catalog.py --plot-only --gw8-10
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/plot_narrative.py
+```
+
+Writes `plots/narrative/` (Fig. 1–5) and `tables/gw8_10/` (SV locus scan + derived EpiFactors).
+
+**Full 648** with 30 CpG-cluster suspects relabeled abnormal (n=77/418/153):
+
+```bash
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/run_narrative_all_suspect.py
+```
+
+Writes `plots/narrative_all_suspect/` and `tables/suspect_abn/`.

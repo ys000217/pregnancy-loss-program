@@ -34,6 +34,22 @@ COHORT_AF_RARE_THRESHOLD = 0.05
 POP_AF_COLS = ["B_gain_AFmax", "B_loss_AFmax", "B_ins_AFmax", "B_inv_AFmax"]
 
 
+def parse_gw_bin(raw: str) -> str | None:
+    """Map Gestational_Week to g8 / g9 / g10, or None if outside 8–10 weeks."""
+    g = str(raw or "").strip().lower()
+    if re.fullmatch(r"g8|8(\+.*)?", g):
+        return "g8"
+    if re.fullmatch(r"g9|9(\+.*)?", g):
+        return "g9"
+    if re.fullmatch(r"g10|10(\+.*)?", g):
+        return "g10"
+    return None
+
+
+def keep_gw_8_10(raw: str) -> bool:
+    return parse_gw_bin(raw) is not None
+
+
 def norm_chr(chrom: str) -> str:
     return chrom.lower().replace("chr", "").strip()
 
@@ -187,10 +203,10 @@ def compute_sv_burden(samples: list[str], vcf_path: Path):
             coord_key = f"{parts[0]}:{parts[1]}:{sv_end}:{svtype}"
             gt_map = dict(zip(vcf_samples, parts[9:]))
             carried = {}
+            # Count only alt-carrying genotypes (0/1, 1/1, …), not 0/0 or missing.
             for sample in samples:
                 gt = gt_map.get(sample, "./.")
-                g = gt.split(":")[0]
-                if g in {".", "./.", ".|."}:
+                if not has_alt_allele(gt):
                     continue
                 total[sample] += 1
                 by_type[svtype][sample] += 1

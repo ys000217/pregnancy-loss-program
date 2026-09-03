@@ -1,0 +1,5 @@
+Fig. 1 | EpiFactors-gene variants in methylation-defined groups (descriptive).
+a, Per-sample count of rare (gnomAD AF < 1% or missing) nonsynonymous or splice SNVs in the EpiFactors library. n = 47 abnormal, 356 normal, 110 control. Boxes show median and IQR; points are samples. b, Per-sample count of size-filtered SVs overlapping any EpiFactors gene (any location). c, Top EpiFactors genes by raw Fisher p (abnormal vs control SV carriers); bars are percent of samples. d, Top EpiFactors genes by raw Fisher p (abnormal vs control rare SNV carriers); same layout as c. Panel-overlapping SVs are mostly intronic (abnormal 93%, normal 94%, control 93%); not shown as a panel. a, two-sided Mann–Whitney: Ab–N p=0.645, Ab–C p=0.980, N–C p=0.356. b, Ab–N p=0.800, Ab–C p=0.510, N–C p=0.063. d is descriptive (no test).
+
+Fig. 2 | SNV consequence mix and coding-relevant SVs.
+a, Consequence of nonsynonymous/splice SNVs in abnormal samples. b, Per-sample SVs whose AnnotSV Location includes exon or splice (including exonN-exonN). c, Number of genes carrying an overlapping SV with ACMG class ≥ 4.

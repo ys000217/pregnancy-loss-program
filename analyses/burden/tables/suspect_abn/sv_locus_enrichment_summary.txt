@@ -1,0 +1,12 @@
+pass_sv_loci	55388
+fdr_threshold	0.05
+abnormal_specific_loci	0
+abnormal_specific_rule	fdr(ab vs control)<thr AND ab_rate>control AND ab_rate>normal AND fdr(ab vs normal)<thr
+fdr05_any_pairwise	990
+pattern_abnormal_vs_control_only	38
+pattern_case_vs_control	172
+pattern_none	54398
+pattern_normal_vs_control	780
+fdr05_abnormal_vs_control	210
+fdr05_abnormal_vs_normal	0
+fdr05_normal_vs_control	952

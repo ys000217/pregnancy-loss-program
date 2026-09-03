@@ -1,0 +1,649 @@
+VCF_Sample_ID	Condition	Source	Match_Status	Group_Type	Group1	Group4	Gestational_Week	Suspect_Abnormal
+0002C	control	metadata_summary	metadata_exact	NA			g8	0
+0003C	control	metadata_summary	metadata_exact	NA			g9	0
+0004c	control	clinical_649	clinical_exact		control	non-abnormal	6+5	0
+0005c	control	clinical_649	clinical_exact		control	non-abnormal	6+5	0
+0006C	control	metadata_summary	metadata_exact	NA			g8	0
+0008C	control	metadata_summary	metadata_exact	NA			g8	0
+0010C	control	metadata_summary	metadata_exact	NA			g8	0
+0011C	control	metadata_summary	metadata_exact	NA			g9	0
+0012c	control	clinical_649	clinical_exact		control	non-abnormal	7+4	0
+0013C	control	metadata_summary	metadata_exact	NA			g9	0
+0014c	control	clinical_649	clinical_exact		control	non-abnormal	7+4	0
+0017C	control	metadata_summary	metadata_exact	NA			g8	0
+0022C	control	metadata_summary	metadata_exact	NA			g8	0
+0026C	control	metadata_summary	metadata_exact	NA			g9	0
+0027C	control	metadata_summary	metadata_exact	NA			g8	0
+0030C	control	metadata_summary	metadata_exact	NA			g8	0
+0038C	control	metadata_summary	metadata_exact	NA			g9	0
+0039C	control	metadata_summary	metadata_exact	NA			g9	0
+0040C	control	metadata_summary	metadata_exact	NA			g8	0
+0041C	control	metadata_summary	metadata_exact	NA			g8	0
+0042c	control	clinical_649	clinical_exact		control	non-abnormal	7+6	0
+0043C	control	metadata_summary	metadata_exact	NA			g8	0
+0044c	control	clinical_649	clinical_exact		control	non-abnormal	7+5	0
+0045C	control	metadata_summary	metadata_exact	NA			g8	0
+0046c	control	clinical_649	clinical_exact		control	non-abnormal	7+3	0
+0047c	control	clinical_649	clinical_exact		control	non-abnormal	7+2	0
+0048C	control	metadata_summary	metadata_exact	NA			g8	0
+0049c	control	clinical_649	clinical_exact		control	non-abnormal	6+3	0
+0052c	control	clinical_649	clinical_exact		control	non-abnormal	7+2	0
+0053c	control	clinical_649	clinical_exact		control	non-abnormal	6+3	0
+0054c	control	clinical_649	clinical_exact		control	non-abnormal	7	0
+0056c	control	clinical_649	clinical_exact		control	non-abnormal	6+4	0
+0058C	control	metadata_summary	metadata_exact	NA			g9	0
+0059C	control	metadata_summary	metadata_exact	NA			g9	0
+0060C	control	metadata_summary	metadata_exact	NA			g8	0
+0061C	control	metadata_summary	metadata_exact	NA			g8	0
+0062c	control	clinical_649	clinical_exact		control	non-abnormal	6+5	0
+0063C	control	metadata_summary	metadata_exact	NA			g8	0
+0064c	control	clinical_649	clinical_exact		control	non-abnormal	6+6	0
+0065c	control	clinical_649	clinical_exact		control	non-abnormal	7+6	0
+0066c	control	clinical_649	clinical_exact		control	non-abnormal	7+3	0
+0067c	control	clinical_649	clinical_exact		control	non-abnormal	6	0
+0070c	control	clinical_649	clinical_exact		control	non-abnormal	7+6	0
+0072c	control	clinical_649	clinical_exact		control	non-abnormal	7	0
+0073c	control	clinical_649	clinical_exact		control	non-abnormal	7+2	0
+0074c	control	clinical_649	clinical_exact		control	non-abnormal	6+1	0
+0075c	control	clinical_649	clinical_exact		control	non-abnormal	7+1	0
+0076c	control	clinical_649	clinical_exact		control	non-abnormal	7+1	0
+0077c	control	clinical_649	clinical_exact		control	non-abnormal	6+4	0
+0079c	control	clinical_649	clinical_exact		control	non-abnormal	6+1	0
+0080c	control	clinical_649	clinical_exact		control	non-abnormal	5+6	0
+0081c	control	clinical_649	clinical_exact		control	non-abnormal	7+4	0
+0082c	control	clinical_649	clinical_exact		control	non-abnormal	6+4	0
+0084c	control	clinical_649	clinical_exact		control	non-abnormal	6+3	0
+0085c	control	clinical_649	clinical_exact		control	non-abnormal	7+3	0
+0086c	control	clinical_649	clinical_exact		control	non-abnormal	6+2	0
+0088c	control	clinical_649	clinical_exact		control	non-abnormal	6+2	0
+0092c	control	clinical_649	clinical_exact		control	non-abnormal	7+5	0
+0094c	control	clinical_649	clinical_exact		control	non-abnormal	7	0
+0095c	control	clinical_649	clinical_exact		control	non-abnormal	6+1	0
+0096c	control	clinical_649	clinical_exact		control	non-abnormal	7+5	0
+0097c	control	clinical_649	clinical_exact		control	non-abnormal	7+1	0
+0098c	control	clinical_649	clinical_exact		control	non-abnormal	6+6	0
+0104c	control	clinical_649	clinical_exact		control	non-abnormal	6	0
+0108c	control	clinical_649	clinical_exact		control	non-abnormal	6	0
+102	normal	metadata_summary	metadata_exact	rpl			g10	0
+105	normal	metadata_summary	metadata_exact	rpl			g8	0
+107	abnormal	metadata_summary	metadata_exact	spl			g9	0
+108	normal	metadata_summary	metadata_exact	spl			g8	0
+112	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+113	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+114	normal	metadata_summary	metadata_exact	spl			g8	0
+118	normal	metadata_summary	metadata_exact	rpl			g8	0
+119	normal	clinical_649	clinical_exact		case	non-abnormal	11+4	0
+121	normal	metadata_summary	metadata_exact	rpl			g8	0
+122	normal	metadata_summary	metadata_exact	rpl			g10	0
+123	normal	metadata_summary	metadata_exact	spl			g8	0
+133	normal	metadata_summary	metadata_exact	spl			g8	0
+151	normal	metadata_summary	metadata_exact	rpl			g9	0
+154	normal	metadata_summary	metadata_exact	rpl			g10	0
+155	normal	metadata_summary	metadata_exact	spl			g8	0
+158	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+159	normal	metadata_summary	metadata_exact	rpl			g8	0
+160	normal	metadata_summary	metadata_exact	rpl			g9	0
+163	normal	metadata_summary	metadata_exact	rpl			g8	0
+165	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+170	normal	metadata_summary	metadata_exact	spl			g8	0
+171	normal	metadata_summary	metadata_exact	rpl			g8	0
+174	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+176	normal	metadata_summary	metadata_exact	rpl			g8	0
+179	normal	metadata_summary	metadata_exact	rpl			g10	0
+180	normal	metadata_summary	metadata_exact	rpl			g10	0
+182	normal	metadata_summary	metadata_exact	spl			g8	0
+185	normal	metadata_summary	metadata_exact	rpl			g8	0
+191	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+192	normal	metadata_summary	metadata_exact	rpl			g8	0
+193	normal	metadata_summary	metadata_exact	spl			g8	0
+194	normal	metadata_summary	metadata_exact	rpl			g8	0
+195	normal	metadata_summary	metadata_exact	rpl			g9	0
+200	abnormal	metadata_summary	metadata_exact	spl			g8	0
+208	normal	metadata_summary	metadata_exact	rpl			g10	0
+209	normal	metadata_summary	metadata_exact	rpl			g8	0
+210	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+211	normal	metadata_summary	metadata_exact	rpl			g8	0
+216	abnormal	clinical_649	clinical_exact		case	non-abnormal	7+1	1
+218	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+219	normal	metadata_summary	metadata_exact	rpl			g8	0
+220	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+221	normal	metadata_summary	metadata_exact	rpl			g9	0
+222	normal	metadata_summary	metadata_exact	spl			g8	0
+223	normal	metadata_summary	metadata_exact	spl			g9	0
+224	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+225	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+226	abnormal	clinical_649	clinical_exact		case	non-abnormal	11	1
+227	normal	metadata_summary	metadata_exact	rpl			g8	0
+229	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+230	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+233	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+236	normal	metadata_summary	metadata_exact	rpl			g10	0
+237	normal	metadata_summary	metadata_exact	spl			g9	0
+238	abnormal	metadata_summary	metadata_exact	spl			g8	0
+241	normal	metadata_summary	metadata_exact	rpl			g9	0
+245	normal	clinical_649	clinical_exact		case	non-abnormal	7+3	0
+247	abnormal	clinical_649	clinical_exact		case	non-abnormal	7+3	1
+248	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+249	normal	metadata_summary	metadata_exact	spl			g8	0
+250	normal	metadata_summary	metadata_exact	spl			g8	0
+254	normal	metadata_summary	metadata_exact	rpl			g8	0
+258	normal	metadata_summary	metadata_exact	spl			g8	0
+261	normal	clinical_649	clinical_exact		case	non-abnormal	11+5	0
+262	normal	metadata_summary	metadata_exact	rpl			g10	0
+263	normal	metadata_summary	metadata_exact	rpl			g10	0
+264	normal	metadata_summary	metadata_exact	rpl			g8	0
+265	normal	metadata_summary	metadata_exact	rpl			g9	0
+275	normal	clinical_649	clinical_exact		case	non-abnormal	6+5	0
+277	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+278	normal	clinical_649	clinical_exact		case	non-abnormal	11+5	0
+281	normal	metadata_summary	metadata_exact	spl			g8	0
+282	normal	metadata_summary	metadata_exact	rpl			g8	0
+285	normal	metadata_summary	metadata_exact	rpl			g9	0
+287	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+291	normal	metadata_summary	metadata_exact	rpl			g9	0
+292	normal	metadata_summary	metadata_exact	spl			g8	0
+294	normal	clinical_649	clinical_exact		case	non-abnormal	7	0
+297	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+302	normal	metadata_summary	metadata_exact	rpl			g8	0
+303	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+304	normal	metadata_summary	metadata_exact	spl			g8	0
+305	normal	metadata_summary	metadata_exact	spl			g8	0
+307	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+310	normal	metadata_summary	metadata_exact	rpl			g9	0
+313	normal	metadata_summary	metadata_exact	spl			g8	0
+315	normal	metadata_summary	metadata_exact	spl			g8	0
+316	normal	metadata_summary	metadata_exact	spl			g8	0
+317	normal	metadata_summary	metadata_exact	rpl			g8	0
+318	normal	metadata_summary	metadata_exact	rpl			g8	0
+323	normal	metadata_summary	metadata_exact	rpl			g10	0
+324	normal	metadata_summary	metadata_exact	rpl			g8	0
+325	normal	metadata_summary	metadata_exact	spl			g8	0
+326	normal	metadata_summary	metadata_exact	spl			g8	0
+328	normal	metadata_summary	metadata_exact	spl			g8	0
+332	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+337	normal	metadata_summary	metadata_exact	spl			g8	0
+341	normal	metadata_summary	metadata_exact	rpl			g8	0
+342	normal	metadata_summary	metadata_exact	rpl			g8	0
+349	normal	metadata_summary	metadata_exact	spl			g8	0
+350	normal	metadata_summary	metadata_exact	rpl			g8	0
+352	normal	metadata_summary	metadata_exact	spl			g9	0
+353	normal	clinical_649	clinical_exact		case	non-abnormal	7+6	0
+354	normal	metadata_summary	metadata_exact	spl			g9	0
+355	abnormal	metadata_summary	metadata_exact	spl			g8	0
+356	abnormal	metadata_summary	metadata_exact	spl			g8	0
+357	normal	metadata_summary	metadata_exact	spl			g10	0
+359	normal	clinical_649	clinical_exact		case	non-abnormal	6+6	0
+364	normal	clinical_649	clinical_exact		case	non-abnormal	6+1	0
+365	normal	metadata_summary	metadata_exact	rpl			g8	0
+367	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+3	1
+368	normal	metadata_summary	metadata_exact	rpl			g8	0
+369	normal	metadata_summary	metadata_exact	spl			g8	0
+370	normal	metadata_summary	metadata_exact	rpl			g8	0
+379	normal	metadata_summary	metadata_exact	spl			g8	0
+388	normal	metadata_summary	metadata_exact	spl			g8	0
+389	normal	clinical_649	clinical_exact		case	non-abnormal	7+6	0
+390	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+393	normal	metadata_summary	metadata_exact	spl			g8	0
+396	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0281	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0283	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+A0295	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0298	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0301	abnormal	metadata_summary	metadata_exact	spl			g10	0
+A0302	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+A0303	normal	metadata_summary	metadata_exact	spl			g9	0
+A0305	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0308	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0309	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+A0310	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0311	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0312	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+A0313	normal	metadata_summary	metadata_exact	spl			g10	0
+A0315	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0318	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0319	normal	metadata_summary	metadata_exact	spl			g8	0
+A0323	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0329	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0335	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0340	normal	metadata_summary	metadata_exact	spl			g8	0
+A0342	normal	metadata_summary	metadata_exact	spl			g8	0
+A0344	normal	metadata_summary	metadata_exact	spl			g8	0
+A0346	normal	clinical_649	clinical_exact		case	non-abnormal	11+1	0
+A0349	normal	metadata_summary	metadata_exact	spl			g8	0
+A0352	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0355	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0356	normal	metadata_summary	metadata_exact	spl			g8	0
+A0357	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0358	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0362	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0364	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0365	normal	metadata_summary	metadata_exact	spl			g8	0
+A0367	normal	metadata_summary	metadata_exact	spl			g10	0
+A0369	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0370	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0374	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0375	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0379	normal	metadata_summary	metadata_exact	spl			g10	0
+A0382	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0384	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0386	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0388	normal	metadata_summary	metadata_exact	spl			g8	0
+A0389	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0393	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0397	normal	metadata_summary	metadata_exact	spl			g8	0
+A0399	normal	metadata_summary	metadata_exact	spl			g8	0
+A0403	normal	metadata_summary	metadata_exact	spl			g8	0
+A0404	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0405	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0406	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+6	1
+A0407	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0410	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0411	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0412	normal	metadata_summary	metadata_exact	spl			g8	0
+A0414	normal	metadata_summary	metadata_exact	spl			g8	0
+A0416	normal	metadata_summary	metadata_exact	spl			g8	0
+A0417	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0418	normal	metadata_summary	metadata_exact	spl			g8	0
+A0419	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0420	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+A0423	abnormal	metadata_summary	metadata_exact	spl			g10	0
+A0430	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0431	normal	metadata_summary	metadata_exact	spl			g9	0
+A0435	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0438	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0439	normal	metadata_summary	metadata_exact	spl			g8	0
+A0441	normal	metadata_summary	metadata_exact	spl			g8	0
+A0442	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0443	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0453	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0457	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0458	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0460	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0461	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0466	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0467	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0468	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+A0471	normal	metadata_summary	metadata_exact	spl			g10	0
+A0472	abnormal	metadata_summary	metadata_exact	rpl			g10	0
+A0473	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0486	normal	clinical_649	clinical_exact		case	non-abnormal	11+5	0
+A0488	normal	metadata_summary	metadata_exact	spl			g8	0
+A0497	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0506	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0509	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0522	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0526	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+A0527	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0528	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0529	normal	metadata_summary	metadata_exact	spl			g10	0
+A0536	normal	metadata_summary	metadata_exact	spl			g9	0
+A0538	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0539	normal	metadata_summary	metadata_exact	spl			g9	0
+A0541	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0561	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0566	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0568	normal	metadata_summary	metadata_exact	spl			g8	0
+A0570	normal	metadata_summary	metadata_exact	spl			g10	0
+A0574	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0575	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0578	normal	metadata_summary	metadata_exact	spl			g8	0
+A0581	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0582	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+A0584	normal	metadata_summary	metadata_exact	spl			g8	0
+A0588	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0590	normal	metadata_summary	metadata_exact	spl			g8	0
+A0592	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0594	normal	metadata_summary	metadata_exact	spl			g8	0
+A0595	normal	metadata_summary	metadata_exact	spl			g8	0
+A0596	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0600	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0601	normal	metadata_summary	metadata_exact	spl			g8	0
+A0603	normal	metadata_summary	metadata_exact	spl			g9	0
+A0608	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0611	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0618	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0619	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+A0622	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0626	normal	metadata_summary	metadata_exact	spl			g8	0
+A0631	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0633	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0635	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0638	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0643	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0645	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0646	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0648	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0653	normal	metadata_summary	metadata_exact	spl			g9	0
+A0654	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0661	normal	metadata_summary	metadata_exact	spl			g10	0
+A0663	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0673	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0675	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0682	normal	metadata_summary	metadata_exact	spl			g8	0
+A0686	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0698	normal	metadata_summary	metadata_exact	spl			g9	0
+A0707	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+6	1
+A0709	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0713	abnormal	metadata_summary	metadata_exact	spl			g10	0
+A0714	normal	metadata_summary	metadata_exact	spl			g8	0
+A0716	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0722	normal	metadata_summary	metadata_exact	spl			g10	0
+A0726	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0729	normal	metadata_summary	metadata_exact	spl			g8	0
+A0740	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0742	normal	clinical_649	clinical_exact		case	non-abnormal	7+3	0
+A0745	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0747	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0749	normal	metadata_summary	metadata_exact	spl			g8	0
+A0751	normal	metadata_summary	metadata_exact	spl			g8	0
+A0757	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0758	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0760	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0762	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0763	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0764	normal	metadata_summary	metadata_exact	spl			g10	0
+A0768	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0790	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0791	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+A0799	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0802	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0805	normal	metadata_summary	metadata_exact	spl			g8	0
+A0811	normal	metadata_summary	metadata_exact	spl			g9	0
+A0813	normal	metadata_summary	metadata_exact	spl			g8	0
+A0816	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0822	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0825	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0827	normal	metadata_summary	metadata_exact	spl			g8	0
+A0829	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0830	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0831	normal	metadata_summary	metadata_exact	spl			g8	0
+A0837	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0846	normal	metadata_summary	metadata_exact	spl			g9	0
+A0848	normal	metadata_summary	metadata_exact	spl			g8	0
+A0857	normal	metadata_summary	metadata_exact	spl			g10	0
+A0862	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0872	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0873	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0883	normal	metadata_summary	metadata_exact	spl			g8	0
+A0888	normal	metadata_summary	metadata_exact	spl			g8	0
+A0896	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0899	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+A0902	normal	metadata_summary	metadata_exact	spl			g9	0
+A0906	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0921	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0927	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0931	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0936	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0938	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+A0948	normal	metadata_summary	metadata_exact	spl			g8	0
+A0968	normal	metadata_summary	metadata_exact	rpl			g9	0
+A0969	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A0972	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0981	normal	metadata_summary	metadata_exact	rpl			g8	0
+A0983	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+A0988	normal	metadata_summary	metadata_exact	rpl			g10	0
+A0989	normal	metadata_summary	metadata_exact	spl			g8	0
+A0993	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+A0996	normal	metadata_summary	metadata_exact	spl			g8	0
+A1000	normal	metadata_summary	metadata_exact	rpl			g9	0
+A1005	normal	metadata_summary	metadata_exact	spl			g10	0
+A1010	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A1019	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1027	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1037	normal	metadata_summary	metadata_exact	rpl			g9	0
+A1043	normal	metadata_summary	metadata_exact	spl			g8	0
+A1046	normal	metadata_summary	metadata_exact	spl			g8	0
+A1049	normal	metadata_summary	metadata_exact	spl			g8	0
+A1055	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A1057	normal	metadata_summary	metadata_exact	spl			g8	0
+A1058	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1060	normal	metadata_summary	metadata_exact	spl			g8	0
+A1066	abnormal	metadata_summary	metadata_exact	spl			g10	0
+A1067	normal	metadata_summary	metadata_exact	rpl			g9	0
+A1074	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1078	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1084	abnormal	metadata_summary	metadata_exact	rpl			g10	0
+A1085	normal	metadata_summary	metadata_exact	spl			g8	0
+A1086	normal	metadata_summary	metadata_exact	spl			g10	0
+A1088	normal	metadata_summary	metadata_exact	rpl			g9	0
+A1092	abnormal	metadata_summary	metadata_exact	spl			g8	0
+A1099	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1105	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+1	1
+A1106	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1116	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+A1117	normal	metadata_summary	metadata_exact	spl			g9	0
+A1119	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+A1125	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+6	1
+A1132	normal	metadata_summary	metadata_exact	spl			g8	0
+A1140	normal	metadata_summary	metadata_exact	rpl			g9	0
+A1141	normal	metadata_summary	metadata_exact	spl			g8	0
+A1144	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1145	normal	metadata_summary	metadata_exact	rpl			g10	0
+A1148	abnormal	metadata_summary	metadata_exact	rpl			g10	0
+A1153	normal	metadata_summary	metadata_exact	spl			g9	0
+A1155	normal	metadata_summary	metadata_exact	spl			g8	0
+A1157	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1175	normal	metadata_summary	metadata_exact	rpl			g8	0
+A1177	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+A1178	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+CS200189	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS201631	normal	metadata_summary	metadata_exact	spl			g8	0
+CS201698	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS201740	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS201955	abnormal	metadata_summary	metadata_exact	rpl			g9	0
+CS202776	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS203024	normal	metadata_summary	metadata_exact	spl			g8	0
+CS203197	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+CS203198	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS203410	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+CS203546	normal	metadata_summary	metadata_exact	rpl			g9	0
+CS203692	abnormal	metadata_summary	metadata_exact	spl			g8	0
+CS203996	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+CS204031	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS204128	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS204131	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS204302	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS210095	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+CS210217	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS210256	normal	metadata_summary	metadata_exact	spl			g9	0
+CS210417	normal	metadata_summary	metadata_exact	rpl			g9	0
+CS210430	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS210469	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+CS210650	normal	metadata_summary	metadata_exact	spl			g9	0
+CS210737	normal	metadata_summary	metadata_exact	spl			g10	0
+CS210816	normal	metadata_summary	metadata_exact	spl			g8	0
+CS210983	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS211030	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS211104	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+CS211113	normal	metadata_summary	metadata_exact	spl			g9	0
+CS211281	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS211307	normal	clinical_649	clinical_exact		case	non-abnormal	11+5	0
+CS211610	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS211637	normal	clinical_649	clinical_exact		case	non-abnormal	11+1	0
+CS211677	normal	clinical_649	clinical_exact		case	non-abnormal	12	0
+CS211997	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS212307	normal	metadata_summary	metadata_exact	spl			g8	0
+CS212319	normal	metadata_summary	metadata_exact	spl			g9	0
+CS212336	abnormal	clinical_649	clinical_exact		case	non-abnormal	11	1
+CS212397	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS212481	abnormal	clinical_649	clinical_exact		case	non-abnormal	11+2	1
+CS212566	normal	metadata_summary	metadata_exact	spl			g8	0
+CS212666	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS212714	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS212913	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS212997	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213226	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213294	normal	metadata_summary	metadata_exact	spl			g9	0
+CS213357	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213469	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213603	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213662	normal	metadata_summary	metadata_exact	spl			g10	0
+CS213684	normal	metadata_summary	metadata_exact	spl			g9	0
+CS213707	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213874	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS213927	normal	metadata_summary	metadata_exact	spl			g10	0
+CS213938	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS214011	normal	metadata_summary	metadata_exact	rpl			g9	0
+CS220086	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+CS220165	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220178	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220250	normal	metadata_summary	metadata_exact	spl			g8	0
+CS220253	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220259	normal	metadata_summary	metadata_exact	spl			g8	0
+CS220498	normal	metadata_summary	metadata_exact	spl			g8	0
+CS220709	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220710	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS220810	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS220898	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220915	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS220960	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS220986	normal	metadata_summary	metadata_exact	rpl			g10	0
+CS221046	normal	metadata_summary	metadata_exact	spl			g8	0
+CS221067	normal	clinical_649	clinical_exact		case	non-abnormal	11+3	0
+CS221073	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS221088	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS221161	normal	metadata_summary	metadata_exact	spl			g9	0
+CS221228	normal	metadata_summary	metadata_exact	rpl			g9	0
+CS221243	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS221269	normal	metadata_summary	metadata_exact	rpl			g8	0
+CS222676	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+N21001	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+N21003	normal	metadata_summary	metadata_exact	rpl			g9	0
+N21004	normal	metadata_summary	metadata_exact	spl			g9	0
+N21005	normal	metadata_summary	metadata_exact	spl			g8	0
+N21006	normal	metadata_summary	metadata_exact	rpl			g10	0
+N22016	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22031	normal	metadata_summary	metadata_exact	spl			g8	0
+N22040	abnormal	metadata_summary	metadata_exact	rpl			g10	0
+N22065	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22083	normal	metadata_summary	metadata_exact	spl			g8	0
+N22103	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22128	normal	metadata_summary	metadata_exact	spl			g8	0
+N22130	normal	metadata_summary	metadata_exact	spl			g8	0
+N22132	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22166	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22175	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22176	normal	metadata_summary	metadata_exact	spl			g8	0
+N22185	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22209	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22217	abnormal	metadata_summary	metadata_exact	rpl			g8	0
+N22234	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22237	normal	metadata_summary	metadata_exact	spl			g8	0
+N22258	normal	metadata_summary	metadata_exact	spl			g8	0
+N22266	normal	metadata_summary	metadata_exact	spl			g8	0
+N22269	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22301	normal	metadata_summary	metadata_exact	rpl			g8	0
+N22321	normal	metadata_summary	metadata_exact	spl			g8	0
+N22323	normal	metadata_summary	metadata_exact	rpl			g8	0
+N23022	normal	clinical_649	clinical_exact		case	non-abnormal	11+4	0
+N23023	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+N23025	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23032	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23036	normal	metadata_summary	metadata_exact	spl			g9	0
+N23046	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+N23047	normal	clinical_649	clinical_exact		case	non-abnormal	11	0
+N23056	normal	clinical_649	clinical_exact		case	non-abnormal	11+2	0
+N23063	normal	metadata_summary	metadata_exact	rpl			g8	0
+N23081	normal	clinical_649	clinical_exact		case	non-abnormal	11+4	0
+N23084	normal	metadata_summary	metadata_exact	rpl			g8	0
+N23086	normal	metadata_summary	metadata_exact	spl			g8	0
+N23099	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23108	abnormal	clinical_649	clinical_exact		case	non-abnormal	11	1
+N23116	normal	metadata_summary	metadata_exact	rpl			g10	0
+N23123	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23133	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23174	normal	metadata_summary	metadata_exact	rpl			g9	0
+N23180	normal	clinical_649	clinical_exact		case	non-abnormal	11+4	0
+N23188	normal	clinical_649	clinical_exact		case	non-abnormal	11+6	0
+N23203	normal	metadata_summary	metadata_exact	spl			g10	0
+N23206	normal	metadata_summary	metadata_exact	spl			g10	0
+N23209	normal	metadata_summary	metadata_exact	rpl			g8	0
+N23211	abnormal	clinical_649	clinical_exact		case	non-abnormal	12	1
+zz230044	control	metadata_summary	metadata_exact	NA			g9	0
+zz230082	control	metadata_summary	metadata_exact	NA			g8	0
+zz230106	control	metadata_summary	metadata_exact	NA			g8	0
+zz230125	control	metadata_summary	metadata_exact	NA			g8	0
+zz230133	control	metadata_summary	metadata_exact	NA			g8	0
+zz230138	control	metadata_summary	metadata_exact	NA			g9	0
+zz230139	control	metadata_summary	metadata_exact	NA			g10	0
+zz230140	control	metadata_summary	metadata_exact	NA			g9	0
+zz230142	control	metadata_summary	metadata_exact	NA			g8	0
+zz230182	control	metadata_summary	metadata_exact	NA			g10	0
+zz230187	control	metadata_summary	metadata_exact	NA			g8	0
+zz230188	control	metadata_summary	metadata_exact	NA			g8	0
+zz230189	control	metadata_summary	metadata_exact	NA			g8	0
+zz230201	control	metadata_summary	metadata_exact	NA			g8	0
+zz230253	control	metadata_summary	metadata_exact	NA			g9	0
+zz230256	control	metadata_summary	metadata_exact	NA			g10	0
+zz230257	control	metadata_summary	metadata_exact	NA			g8	0
+zz230258	control	metadata_summary	metadata_exact	NA			g9	0
+zz230259	control	metadata_summary	metadata_exact	NA			g8	0
+zz230260	control	metadata_summary	metadata_exact	NA			g9	0
+zz230261	control	metadata_summary	metadata_exact	NA			g8	0
+zz230264	control	metadata_summary	metadata_exact	NA			g8	0
+zz230265	control	metadata_summary	metadata_exact	NA			g9	0
+zz230266	control	metadata_summary	metadata_exact	NA			g9	0
+zz230268	control	metadata_summary	metadata_exact	NA			g8	0
+zz230270	control	metadata_summary	metadata_exact	NA			g8	0
+zz230271	control	metadata_summary	metadata_exact	NA			g8	0
+zz230272	control	metadata_summary	metadata_exact	NA			g8	0
+zz230273	control	metadata_summary	metadata_exact	NA			g8	0
+zz230274	control	metadata_summary	metadata_exact	NA			g8	0
+zz230275	control	metadata_summary	metadata_exact	NA			g8	0
+zz230276	control	metadata_summary	metadata_exact	NA			g8	0
+zz230277	control	metadata_summary	metadata_exact	NA			g9	0
+zz230278	control	metadata_summary	metadata_exact	NA			g8	0
+zz230279	control	metadata_summary	metadata_exact	NA			g8	0
+zz230282	control	metadata_summary	metadata_exact	NA			g8	0
+zz230285	control	metadata_summary	metadata_exact	NA			g9	0
+zz230287	control	metadata_summary	metadata_exact	NA			g10	0
+zz230291	control	metadata_summary	metadata_exact	NA			g11	0
+zz230292	control	metadata_summary	metadata_exact	NA			g8	0
+zz230294	control	metadata_summary	metadata_exact	NA			g8	0
+zz230296	control	metadata_summary	metadata_exact	NA			g8	0
+zz230297	control	metadata_summary	metadata_exact	NA			g8	0
+zz230298	control	metadata_summary	metadata_exact	NA			g8	0
+zz230299	control	metadata_summary	metadata_exact	NA			g8	0
+zz230300	control	metadata_summary	metadata_exact	NA			g11	0
+zz230316	control	metadata_summary	metadata_exact	NA			g10	0
+zz230317	control	metadata_summary	metadata_exact	NA			g9	0
+zz230318	control	metadata_summary	metadata_exact	NA			g10	0
+zz230322	control	metadata_summary	metadata_exact	NA			g8	0
+zz230323	control	metadata_summary	metadata_exact	NA			g9	0
+zz230324	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240001	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240002	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240008	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240009	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240011	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240012	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240013	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240019	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240027	control	metadata_summary	metadata_exact	NA			g10	0
+ZZ240034	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240050	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240051	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240054	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240055	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240056	control	metadata_summary	metadata_exact	NA			g10	0
+ZZ240062	control	metadata_summary	metadata_exact	NA			g10	0
+ZZ240063	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240074	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240075	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240078	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240084	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240090	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240093	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240098	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240099	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240104	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240106	control	metadata_summary	metadata_exact	NA			g9	0
+ZZ240107	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240110	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240120	control	metadata_summary	metadata_exact	NA			g10	0
+ZZ240123	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240124	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240130	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240133	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240134	control	metadata_summary	metadata_exact	NA			g8	0
+ZZ240137	control	metadata_summary	metadata_exact	NA			g8	0

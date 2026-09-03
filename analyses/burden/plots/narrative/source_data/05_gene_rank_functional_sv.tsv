@@ -1,0 +1,3 @@
+gene	func_abnormal_n	func_normal_n	func_control_n	exon_abnormal_n	acmg4_abnormal_n	func_abnormal_rate	func_normal_rate	func_control_rate
+KDM4B	19	64	30	19	0	0.40425531914893614	0.1797752808988764	0.2727272727272727
+MBTD1	4	28	7	4	0	0.0851063829787234	0.07865168539325842	0.06363636363636363

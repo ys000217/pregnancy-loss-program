@@ -1,0 +1,43 @@
+图注与解读（按汇报顺序）
+
+本套图仅保留孕周 8–10 周样本（g8/g9/g10，含 8+/9+/10+）。
+检验均为双侧 Mann–Whitney U（未做多重校正）。n = 47 abnormal / 356 normal / 110 control。
+
+========== Fig. 1 全基因组负荷 ==========
+a, 规范编码外显子（85.77 Mb）上的非同义 SNV 速率（mut/Mb）。
+   检验：Ab–N p=0.654；Ab–C p=0.014；N–C p=7.0e-05。
+   解读：abnormal 与 normal 没有差别，高甲基化这一刀并不对应更高的编码突变负担。
+   abnormal/normal 相对 control 若显著，方向是略低而不是更高，排除“突变越多→高甲基化”。
+
+b, 每人携带的 PASS SV 条数（只计 0/1、1/1 等带 alt 的基因型，不计 0/0）。
+   检验：Ab–N p=0.448；Ab–C p=0.174；N–C p=0.388。
+   解读：中位数大约每人 3–4 千条。Fig.2 检验的是队列里出现过的不重复位点（约 5.2 万），不是每人 5 万条。
+   同一条常见 SV 会在几百人中重复出现，所以“每人几千”和“位点库五万”可以同时成立。
+
+c, 每人携带的 AnnotSV P/LP（ACMG 4 或 5）条数（同样只计 alt）。
+   检验：Ab–N p=0.636；Ab–C p=0.600；N–C p=0.871。
+   解读：三组无显著差别；abnormal 并不携带更多注释致病 SV。
+
+========== Fig. 2 逐位点 SV（8–10 周分母） ==========
+a, FDR<0.05 的 PASS SV 位点（共 29 个；FDR ab vs ctrl = 0）。
+   附表 02_fig2a_locus_annotation.tsv：AnnotSV ACMG 等级、ranking score、是否命中 EpiFactors 基因。
+   统计：ACMG≥4 = 0 / 29；EpiFactors 命中 = 0。
+b, 上述位点在 abnormal 中的携带率分布。虚线=5%。
+c, AnnotSV P/LP（ACMG 4–5）中 abnormal 携带率同时高于 normal 与 control 的位点（共 35/83）。
+   附表 02_fig2c_plp_annotation.tsv：P/LP 位点 EpiFactors 命中 = 11；其中 abnormal 最高 = 4。
+
+========== Fig. 3 EpiFactors 基因库 ==========
+a–b, 每人 rare SNV / panel SV 条数（箱线图 x 轴标注 n）。
+   检验：a Ab–N p=0.645；Ab–C p=0.980；N–C p=0.356。
+   b Ab–N p=0.800；Ab–C p=0.510；N–C p=0.063。
+
+c, EpiFactors 基因：按 abnormal vs control 携带者 Fisher 原始 p 升序（第一行=携带率差最大），展示 top 12 基因的 SV 携带比例。
+d, 同上排序规则，展示 rare SNV 携带比例（layout 与 c 相同）。
+
+========== Fig. 4 rare SNV 基因图（来自 Fig.3d top 6） ==========
+不再按 HHI 集中度选基因；直接取 Fig.3d 原始 p 最靠前的 6 个基因画 lollipop。
+黑块=外显子；橙棒=abnormal rare SNV；蓝=仅 normal/control。
+
+========== Fig. 5 panel SV 基因图（来自 Fig.3c top 6） ==========
+取 Fig.3c 原始 p 最靠前的 6 个基因。深橙=与所画外显子相交的 SV；浅橙=内含子；圆点=INS。
+附表 03_sv_gene_rank.tsv / 03_snv_gene_rank.tsv 为 Fig.3c/d 完整排序。

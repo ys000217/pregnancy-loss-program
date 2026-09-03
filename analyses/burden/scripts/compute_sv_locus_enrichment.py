@@ -19,6 +19,7 @@ from compute_burden import (  # noqa: E402
     bh_fdr,
     fisher_exact_2x2,
     has_alt_allele,
+    keep_gw_8_10,
     load_phenotype,
     open_text,
     parse_info_field,
@@ -142,6 +143,63 @@ def collect_pass_sv_loci(samples: list[str], vcf_path: Path) -> list[dict]:
     return loci
 
 
+def bare_sv_key(chrom: str, pos: str, end: str, svtype: str) -> str:
+    c = str(chrom).lower().replace("chr", "")
+    return f"{c}:{pos}:{end}:{svtype}"
+
+
+def collect_pass_sv_loci_matching(
+    samples: list[str],
+    vcf_path: Path,
+    coord_keys: set[str],
+    sv_ids: set[str],
+) -> list[dict]:
+    """Scan PASS SVs but keep only loci whose bare coord or ID is in the given sets."""
+    want_coord = {k.lower().replace("chr", "") for k in coord_keys}
+    want_id = {s for s in sv_ids if s}
+    loci: list[dict] = []
+    with open_text(vcf_path) as f:
+        vcf_samples = None
+        for line in f:
+            if line.startswith("#CHROM"):
+                vcf_samples = line.strip().split("\t")[9:]
+                break
+        if vcf_samples is None:
+            raise RuntimeError("SV VCF header missing")
+        for line in f:
+            if line.startswith("#"):
+                continue
+            parts = line.rstrip("\n").split("\t")
+            if parts[6] != "PASS":
+                continue
+            svtype = parse_info_field(parts[7], "SVTYPE") or "UNK"
+            sv_end = parse_info_field(parts[7], "END") or parts[1]
+            key = bare_sv_key(parts[0], parts[1], sv_end, svtype)
+            if key not in want_coord and parts[2] not in want_id:
+                continue
+            gt_map = dict(zip(vcf_samples, parts[9:]))
+            carriers = {}
+            for sample in samples:
+                gt = gt_map.get(sample, "./.")
+                if has_alt_allele(gt):
+                    carriers[sample] = 1
+            if not carriers:
+                continue
+            loci.append(
+                {
+                    "coord_key": f"{parts[0]}:{parts[1]}:{sv_end}:{svtype}",
+                    "chrom": parts[0],
+                    "pos": parts[1],
+                    "end": sv_end,
+                    "svtype": svtype,
+                    "sv_id": parts[2],
+                    "cohort_carrier": len(carriers),
+                    "carriers": carriers,
+                }
+            )
+    return loci
+
+
 def build_enrichment_rows(loci: list[dict], groups: dict[str, list[str]]) -> list[dict]:
     rows: list[dict] = []
     n_cohort = sum(len(v) for v in groups.values())
@@ -204,8 +262,31 @@ def write_top_hits(rows: list[dict], p_col: str, fdr_col: str, path: Path, n: in
 
 
 def main() -> None:
+    import argparse
+
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--gw8-10", action="store_true")
+    p.add_argument("--pheno", type=Path, default=None)
+    p.add_argument("--out", type=Path, default=None)
+    p.add_argument("--skip-all-pass", action="store_true", help="do not write the huge all_pass TSV")
+    args, unknown = p.parse_known_args()
+    gw810 = (
+        os.environ.get("BURDEN_GW", "").strip() in {"8-10", "8_10", "gw8_10"}
+        or args.gw8_10
+        or "--gw8-10" in unknown
+    )
     print("[1/3] Loading phenotype...")
-    pheno_rows = load_phenotype(PHENO_PATH)
+    pheno_path = args.pheno or PHENO_PATH
+    pheno_rows = load_phenotype(pheno_path)
+    if gw810:
+        pheno_rows = [r for r in pheno_rows if keep_gw_8_10(r.get("Gestational_Week", ""))]
+        out = args.out or (OUT_DIR / "gw8_10")
+        out.mkdir(parents=True, exist_ok=True)
+        print("  subset: gestational weeks 8–10")
+    else:
+        out = args.out or OUT_DIR
+        out.mkdir(parents=True, exist_ok=True)
+    skip_all = args.skip_all_pass or args.out is not None or gw810
     samples = [r["VCF_Sample_ID"] for r in pheno_rows]
     pheno_map = {r["VCF_Sample_ID"]: r["Condition"] for r in pheno_rows}
     groups = group_samples(samples, pheno_map)
@@ -224,11 +305,12 @@ def main() -> None:
     ab_specific = [r for r in rows if r["abnormal_specific"] == 1]
     ab_specific.sort(key=lambda r: r["p_abnormal_vs_control"])
 
-    all_path = OUT_DIR / "sv_locus_enrichment_all_pass.tsv"
-    write_tsv(rows, all_path)
-    print(f"  wrote {all_path}")
+    if not skip_all:
+        all_path = out / "sv_locus_enrichment_all_pass.tsv"
+        write_tsv(rows, all_path)
+        print(f"  wrote {all_path}")
 
-    ab_spec_path = OUT_DIR / "sv_locus_enrichment_abnormal_specific.tsv"
+    ab_spec_path = out / "sv_locus_enrichment_abnormal_specific.tsv"
     write_tsv(ab_specific, ab_spec_path)
     print(f"  abnormal-specific loci: {len(ab_specific)}")
 
@@ -242,7 +324,7 @@ def main() -> None:
         )
         < FDR_THRESHOLD
     ]
-    sig_path = OUT_DIR / "sv_locus_enrichment_fdr05_any_comparison.tsv"
+    sig_path = out / "sv_locus_enrichment_fdr05_any_comparison.tsv"
     write_tsv(sig_rows, sig_path)
     print(f"  FDR<{FDR_THRESHOLD} in any pairwise comparison: {len(sig_rows)}")
 
@@ -250,22 +332,22 @@ def main() -> None:
         ab_specific if ab_specific else rows,
         "p_abnormal_vs_control",
         "fdr_abnormal_vs_control",
-        OUT_DIR / "sv_locus_enrichment_top50_abnormal_vs_control.tsv",
+        out / "sv_locus_enrichment_top50_abnormal_vs_control.tsv",
     )
     write_top_hits(
         rows,
         "p_abnormal_vs_normal",
         "fdr_abnormal_vs_normal",
-        OUT_DIR / "sv_locus_enrichment_top50_abnormal_vs_normal.tsv",
+        out / "sv_locus_enrichment_top50_abnormal_vs_normal.tsv",
     )
     write_top_hits(
         rows,
         "p_normal_vs_control",
         "fdr_normal_vs_control",
-        OUT_DIR / "sv_locus_enrichment_top50_normal_vs_control.tsv",
+        out / "sv_locus_enrichment_top50_normal_vs_control.tsv",
     )
 
-    summary_path = OUT_DIR / "sv_locus_enrichment_summary.txt"
+    summary_path = out / "sv_locus_enrichment_summary.txt"
     pattern_counts = Counter(r["enrichment_pattern"] for r in rows)
     with open(summary_path, "w", encoding="utf-8") as f:
         f.write(f"pass_sv_loci\t{len(loci)}\n")

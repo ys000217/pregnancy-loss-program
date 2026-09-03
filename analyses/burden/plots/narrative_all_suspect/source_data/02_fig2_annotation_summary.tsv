@@ -1,0 +1,13 @@
+panel	metric	value
+fig2a	n_loci	210
+fig2a	n_with_acmg_class	3
+fig2a	n_with_ranking_score	3
+fig2a	n_epifactors_hit	0
+fig2a	n_acmg_ge4	0
+fig2a	acmg_1_B	2
+fig2a	acmg_3_VUS	1
+fig2a	acmg_missing	207
+fig2c	n_plp_loci	93
+fig2c	n_plp_abnormal_highest	36
+fig2c	n_plp_epifactors_hit	13
+fig2c	n_plp_abnormal_highest_epifactors_hit	3

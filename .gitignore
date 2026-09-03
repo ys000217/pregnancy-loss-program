@@ -118,3 +118,10 @@ abnormal_nonpmd_stats/
 # local-only copies not part of this program
 _local_cell_composition_not_in_repo/
 
+# Local collaborator CNV review notes (do not commit)
+analyses/cnv/赵姐的意见/
+**/pregnancy_loss_CNV_code_review.docx
+
+# burden: per-sample SNV long tables (regenerate with epifactors_catalog.py --catalog)
+analyses/burden/tables/**/snv_variants.tsv
+analyses/burden/tables/**/snv_sites.tsv
