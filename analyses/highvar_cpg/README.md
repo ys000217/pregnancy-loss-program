@@ -6,50 +6,38 @@
 
 ## 分析逻辑（当前）
 
-三步嵌套，后一步都建立在前一步已经确认的结构上。
+### 1–2. 全队列 + NC：主要收获是「疑似 abnormal」
 
-### 1. 全队列高变 CpG：abnormal 可分，并带出 30 例 normal_case
+全队列高变 CpG 能分开 **clinical abnormal 富集枝**（约 46/47 abnormal），同枝上还有 **30 例 normal_case + 1 例 control**。去掉 clinical abnormal 后重算高变（job **09**），这 30 例仍成簇且与全队列枝完全重叠。
 
-在**全体样本**上按方差取高变 CpG（Ward + Pearson）。主结构是两枝，不是 clinical 三分：
+**叙事口径：** 这 30 例是**疑似 abnormal**（临床未标 abnormal，甲基化为 abnormal-like）。主要收获是用高变位点 + 敏感性分析，在 **7 / 11 / 12 周**找到这批疑似样本（**不在 8–10 周**）。名单：[`metadata/abnormal_like_normal_case_30.txt`](metadata/abnormal_like_normal_case_30.txt)。
 
-- **abnormal 富集枝**：约 46/47 临床 abnormal，外加 **30 例 normal_case + 1 例 control**
-- **主流混合群**：其余 control 与 normal_case 混在一起
+全队列/NC 上 control 与其余 normal_case **整体仍分不开**；加大 k 无济于事。
 
-k 加大只会把主流群切碎，不会把 control / normal 整体切开。全队列脚本 `01–08` + 本地 `run_clustering.R` / `run_kscan_normal_subcluster.R` 已完成，不必重跑。
+### 3. 分周 8 / 9 / 10（job 11）：问 control vs normal_case
 
-### 2. 敏感性测试：去掉 abnormal 后重算高变位点，这 30 例仍在
-
-剔除临床 abnormal 后，只在 control + normal_case 上重算覆盖与方差（job **09**）。这 30 例 normal_case 仍单独成簇，且与全队列 abnormal 枝上的非 abnormal 成员 **100% 重叠**。
-
-因此：这 30 例**不符合临床 abnormal 定义**，但在高变甲基化空间上是 **abnormal-like**。同簇 1 例 control（`zz230300`，11 周）记为同枝成员，不改临床标签。
-
-这 30 例在 11–12 周富集，但 **82 例 11–12 周 normal_case 里只有 28 例进该簇**，晚孕周不是充分条件。名单：[`metadata/abnormal_like_normal_case_30.txt`](metadata/abnormal_like_normal_case_30.txt)。
-
-job 09 与本地 `run_NC_matrix_cluster.R` / `check_cluster_overlap.R` 已完成，不必为改叙述而重跑。
-
-### 3. 8 / 9 / 10 周组内高变（此前未做）
-
-按整周、在人数足够的 8/9/10 周**各算一套**高变 CpG。两套样本集合（脚本 **11**）：
+按周各算高变。两套：
 
 | 集合 | 含义 | W8 | W9 | W10 |
 |------|------|----|----|-----|
-| **all** | 该周全部样本（含 abnormal） | 339（abn 31 / ctrl 72 / nor 236） | 101（8 / 29 / 64） | 74（8 / 10 / 56） |
-| **noabn** | 该周去掉 clinical abnormal | 308（72 / 236） | 93（29 / 64） | 66（10 / 56） |
+| **all** | 该周全部（含 abnormal） | 339 | 101 | 74 |
+| **noabn** | 该周去掉 clinical abnormal | 308（72/236） | 93（29/64） | 66（10/56） |
 
-脚本 **10**（再去掉 30 例 like）在这三周上与 **11-noabn 样本集相同**，因为 like 不在 8/9/10 周。可只跑 11。
+因疑似 30 例不在 8–10 周，**noabn ≈ 干净主流 + 控孕周**。本步问题：
 
-30 例 abnormal-like 孕周：7 周 2 例、11 周 9 例、12 周 19 例（SPL 10 / RPL 20）；**8/9/10 周为 0**。
+1. 周内 control 与 normal_case 能否分开？
+2. 若有稳定亚群，跨周是否重复、是否随孕周变化？
 
-### 4. 8–10 周合并高变（此前未做；脚本 12）
+本地分析脚本：`scripts/run_week8910_noabn_control_vs_normal.R`（Nature 出图规范）。
 
-把 8+9+10 周**合成一层**再算覆盖与方差（相对脚本 11 只改「是否分周」）：
+### 4. 8–10 周合并（job 12）
 
-| 集合 | 含义 | 预期 n |
-|------|------|--------|
-| **all** | 8–10 周全部样本（含 abnormal） | **514**（339+101+74） |
-| **noabn** | 8–10 周去掉 clinical abnormal | **467**（308+93+66） |
+把 8+9+10 合成一层再算（`all` / `noabn`），与分周对照，看合并是否被某一周主导。
 
-产出一层目录：`W8_10/`。like 仍不在这三周，noabn 不必再剔 like。
+| 集合 | 预期 n |
+|------|--------|
+| **all** | **514** |
+| **noabn** | **467** |
 
 ### 结果状态（入库文档口径）
 
