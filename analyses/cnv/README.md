@@ -97,12 +97,20 @@ cnv_work/
   cohort/cohort.large_high.clusters.tsv # 跨样本断点聚类（中位坐标）
   cohort/cohort.large_high.members.tsv
   annot/{sample}.annotsv.tsv
+  done/{sample}.done                    # run_sample / remake_merge 全成功后才写；submit 据此 SKIP
 ```
 
 ## 怎么跑
 
 1. 改 `config.sh` 里的 `REF_FASTA`（必须与 ONT BAM 的 `@SQ` 一致）和 `TR_BED`。
-2. 生成**正式** manifest（必须含 `ont_bam`）。`00_scan_fastq.py` 只扫 WGS；配对 BAM 用 `00c`：
+2. **队列提交前**建好参考索引（单样本 job **不会**再建，避免并发写同一套 index）：
+
+```bash
+source config.sh
+bash scripts/prepare_ref_index.sh
+```
+
+3. 生成**正式** manifest（必须含 `ont_bam`）。`00_scan_fastq.py` 只扫 WGS；配对 BAM 用 `00c`：
 
 ```bash
 source config.sh
@@ -115,11 +123,12 @@ python3 scripts/00c_ont_wgs_coverage.py \
 # 示例列见 examples/manifest.tsv
 ```
 
-3. 单样本：
+4. 单样本：
 
 ```bash
 source config.sh
 bash scripts/run_sample.sh 0002C
+# 成功后: ${WORKDIR}/done/0002C.done
 ```
 
 仅重跑合并（callset 已在盘上、改了 merge 规则之后）：
@@ -130,9 +139,9 @@ bash scripts/remake_merge.sh 0002C
 # 同步后务必: sed -i 's/\r$//' scripts/*.sh scripts/*.py config.sh
 ```
 
-4. 队列：对 `manifest.from_ont.tsv` 的 `ont_id` 循环提交（不要在 `NGS_Rawdata/` 里跑）。已有 `cnv.high.bed` 的样本会被 SKIP；改规则后用 `FORCE=1` 或先 `remake_merge.sh`。
+5. 队列：`bash scripts/submit_per_sample.sh`（不要在 `NGS_Rawdata/` 里跑）。已有 `done/${sample}.done` 的样本会被 SKIP（不是只看 `cnv.high.bed`）；改规则后用 `FORCE=1` 或先 `remake_merge.sh`。
 
-5. 全部样本 merge 完成后，做 **LARGE_HIGH 跨样本断点聚类**（负担/复发用这一张表，不要按每人一条原始 BED 行去计位点）：
+6. 全部样本 merge 完成后，做 **LARGE_HIGH 跨样本断点聚类**（负担/复发用这一张表，不要按每人一条原始 BED 行去计位点）：
 
 ```bash
 source config.sh

@@ -36,7 +36,9 @@ fi
 
 WGS_BAM="${WORKDIR}/wgs_bam/${ont_id}.markdup.bam"
 
-mkdir -p "${WORKDIR}"/{qc,wgs_bam,ont_sv,ont_cnv,wgs_sv,wgs_cnv,merged,annot,tmp}
+mkdir -p "${WORKDIR}"/{qc,wgs_bam,ont_sv,ont_cnv,wgs_sv,wgs_cnv,merged,annot,tmp,done}
+# Clear stale success flag so a mid-run failure cannot be skipped as "done"
+rm -f "${WORKDIR}/done/${ont_id}.done"
 
 echo "=== ${ont_id}  ONT=${ONT_BAM}"
 echo "=== ${ont_id}  R1=${wgs_r1}"
@@ -93,6 +95,10 @@ fi
 python3 "${SCRIPTS}/07_merge_paired.py" "${merge_args[@]}"
 bash "${SCRIPTS}/08_annotate.sh" "${ont_id}"
 
+# Full-pipeline success marker (submit_per_sample.sh skips on this, not on cnv.high.bed alone)
+touch "${WORKDIR}/done/${ont_id}.done"
+
 echo "=== done ${ont_id}"
 echo "LARGE_HIGH: ${WORKDIR}/merged/${ont_id}.cnv.high.bed"
 echo "SHARED_SV:  ${WORKDIR}/merged/${ont_id}.cnv.shared_sv.bed"
+echo "DONE:       ${WORKDIR}/done/${ont_id}.done"

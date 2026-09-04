@@ -1,76 +1,66 @@
 # 当前计划（10x ONT + WGS 配对 CNV）
 
-日期：2026-08-28
+日期：2026-09-04（相对 2026-08-28 / 2026-09-01 复查后同步）
 
 ## 结论（先定死）
 
 - 数据：ONT ~10x 已比对 BAM；Illumina WGS ~10x 原始 PE FASTQ；**同一人配对**。
 - 问题：体质性/种系 CNV（妊娠丢失队列），不是肿瘤、不是 scRNA。
-- 策略：断点（Sniffles2 / Manta）+ 剂量（CNVpytor 100 kb / 500 kb）互补；**配对重叠当主过滤器**。
+- 策略：断点（Sniffles2 / DELLY）+ 剂量（CNVpytor 100 kb / 500 kb）互补；**配对重叠当主过滤器**。
 - 不用：inferCNV、CNVkit 默认 exome、GATK-gCNV、FACETS、ichorCNA。
-- 原始 FASTQ / ONT 原始目录只读；结果写到独立 `cnv_work/`。
+- 原始 FASTQ / ONT 原始目录只读；结果写到独立 `cnv_work/`（`WORKDIR`）。
 
-## 已写到本目录的内容
+## 规则摘要（与 README 一致）
+
+- **LARGE_HIGH**：双平台同型、RO≥50%、≥100 kb、硬区 mask 外；≥1 Mb 有 500 kb 时需 500 kb 支持；**>10 Mb 双边 depth 即可，不强制 SV**。
+- CNVpytor 进 merge 前默认 Q0/pN/e-val1 过滤；缺 hard mask → merge 失败。
+- 默认丢 X/Y（`KEEP_SEX_CHROM=1` 才保留）。
+- 队列负担用 `09_cluster_breakpoints`（跨样本断点聚类），不要按每人 BED 行计位点。
+
+## 正式入口（按这个顺序）
+
+```text
+00_scan_fastq.py
+  → 00c_ont_wgs_coverage.py  →  ${WORKDIR}/manifest.from_ont.tsv  （含 ont_bam）
+prepare_ref_index.sh         →  bwa-mem2 index + samtools faidx（队列提交前只做一次）
+ONLY=0002C submit / run_sample.sh
+  → … merge → AnnotSV → touch done/${sample}.done
+全队列 submit_per_sample.sh（跳过已有 done/*.done；FORCE=1 重跑）
+09_cluster_breakpoints.sh    →  cohort/LARGE_HIGH 位点表
+```
+
+改 merge 规则后：对已有 callset 用 `remake_merge.sh`（也会刷新 `.done`）。
+
+## 本目录内容
 
 | 文件 | 作用 |
 |------|------|
-| `README.md` | 分辨率合同、置信度规则、流水线说明 |
-| `config.sh` | 集群路径和 10x 参数（上机后先改这里） |
-| `scripts/00_scan_fastq.py` … `08_annotate.sh` | 逐步脚本 |
-| `scripts/run_sample.sh` | 单样本全流程 |
-| `scripts/run_cohort.sh` | 队列循环（作业系统需按景行再包一层） |
-| `examples/manifest.tsv` | 配对表格式 |
-| `env/environment.yml` | conda 环境（不含 manta） |
-| `env/README.md` | 安装失败排查、可选 Manta 单独安装 |
-| `scripts/check_env.sh` | 上机后检查工具是否齐 |
+| `README.md` | 分辨率合同、置信度、怎么跑 |
+| `config.sh` | 集群路径与 10x 参数 |
+| `scripts/00_scan_fastq.py` … `00c_*.py` | 扫 FASTQ、配对 ONT BAM → 正式 manifest |
+| `scripts/prepare_ref_index.sh` | **队列前**建参考索引（单样本不再建） |
+| `scripts/prepare_cnvpytor_ref.sh` | CNVpytor GC/conf 一次性准备 |
+| `scripts/01` … `08` | 比对 → QC → SV/depth → merge → AnnotSV |
+| `scripts/09_cluster_breakpoints.*` | 跨样本 LARGE_HIGH 断点聚类 |
+| `scripts/run_sample.sh` | 单样本全流程；成功写 `done/${id}.done` |
+| `scripts/remake_merge.sh` | 只重跑 merge+annotate |
+| `scripts/submit_per_sample.sh` | jsub 提交；按 `.done` SKIP |
+| `examples/manifest.tsv` | 含 `ont_bam` 的示例表头 |
+| `ref/hard_mask.grch38.refseq.bed` | LARGE_HIGH 硬区 |
+| `env/` | conda（不含 Manta） |
 
-## 接下来做什么（按这个顺序）
+## 服务器上机清单
 
-1. **本机/仓库**：计划与脚本已在 `cnv/`，拷到服务器分析盘（不要拷进 `NGS_Rawdata/`）。
-2. **服务器：配环境与工具** ← 你现在要做的这一步
-   - 建 conda 环境（见 `env/environment.yml`）
-   - 跑 `bash scripts/check_env.sh`
-   - 确认 `REF_FASTA` 与 ONT BAM 的 `@SQ` 同一套 GRCh38
-   - 放 tandem-repeat BED（Sniffles2 必需）
-3. **编 `manifest.tsv`**：`00_scan_fastq.py` 扫 FASTQ，手工把 `ont_id` 对上 `0002C` 这类 ONT 目录名。
-4. **先跑 1 个配对样本**（建议 `0002C`）通流程，再提交队列。
+1. 拷贝本模块到分析盘；`sed -i 's/\r$//' scripts/*.sh scripts/*.py config.sh`
+2. `conda env create -f env/environment.yml && conda activate cnv10x`
+3. `bash scripts/check_env.sh`（含参考索引是否存在）
+4. 确认 `REF_FASTA` 与 ONT BAM `@SQ` 一致（RefSeq `NC_*`）
+5. `bash scripts/prepare_ref_index.sh`（若 check 报 MISS）
+6. `bash scripts/prepare_cnvpytor_ref.sh`（若尚未做 GC）
+7. 生成 `manifest.from_ont.tsv`（见 README）
+8. 先 `ONLY=0002C bash scripts/submit_per_sample.sh` 或 `run_sample.sh`，再全队列
+9. 全员 merge 后：`bash scripts/09_cluster_breakpoints.sh`
 
-## 服务器上需要的工具
+## 已关闭的复查项（2026-09-01）
 
-必装：
-
-- python ≥3.10
-- fastp
-- bwa-mem2
-- samtools ≥1.19
-- sambamba 或 samtools markdup
-- mosdepth ≥0.3
-- sniffles ≥2.2
-- delly（WGS 断点 SV；conda 默认）
-- cnvpytor
-- bcftools ≥1.19
-- bedtools ≥2.31
-
-可选：
-
-- spectre（ONT 大片段剂量，没有就只用 CNVpytor）
-- AnnotSV（LARGE_HIGH 结果注释）
-
-参考数据（不是软件，但环境配完就要就位）：
-
-- 与 ONT BAM 一致的 `GRCh38.fa` + bwa-mem2 索引
-- `human_GRCh38_TR.bed`（或等价 tandem-repeat BED）
-
-## 明确还没做的
-
-- 还没有在服务器上安装/验证上述工具
-- 还没有 `manifest.tsv` 实表（ONT ID ↔ FASTQ 路径）
-- 还没有对照 ONT BAM header 锁定 `REF_FASTA`
-- 还没有用真实样本跑通
-- 景行作业脚本（`yhbatch` / 队列名）还没按站点包装
-
-配完环境并 `check_env.sh` 全绿之后：
-
-1. `bash scripts/discover_paths.sh 0002C` — 找 ONT BAM 真实路径和 @SQ
-2. 改 `config.sh`（路径一律用 share：`SHARE_ROOT`，不要用 `~/5250028_songyang`），`mkdir -p $SHARE_ROOT/cnv_work`
-3. 编 `manifest.tsv`，跑 `bash scripts/run_sample.sh 0002C`
+Spectre 1 kb、500 kb 进 merge、CNVpytor QC、>10 Mb 不强制 SV、hard mask 必填、mask union、primary/性染色体、`fixmate -m`、`.done` 完成标志、BWA 索引不在单样本并发创建。AnnotSV 染色体命名按实测可用，不改。

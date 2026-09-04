@@ -36,9 +36,17 @@ if [[ ! -s "${REF_FASTA}" ]]; then
   echo "ERROR REF_FASTA not found: ${REF_FASTA}" >&2
   exit 1
 fi
+# Do not build indexes here — many jsub jobs would race on the same files.
+# Run once before the cohort: bash scripts/prepare_ref_index.sh
 if [[ ! -s "${REF_FASTA}.bwt.2bit.64" && ! -s "${REF_FASTA}.0123" ]]; then
-  echo "Indexing ${REF_FASTA} with bwa-mem2 (once)"
-  bwa-mem2 index "${REF_FASTA}"
+  echo "ERROR bwa-mem2 index missing for ${REF_FASTA}" >&2
+  echo "  bash scripts/prepare_ref_index.sh" >&2
+  exit 1
+fi
+if [[ ! -s "${REF_FASTA}.fai" ]]; then
+  echo "ERROR samtools faidx missing: ${REF_FASTA}.fai" >&2
+  echo "  bash scripts/prepare_ref_index.sh" >&2
+  exit 1
 fi
 
 cat "${R1S[@]}" > "${tmpdir}/${SAMPLE}.r1.cat.fq.gz"

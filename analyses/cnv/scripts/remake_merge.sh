@@ -80,4 +80,7 @@ fi
 
 python3 "${SCRIPTS}/07_merge_paired.py" "${merge_args[@]}"
 bash "${SCRIPTS}/08_annotate.sh" "${ont_id}"
+mkdir -p "${WORKDIR}/done"
+touch "${WORKDIR}/done/${ont_id}.done"
 echo "remade ${ont_id}: LARGE_HIGH -> ${WORKDIR}/merged/${ont_id}.cnv.high.bed"
+echo "DONE: ${WORKDIR}/done/${ont_id}.done"

@@ -94,6 +94,20 @@ if [[ -f "${ROOT}/config.sh" ]]; then
       echo "MISS  ${p}=${v}"
     fi
   done
+  if [[ -n "${REF_FASTA:-}" && -e "${REF_FASTA}" ]]; then
+    echo
+    echo "=== reference index (build once: bash scripts/prepare_ref_index.sh) ==="
+    if [[ -s "${REF_FASTA}.bwt.2bit.64" || -s "${REF_FASTA}.0123" ]]; then
+      echo "OK    bwa-mem2 index"
+    else
+      echo "MISS  bwa-mem2 index — run: bash scripts/prepare_ref_index.sh"
+    fi
+    if [[ -s "${REF_FASTA}.fai" ]]; then
+      echo "OK    ${REF_FASTA}.fai"
+    else
+      echo "MISS  ${REF_FASTA}.fai — run: bash scripts/prepare_ref_index.sh"
+    fi
+  fi
 fi
 
 echo
@@ -102,4 +116,4 @@ if [[ "${fail}" -ne 0 ]]; then
   echo "  conda env create -f env/environment.yml && conda activate cnv10x"
   exit 1
 fi
-echo "Required tools are present. Next: lock REF_FASTA against an ONT BAM header, then build manifest.tsv."
+echo "Required tools are present. Next: prepare_ref_index.sh (if needed), lock REF_FASTA vs ONT @SQ, then build manifest.from_ont.tsv."

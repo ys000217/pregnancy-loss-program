@@ -3,7 +3,12 @@
 #
 #   ONLY=0002C bash scripts/submit_per_sample.sh   # one job first
 #   bash scripts/submit_per_sample.sh                # all in MANIFEST
-#   FORCE=1 ONLY=0002C bash scripts/submit_per_sample.sh  # rerun even if LARGE_HIGH bed exists
+#   FORCE=1 ONLY=0002C bash scripts/submit_per_sample.sh  # rerun even if done/${sample}.done exists
+#
+# Skip uses done/${sample}.done (written only after merge+annotate finish), not cnv.high.bed
+# alone — so a failed AnnotSV / mid-pipeline crash is not treated as complete.
+#
+# Before first cohort submit: bash scripts/prepare_ref_index.sh
 #
 # Cores: default 16 to match config.sh THREADS. DMR jobs used 56; WGS bwa+sniffles
 # rarely needs that many, and 678 x 56 will stall the queue.
@@ -64,8 +69,8 @@ EOF
 
 submit_one() {
   local sample="$1"
-  if [[ "${FORCE:-0}" != "1" && -s "${WORKDIR}/merged/${sample}.cnv.high.bed" ]]; then
-    echo "SKIP ${sample} (cnv.high.bed exists; FORCE=1 to rerun)"
+  if [[ "${FORCE:-0}" != "1" && -f "${WORKDIR}/done/${sample}.done" ]]; then
+    echo "SKIP ${sample} (done/${sample}.done exists; FORCE=1 to rerun)"
     return
   fi
   local job
