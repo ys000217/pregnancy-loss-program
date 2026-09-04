@@ -47,9 +47,11 @@ bash scripts/run_gsmap_sug87_CS17.sh       # 人胚胎 CS17 HESTA
 
 | 文件 | 说明 |
 |---|---|
+| `Fig_GWAS_Manhattan_QQ_suggestive_1e-4.pdf` / `.png` | **主图**（Nature 规格）：曼哈顿 + QQ；suggestive P&lt;1×10⁻⁴；脚本 `scripts/plot_gwas_nature_suggestive.py` |
+| `Fig_GWAS_Manhattan_QQ_suggestive_1e-4_source_a.csv` / `_source_b.csv` | 主图 source data（a=suggestive 位点；b=QQ 抽样） |
 | `GWAS_suggestive_hits_1e-4.csv` | 87 个 suggestive 位点 |
 | `GWAS_reanalysis_summary_1e-4.txt` | λ_GC 与计数摘要 |
-| `combine_GWAS_Manhattan_suggestive_1e-4.png` / `*_QQ_*.png` | 曼哈顿图 / QQ 图 |
+| `combine_GWAS_Manhattan_suggestive_1e-4.png` / `*_QQ_*.png` | 早期探索图（非 Nature 规格；以 Fig_GWAS_* 为准） |
 | `RPL_suggestive87_mapping_report.txt` | 87 位点 → hg19/rsID/sumstats 映射 |
 | `RPL_cauchy_celltype_level.csv.gz` | 既往全基因组 RPL gsMap Cauchy |
 | `RPL_OLA1boost_cauchy_celltype_level.csv.gz` | 既往 OLA1 抬升实验 Cauchy |

@@ -1,0 +1,13 @@
+Nature-style GWAS figure (suggestive line)
+input: D:\ONT\figure3\gwas\combine_gwas_result_v1.Status.glm.logistic.hybrid
+n_variants: 304783
+lambda_GC: 1.014573
+genomewide_P: 5e-08
+suggestive_P: 0.0001
+n_genomewide: 0
+n_suggestive: 87
+figure_pdf: Fig_GWAS_Manhattan_QQ_suggestive_1e-4.pdf
+figure_png: Fig_GWAS_Manhattan_QQ_suggestive_1e-4.png
+source_a: Fig_GWAS_Manhattan_QQ_suggestive_1e-4_source_a.csv
+source_b: Fig_GWAS_Manhattan_QQ_suggestive_1e-4_source_b.csv
+style: Nature Portfolio (180 mm; Arial 6–7 pt; Okabe–Ito)
