@@ -12,10 +12,10 @@
 
 | 事件大小 | 主要证据 | 10x 下怎么处理 |
 |----------|----------|----------------|
-| 非整倍体 / ≥1 Mb | 两边的 depth（CNVpytor 500 kb） | 高可信，配对应一致 |
-| 100 kb–1 Mb | 两边 depth（100 kb bin）± SV 断点 | 两边同向重叠 → HIGH；单边 → 降级 |
-| 10–100 kb | ONT Sniffles2 为主，DELLY/Manta 辅助 | **不要用 depth 单独确认** |
-| 50 bp–10 kb | 几乎只能靠 ONT Sniffles2 | WGS 10x 的 depth 和 split-read 都不够 |
+| 非整倍体 / ≥1 Mb | 两边的 depth（CNVpytor 500 kb） | LARGE_HIGH 须双边 500 kb depth |
+| 100 kb–1 Mb | 两边 depth（100 kb）；SV 可加分但不能代替 depth | 双边 depth → LARGE_HIGH；仅交叉 SV/单边 depth → MEDIUM / ONT_* |
+| 10–100 kb | ONT Sniffles2 为主，DELLY 辅助 | **不要用 depth 单独确认**；ONT 独有 → ONT_SV |
+| 50 bp–10 kb | 几乎只能靠 ONT Sniffles2 | WGS 10x 不够；**保留 ONT_SV** |
 | 插入（INS） | 几乎只能靠 ONT | Illumina 10x 基本看不见，不参与 CNV 目录 |
 
 Depth 层 bin = **100 kb**（另跑 500 kb 大事件）。CBS 在 ≤5x 召回会垮；10x 用 CNVpytor 的 mean-shift，不要用 CNVkit 默认 CBS 追焦点。inferCNV / FACETS / ichorCNA / GATK-gCNV 都不作为本队列主 caller。
@@ -63,18 +63,20 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 
 | 标签 | 规则 | 含义 |
 |------|------|------|
-| **LARGE_HIGH** | 两边同类型，RO≥50%，长度 ≥100 kb，**不落在硬区 mask**。100 kb–1 Mb：100 kb 双边 depth；≥1 Mb：有 500 kb 时需 500 kb 支持；**>10 Mb / 非整倍体：双边 depth 即可，不强制 SV 断点** | **病例对照主表**；写入 `cnv.high.bed`。跨样本位点用 `09_cluster_breakpoints` |
+| **LARGE_HIGH** | **必须双边 depth**（`ont_depth`+`wgs_depth`），同型，RO≥50%，≥100 kb，**不落在硬区 mask**。100 kb–1 Mb：100 kb 双边 depth；≥1 Mb：有 500 kb callset 时须 **ONT 与 WGS 两侧都有 500 kb**；**>10 Mb：双边 depth，不强制 SV** | **病例对照主表**；`cnv.high.bed`；跨样本用 `09_cluster_breakpoints` |
 | **SHARED_SV** | 两边都有 SV 断点，长度 &lt;100 kb | 小 SV 负担分析；**不要**和大片段混计 |
-| **MEDIUM** | 跨平台同向重叠但不满足上两档 | 候选，需 IGV |
-| **ONT_SV** | 仅 ONT Sniffles DEL/DUP，≥50 bp | 小 CNV 的预期来源 |
-| **ONT_DEPTH** | 仅 ONT depth，≥100 kb，未 mask，≤10 Mb | 单平台，优先级低 |
-| **WGS_DEPTH** | 仅 WGS depth，≥100 kb，未 mask，≤10 Mb | 单平台探索 |
-| **MASKED** | 本可进 depth/LARGE，但命中硬区，或超长且证据不足，或 ≥1 Mb depth 无 500 kb 支持 | 审计用，不当阳性 |
+| **MEDIUM** | 跨平台同向重叠，但未达双 depth（如 ONT SV+WGS depth），或 ≥1 Mb 缺一侧 500 kb | 候选，需 IGV；**不是丢弃** |
+| **ONT_SV** | 仅 ONT Sniffles DEL/DUP（WGS 无同向支持） | **保留**：长读在难比对区/精确断点的优势 |
+| **ONT_DEPTH** | 仅 ONT depth，≥100 kb，未 mask | **保留**：WGS 未见的大片段候选 |
+| **WGS_DEPTH** | 仅 WGS depth，≥100 kb，未 mask | 单平台探索 |
+| **MASKED** | 命中硬区，或 ONT/WGS 单平台超长且证据不足以报 | 审计用，不当阳性 |
 | **DROP** | 仅 WGS 小 SV；单边 depth &lt;100 kb；**性染色体（默认）**；非 primary contig | 不报 |
 
 硬区 BED：`ref/hard_mask.grch38.refseq.bed`（近端着丝粒短臂、着丝粒±2 Mb、1q12/9qh/16qh 等）。**缺 mask 时 merge 直接失败**（`--require-hard-mask`）。默认**丢弃性染色体**（chrX/Y）；需要时设 `KEEP_SEX_CHROM=1`。
 
-CNVpytor 进 merge 前默认质量过滤：`Q0≤0.5`、`pN≤0.5`、`e-val1≤1e-4`（可用 `CNVPYTOR_QC=0` 关闭）。100 kb + 500 kb 双分辨率都会进 merge；≥1 Mb 且含 depth 证据时要求有 500 kb 支持。
+CNVpytor 进 merge 前默认质量过滤：`Q0≤0.5`、`pN≤0.5`、`e-val1≤1e-4`（可用 `CNVPYTOR_QC=0` 关闭）。100 kb + 500 kb 双分辨率都会进 merge；≥1 Mb 进 LARGE_HIGH 时要求 **两侧** 500 kb 支持。
+
+**ONT 单独检出不会被扔掉**：进不了 LARGE_HIGH 时仍写入 `cnv.bed`，标为 `ONT_SV` / `ONT_DEPTH` / `MEDIUM`。主表只取双 depth 交叉验证；长读独有事件做补充负担或人工复核。
 
 **不要**再把旧版笼统的 `HIGH`（含上千条亚 kb SV∩SV）直接做富集。
 

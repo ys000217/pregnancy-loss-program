@@ -12,7 +12,8 @@
 
 ## 规则摘要（与 README 一致）
 
-- **LARGE_HIGH**：双平台同型、RO≥50%、≥100 kb、硬区 mask 外；≥1 Mb 有 500 kb 时需 500 kb 支持；**>10 Mb 双边 depth 即可，不强制 SV**。
+- **LARGE_HIGH**：必须 **ONT depth + WGS depth**、RO≥50%、≥100 kb、硬区 mask 外；≥1 Mb 有 500 kb 时须 **两侧都有 500 kb**；**>10 Mb 双边 depth，不强制 SV**。
+- 跨平台但未双 depth（如 ONT SV+WGS depth）→ **MEDIUM**；ONT 独有 → **ONT_SV / ONT_DEPTH**（保留，不丢）。
 - CNVpytor 进 merge 前默认 Q0/pN/e-val1 过滤；缺 hard mask → merge 失败。
 - 默认丢 X/Y（`KEEP_SEX_CHROM=1` 才保留）。
 - 队列负担用 `09_cluster_breakpoints`（跨样本断点聚类），不要按每人 BED 行计位点。
@@ -61,6 +62,6 @@ ONLY=0002C submit / run_sample.sh
 8. 先 `ONLY=0002C bash scripts/submit_per_sample.sh` 或 `run_sample.sh`，再全队列
 9. 全员 merge 后：`bash scripts/09_cluster_breakpoints.sh`
 
-## 已关闭的复查项（2026-09-01）
+## 已关闭的复查项（2026-09-01 / 最新版）
 
-Spectre 1 kb、500 kb 进 merge、CNVpytor QC、>10 Mb 不强制 SV、hard mask 必填、mask union、primary/性染色体、`fixmate -m`、`.done` 完成标志、BWA 索引不在单样本并发创建。AnnotSV 染色体命名按实测可用，不改。
+Spectre 1 kb、500 kb 进 merge、CNVpytor QC、>10 Mb 不强制 SV、hard mask 必填、mask union、primary/性染色体、`fixmate -m`、`.done`、BWA 预索引；**LARGE_HIGH 强制双边 depth、≥1 Mb 强制双边 500 kb**；AnnotSV `-svtBEDcol 4`。染色体 NC_*→1–22 映射按实测可用暂不改。

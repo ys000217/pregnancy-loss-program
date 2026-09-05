@@ -2,11 +2,15 @@
 """Merge ONT + WGS DEL/DUP callsets for one 10x paired sample.
 
 Confidence tiers (cohort-facing):
-  LARGE_HIGH  both platforms, same type, RO>=0.5, size>=100kb, outside hard mask,
-              on primary autosomes; >10 Mb needs both-platform depth only (no SV required)
+  LARGE_HIGH  both platforms have depth (ont_depth+wgs_depth), same type, RO>=0.5,
+              size>=100kb, outside hard mask, primary autosomes;
+              >=1 Mb also needs both-platform 500 kb depth when those callsets exist;
+              >10 Mb needs dual depth only (no SV required)
   SHARED_SV   both platforms have SV breakpoints, size < 100kb (small SV burden)
-  MEDIUM      cross-platform same-type overlap that is neither LARGE_HIGH nor SHARED_SV
+  MEDIUM      cross-platform same-type overlap that is not dual-depth LARGE_HIGH
+              (e.g. ONT SV + WGS depth, or >=1 Mb missing one side's 500 kb)
   ONT_SV / ONT_DEPTH / WGS_DEPTH / MASKED / DROP
+              ONT-only SV/depth are KEPT (not dropped) — long-read unique events
 
 Sex chromosomes (X/Y) are dropped by default (DROP_SEX_CHROM).
 Hard mask is required for LARGE_HIGH (--require-hard-mask).
@@ -79,10 +83,16 @@ class Cluster:
 
     @property
     def has_large_bin_depth(self) -> bool:
-        return any(
-            m.source in ("ont_depth", "wgs_depth") and m.bin_size >= 500_000
-            for m in self.members
-        )
+        """True if either platform has a 500 kb depth member (legacy helper)."""
+        return self.has_ont_large_depth or self.has_wgs_large_depth
+
+    @property
+    def has_ont_large_depth(self) -> bool:
+        return any(m.source == "ont_depth" and m.bin_size >= 500_000 for m in self.members)
+
+    @property
+    def has_wgs_large_depth(self) -> bool:
+        return any(m.source == "wgs_depth" and m.bin_size >= 500_000 for m in self.members)
 
 
 @dataclass(frozen=True)
@@ -330,6 +340,7 @@ def assign_confidence(
     ont = ont_sv or ont_depth
     wgs = wgs_sv or wgs_depth
     both_sv = ont_sv and wgs_sv
+    dual_depth = ont_depth and wgs_depth
     size = cl.size
     blocked = hard_blocked(cl, masks, mask_frac)
 
@@ -339,22 +350,26 @@ def assign_confidence(
         if size >= min_depth:
             if blocked:
                 return "MASKED"
+            # LARGE_HIGH requires both-platform depth (not SV+depth or SV+SV alone)
+            if not dual_depth:
+                return "MEDIUM"
             if not passes_size_cap(cl, max_event, ont_depth, wgs_depth):
-                return "MASKED"
-            # ≥1 Mb: when 500 kb callsets were provided, require large-bin depth support
-            if require_large_bin_for_mb and size >= LARGE_BIN_MIN and (ont_depth or wgs_depth):
-                if not cl.has_large_bin_depth:
-                    return "MASKED"
+                return "MEDIUM"
+            # ≥1 Mb: both ONT and WGS 500 kb depth when large callsets were provided
+            if require_large_bin_for_mb and size >= LARGE_BIN_MIN:
+                if not (cl.has_ont_large_depth and cl.has_wgs_large_depth):
+                    return "MEDIUM"
             return "LARGE_HIGH"
         return "MEDIUM"
 
-    if ont_sv and not wgs:
-        return "ONT_SV"
-
-    if ont_depth and not ont_sv and not wgs and size >= min_depth:
-        if blocked or not passes_size_cap(cl, max_event, True, False):
-            return "MASKED"
-        return "ONT_DEPTH"
+    # Platform-unique calls are retained (ONT advantage for loci WGS misses)
+    if not wgs:
+        if ont_depth and size >= min_depth:
+            if blocked or not passes_size_cap(cl, max_event, True, False):
+                return "MASKED"
+            return "ONT_DEPTH"
+        if ont_sv:
+            return "ONT_SV"
 
     if wgs_depth and not ont and size >= min_depth:
         if blocked or not passes_size_cap(cl, max_event, False, True):

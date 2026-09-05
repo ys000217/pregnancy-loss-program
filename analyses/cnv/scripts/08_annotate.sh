@@ -23,6 +23,7 @@ fi
 if command -v AnnotSV >/dev/null 2>&1; then
   AnnotSV \
     -SVinputFile "${outdir}/${SAMPLE}.high.bed" \
+    -svtBEDcol 4 \
     -genomeBuild "${ANNOTSV_GENOME}" \
     -annotationMode both \
     -outputDir "${outdir}" \
