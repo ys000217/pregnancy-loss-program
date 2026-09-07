@@ -116,13 +116,15 @@ bash scripts/prepare_ref_index.sh
 
 ```bash
 source config.sh
+mkdir -p "${WORKDIR}"
 python3 scripts/00_scan_fastq.py --ngs-root "${NGS_RAWDATA}" -o "${WORKDIR}/manifest.wgs.tsv"
 python3 scripts/00c_ont_wgs_coverage.py \
   --ont-root "${ONT_BAM_ROOT}" \
   --ont-extra "${ONT_RAW_MERGED_ROOT}" \
+  --ngs-root "${NGS_RAWDATA}" \
   --wgs-manifest "${WORKDIR}/manifest.wgs.tsv" \
-  -o "${MANIFEST}"   # 默认 WORKDIR/manifest.from_ont.tsv，含 ont_bam
-# 示例列见 examples/manifest.tsv
+  --outdir "${WORKDIR}"
+# 写出 ${WORKDIR}/manifest.from_ont.tsv（含 ont_bam）
 ```
 
 4. 单样本：
