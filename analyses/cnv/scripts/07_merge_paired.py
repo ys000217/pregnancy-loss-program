@@ -44,7 +44,8 @@ PRIMARY_AUTOSOMES = {
 SEX_CHROMS = {"NC_000023.11", "NC_000024.10"}
 
 # CNVpytor -call columns (0-based): type, region, size, level, e1, e2, e3, e4, q0, pN, dG
-DEFAULT_Q0_MAX = 0.5
+DEFAULT_Q0_MAX_ONT = 0.9
+DEFAULT_Q0_MAX_WGS = 0.8
 DEFAULT_PN_MAX = 0.5
 DEFAULT_EVAL_MAX = 1e-4
 
@@ -197,6 +198,9 @@ def parse_cnvpytor(
                 q0 = _f(parts, 8)
                 pn = _f(parts, 9)
                 e1 = _f(parts, 4)
+                # Q0 < 0 is CNVpytor's "no usable MQ stats" (often gap); treat as fail-safe drop
+                if q0 is not None and q0 < 0:
+                    continue
                 if q0 is not None and q0 > q0_max:
                     continue
                 if pn is not None and pn > pn_max:
@@ -204,8 +208,12 @@ def parse_cnvpytor(
                 if e1 is not None and e1 > eval_max:
                     continue
             level = parts[3] if len(parts) > 3 else ""
+            q0_s = parts[8] if len(parts) > 8 else ""
+            pn_s = parts[9] if len(parts) > 9 else ""
+            e1_s = parts[4] if len(parts) > 4 else ""
+            extra = f"level={level};q0={q0_s};pn={pn_s};e1={e1_s}"
             calls.append(
-                Call(chrom, start, end, svtype, source, extra=str(level), bin_size=bin_size)
+                Call(chrom, start, end, svtype, source, extra=extra, bin_size=bin_size)
             )
     return calls
 
@@ -406,7 +414,12 @@ def main() -> None:
                    help="Fail if hard-mask missing (needed for LARGE_HIGH)")
     p.add_argument("--keep-sex-chrom", action="store_true",
                    help="Keep chrX/Y; default drops sex chromosomes")
-    p.add_argument("--cnvpytor-q0-max", type=float, default=DEFAULT_Q0_MAX)
+    p.add_argument("--cnvpytor-q0-max-ont", type=float, default=DEFAULT_Q0_MAX_ONT,
+                   help="Max Q0 for ONT CNVpytor calls (long-read; looser than WGS)")
+    p.add_argument("--cnvpytor-q0-max-wgs", type=float, default=DEFAULT_Q0_MAX_WGS,
+                   help="Max Q0 for WGS CNVpytor calls")
+    p.add_argument("--cnvpytor-q0-max", type=float, default=None,
+                   help="If set, use this Q0 max for BOTH platforms (overrides ont/wgs defaults)")
     p.add_argument("--cnvpytor-pn-max", type=float, default=DEFAULT_PN_MAX)
     p.add_argument("--cnvpytor-eval-max", type=float, default=DEFAULT_EVAL_MAX)
     p.add_argument("--no-cnvpytor-qc", action="store_true", help="Disable Q0/pN/e-val filters")
@@ -420,8 +433,19 @@ def main() -> None:
 
     masks = load_mask_bed(args.hard_mask)
     apply_qc = not args.no_cnvpytor_qc
-    qc_kw = dict(
-        q0_max=args.cnvpytor_q0_max,
+    if args.cnvpytor_q0_max is not None:
+        q0_ont = q0_wgs = args.cnvpytor_q0_max
+    else:
+        q0_ont = args.cnvpytor_q0_max_ont
+        q0_wgs = args.cnvpytor_q0_max_wgs
+    qc_ont = dict(
+        q0_max=q0_ont,
+        pn_max=args.cnvpytor_pn_max,
+        eval_max=args.cnvpytor_eval_max,
+        apply_qc=apply_qc,
+    )
+    qc_wgs = dict(
+        q0_max=q0_wgs,
         pn_max=args.cnvpytor_pn_max,
         eval_max=args.cnvpytor_eval_max,
         apply_qc=apply_qc,
@@ -430,12 +454,12 @@ def main() -> None:
     calls: list[Call] = []
     calls += parse_sv_vcf(args.ont_sv, "ont_sv")
     calls += parse_sv_vcf(args.wgs_sv, "wgs_sv")
-    calls += parse_cnvpytor(args.ont_cnvpytor, "ont_depth", args.min_depth, 100_000, **qc_kw)
-    calls += parse_cnvpytor(args.wgs_cnvpytor, "wgs_depth", args.min_depth, 100_000, **qc_kw)
+    calls += parse_cnvpytor(args.ont_cnvpytor, "ont_depth", args.min_depth, 100_000, **qc_ont)
+    calls += parse_cnvpytor(args.wgs_cnvpytor, "wgs_depth", args.min_depth, 100_000, **qc_wgs)
     if args.ont_cnvpytor_large:
-        calls += parse_cnvpytor(args.ont_cnvpytor_large, "ont_depth", args.min_depth, 500_000, **qc_kw)
+        calls += parse_cnvpytor(args.ont_cnvpytor_large, "ont_depth", args.min_depth, 500_000, **qc_ont)
     if args.wgs_cnvpytor_large:
-        calls += parse_cnvpytor(args.wgs_cnvpytor_large, "wgs_depth", args.min_depth, 500_000, **qc_kw)
+        calls += parse_cnvpytor(args.wgs_cnvpytor_large, "wgs_depth", args.min_depth, 500_000, **qc_wgs)
     # Only enforce ≥1 Mb ↔ 500 kb concordance when both large TSVs actually exist
     require_large_bin = bool(
         args.ont_cnvpytor_large
@@ -518,7 +542,8 @@ def main() -> None:
     print(
         f"LARGE_HIGH={counts['LARGE_HIGH']} SHARED_SV={counts['SHARED_SV']} "
         f"MASKED={counts['MASKED']} dropped_non_autosome={dropped_chr} "
-        f"cnvpytor_qc={apply_qc} large_bin={require_large_bin}"
+        f"cnvpytor_qc={apply_qc} q0_ont={q0_ont} q0_wgs={q0_wgs} "
+        f"large_bin={require_large_bin}"
     )
 
 

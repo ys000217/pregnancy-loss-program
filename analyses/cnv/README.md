@@ -74,7 +74,7 @@ manifest.tsv  (ont_id, wgs_r1, wgs_r2, sex)
 
 硬区 BED：`ref/hard_mask.grch38.refseq.bed`（近端着丝粒短臂、着丝粒±2 Mb、1q12/9qh/16qh 等）。**缺 mask 时 merge 直接失败**（`--require-hard-mask`）。默认**丢弃性染色体**（chrX/Y）；需要时设 `KEEP_SEX_CHROM=1`。
 
-CNVpytor 进 merge 前默认质量过滤：`Q0≤0.5`、`pN≤0.5`、`e-val1≤1e-4`（可用 `CNVPYTOR_QC=0` 关闭）。100 kb + 500 kb 双分辨率都会进 merge；≥1 Mb 进 LARGE_HIGH 时要求 **两侧** 500 kb 支持。
+CNVpytor 进 merge 前默认质量过滤（**分平台 Q0**）：ONT `Q0≤0.9`、WGS `Q0≤0.8`，共用 `pN≤0.5`、`e-val1≤1e-4`（`CNVPYTOR_QC=0` 可关）。Merge 阈值偏松，便于 depth 进表；**更严的 Q0/pN 在下游统计时再筛**（原始 `ont_cnv/`、`wgs_cnv/` TSV 一直保留）。`Q0<0`（CNVpytor 无有效 MQ 统计，常伴 gap）在 merge 时直接丢弃。100 kb + 500 kb 双分辨率都会进 merge；≥1 Mb 进 LARGE_HIGH 时要求 **两侧** 500 kb 支持。
 
 **ONT 单独检出不会被扔掉**：进不了 LARGE_HIGH 时仍写入 `cnv.bed`，标为 `ONT_SV` / `ONT_DEPTH` / `MEDIUM`。主表只取双 depth 交叉验证；长读独有事件做补充负担或人工复核。
 

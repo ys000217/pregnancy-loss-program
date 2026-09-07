@@ -51,8 +51,13 @@ export CLUSTER_BP_PAD_LARGE="${CLUSTER_BP_PAD_LARGE:-500000}"
 export MAX_CNV_EVENT="${MAX_CNV_EVENT:-10000000}"
 export MERGE_MASK_FRAC="${MERGE_MASK_FRAC:-0.50}"
 # CNVpytor call QC (disable with CNVPYTOR_QC=0)
+# Q0 is per-BAM mapping-quality-zero fraction — use looser ONT than WGS at ~10x.
+# Merge thresholds are permissive gates; stricter cuts belong in downstream stats (raw TSVs kept).
 export CNVPYTOR_QC="${CNVPYTOR_QC:-1}"
-export CNVPYTOR_Q0_MAX="${CNVPYTOR_Q0_MAX:-0.5}"
+export CNVPYTOR_Q0_MAX_ONT="${CNVPYTOR_Q0_MAX_ONT:-0.9}"
+export CNVPYTOR_Q0_MAX_WGS="${CNVPYTOR_Q0_MAX_WGS:-0.8}"
+# Legacy single threshold (if set, overrides both platform defaults unless *_ONT/*_WGS set explicitly)
+export CNVPYTOR_Q0_MAX="${CNVPYTOR_Q0_MAX:-}"
 export CNVPYTOR_PN_MAX="${CNVPYTOR_PN_MAX:-0.5}"
 export CNVPYTOR_EVAL_MAX="${CNVPYTOR_EVAL_MAX:-1e-4}"
 # Spectre mosdepth window (bp). mosdepth itself has no default --by; Spectre needs ~1 kb.

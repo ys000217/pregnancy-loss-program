@@ -65,13 +65,18 @@ merge_args=(
   --min-depth "${MIN_DEPTH_CNV:-100000}"
   --max-event "${MAX_CNV_EVENT:-10000000}"
   --mask-frac "${MERGE_MASK_FRAC:-0.50}"
-  --cnvpytor-q0-max "${CNVPYTOR_Q0_MAX:-0.5}"
+  --cnvpytor-q0-max-ont "${CNVPYTOR_Q0_MAX_ONT:-0.9}"
+  --cnvpytor-q0-max-wgs "${CNVPYTOR_Q0_MAX_WGS:-0.8}"
   --cnvpytor-pn-max "${CNVPYTOR_PN_MAX:-0.5}"
   --cnvpytor-eval-max "${CNVPYTOR_EVAL_MAX:-1e-4}"
   --sex "${sex:-}"
   --require-hard-mask
   -o "${WORKDIR}/merged"
 )
+# Optional legacy override: one Q0 for both platforms (only if CNVPYTOR_Q0_MAX is set)
+if [[ -n "${CNVPYTOR_Q0_MAX:-}" ]]; then
+  merge_args+=(--cnvpytor-q0-max "${CNVPYTOR_Q0_MAX}")
+fi
 if [[ "${CNVPYTOR_QC:-1}" != "1" ]]; then
   merge_args+=(--no-cnvpytor-qc)
 fi
