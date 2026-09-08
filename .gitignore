@@ -125,3 +125,5 @@ analyses/cnv/赵姐的意见/
 # burden: per-sample SNV long tables (regenerate with epifactors_catalog.py --catalog)
 analyses/burden/tables/**/snv_variants.tsv
 analyses/burden/tables/**/snv_sites.tsv
+# burden: full loose dual-filter candidate matrix (~21MB; regenerate with run_loose_dual_filter.py)
+analyses/burden/tables/loose_dual_filter/loose_candidates.tsv

@@ -48,6 +48,16 @@ Environment variables:
 
 Full per-locus PASS table `sv_locus_enrichment_all_pass.tsv` (~14 MB) stays local under `figure2/burden_analysis/tables/` (not committed).
 
+## Loose SNV dual-filter rules (discovery)
+
+Rule module: `scripts/snv_loose_filter_rules.py` (print card: run the file).
+
+- **Function (hard)**: keep nonsynonymous + splicing; drop synonymous.
+- **ClinVar (loose)**: keep tiers 1–4 (P / LP / VUS / LB) and blank; drop Benign-only. Tier 5 Benign ≠ synonymous.
+- **Scores (soft)**: SIFT / PolyPhen / CADD / REVEL as ranking votes, not hard excludes.
+- **Two-layer rarity**: gnomAD AF missing or &lt;1%, **and** zero carriers in own controls.
+- Aggregate at gene/panel burden; do not claim single-site pathogenicity.
+
 ## Run
 
 ```bash
