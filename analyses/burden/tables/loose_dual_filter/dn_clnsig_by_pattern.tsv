@@ -1,0 +1,4 @@
+pattern	n_sites	n_clnsig_blank	frac_blank
+abnormal_only	6759	6213	0.9192188193519751
+normal_only	47279	43010	0.9097062120603228
+shared	4922	4270	0.8675335229581471

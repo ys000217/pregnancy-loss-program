@@ -257,8 +257,30 @@ def pop_af_ok_strict_absent(gnomad_af: float | None, allow_missing: bool = True)
 
 
 def control_absent_ok(control_carrier_n: int) -> bool:
-    """Layer 2: variant must not appear in any control carrier."""
+    """Layer 2 (original): variant must not appear in any control carrier."""
     return int(control_carrier_n) <= 0
+
+
+# Alternate Layer 2 — cohort frequency gate (parallel filter, does not replace control==0)
+CTRL_CARRIER_RATE_MAX = 0.05
+CASE_CARRIER_RATE_MIN = 0.05
+
+
+def cohort_freq_gate_ok(
+    n_control_carriers: int,
+    n_control: int,
+    n_case_carriers: int,
+    n_case: int,
+    *,
+    ctrl_rate_max: float = CTRL_CARRIER_RATE_MAX,
+    case_rate_min: float = CASE_CARRIER_RATE_MIN,
+) -> bool:
+    """Keep if control rate < 5% and combined-case (abnormal+normal) rate > 5%."""
+    if n_control <= 0 or n_case <= 0:
+        return False
+    return (n_control_carriers / n_control) < ctrl_rate_max and (
+        n_case_carriers / n_case
+    ) > case_rate_min
 
 
 # ---------------------------------------------------------------------------
@@ -385,9 +407,12 @@ C. Prediction scores (soft; do not hard-drop in loose mode)
 D. Two-layer rarity (loose discovery set)
   Layer 1 population (gnomAD_genome_AF_ALL):
     keep if AF is missing OR AF < 0.01
-  Layer 2 own control:
+  Layer 2 own control (original discovery set):
     keep if control carrier count == 0
   Primary set: A & B & Layer1 & Layer2
+
+  Alternate Layer 2 (parallel set; does not replace the original):
+    control carrier rate < 5%, and case (abnormal+normal combined) rate > 5%
 
 E. Analysis recommendation
   Candidate variants → gene/panel burden (case vs control), not single-site
@@ -430,4 +455,7 @@ if __name__ == "__main__":
         control_carrier_n=0,
     )
     assert not d3.keep
+    assert cohort_freq_gate_ok(0, 153, 25, 495)
+    assert not cohort_freq_gate_ok(8, 153, 25, 495)
+    assert not cohort_freq_gate_ok(0, 153, 24, 495)
     print("self-check OK")

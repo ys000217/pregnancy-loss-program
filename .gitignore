@@ -127,3 +127,15 @@ analyses/burden/tables/**/snv_variants.tsv
 analyses/burden/tables/**/snv_sites.tsv
 # burden: full loose dual-filter candidate matrix (~21MB; regenerate with run_loose_dual_filter.py)
 analyses/burden/tables/loose_dual_filter/loose_candidates.tsv
+analyses/burden/tables/loose_dual_filter/dn_carrier_long_ab_normal.tsv
+analyses/burden/tables/loose_dual_filter/dn_gene_sample_carriers.tsv
+analyses/burden/tables/loose_dual_filter/dn_site_patterns_ab_vs_normal.tsv
+analyses/burden/tables/loose_freq_gate/dn_carrier_long_ab_normal.tsv
+analyses/burden/tables/loose_freq_gate/dn_gene_sample_carriers.tsv
+# Nature/Palsson bulk downloads (keep derived comparison TSVs)
+analyses/burden/tables/external_arnadottir2025/*.zip
+analyses/burden/tables/external_arnadottir2025/PalssonEtAl_Nature_2024-v1.0.0/
+analyses/burden/tables/external_arnadottir2025/Arnadottir_et_al_2025_Nature-InitialRelease/
+analyses/burden/tables/external_arnadottir2025/41586_2025_9031_MOESM3_ESM.pdf
+analyses/burden/scripts/_tmp_*.py
+analyses/burden/scripts/tmp_*.py

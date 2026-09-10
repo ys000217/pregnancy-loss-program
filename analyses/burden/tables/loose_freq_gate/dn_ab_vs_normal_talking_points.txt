@@ -1,0 +1,14 @@
+DN-background SNV: abnormal vs normal (raw columns)
+============================================================
+DN background = loose dual filter (nonsyn/splice, drop Benign-only, gnomAD AF missing or <1%) plus cohort frequency gate: control carrier rate <5% and combined case (abnormal+normal) rate >5%. Not trio de novo.
+Phenotype: D:\ONT\analyses\burden\tables\suspect_abn\phenotype.tsv
+Groups: abnormal=77 (47 label + CpG suspects), normal=418, control=153
+Valid FDR: full-union BH for two-sided difference and for each pre-specified one-sided test (ab higher; normal higher). m_site=all union sites; m_gene=all hit genes. No direction-based subsetting of m.
+FDR m: sites=212, genes=209; site FDR<0.05 two/ab/norm=0/0/0; gene FDR<0.05 two/ab/norm=0/0/0
+Sites with ab/norm carriers: 212; genes: 209
+Site patterns: {'shared': 211, 'normal_only': 1}
+Gene patterns: {'normal_only': 1, 'shared': 208}
+Sample DN site load MW p=0.5455; abnormal median=12, normal median=12
+Main tests use: chrom/pos/ref/alt, gene, carrier counts, sample IDs.
+Not used in discovery tests: clinvar_tiers, stratum, score_votes, score_labels.
+clnsig / revel / cadd / sift used only in sensitivity or descriptive tables.

@@ -1,0 +1,9 @@
+DN-background SNV: abnormal vs normal
+============================================================
+问题：case 亚型 abnormal(77) vs normal(418)；control 只过滤不比较。
+候选：非同义/剪接、去纯 Benign、gnomAD 缺失或 AF<1%、control 携带=0。
+分析范围：ab 或 normal 至少一侧有携带（约 58960 位点）；基因层单独做。
+检验：全部候选位点/基因上做 BH × 三套（双侧差异；单侧 ab 更高；单侧 normal 更高）。
+不用观测方向缩小 FDR 背景；不用致病预测分/自编 tier 做发现门槛。
+
+正式结果：位点与基因在三套检验的 FDR<0.05 上均为 0。

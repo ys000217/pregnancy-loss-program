@@ -55,8 +55,34 @@ Rule module: `scripts/snv_loose_filter_rules.py` (print card: run the file).
 - **Function (hard)**: keep nonsynonymous + splicing; drop synonymous.
 - **ClinVar (loose)**: keep tiers 1–4 (P / LP / VUS / LB) and blank; drop Benign-only. Tier 5 Benign ≠ synonymous.
 - **Scores (soft)**: SIFT / PolyPhen / CADD / REVEL as ranking votes, not hard excludes.
-- **Two-layer rarity**: gnomAD AF missing or &lt;1%, **and** zero carriers in own controls.
+- **Two-layer rarity (original)**: gnomAD AF missing or &lt;1%, **and** zero carriers in own controls.
+- **Parallel Layer 2 (freq gate)**: same A/B/Layer1, then control carrier **rate &lt;5%** and combined case (abnormal+normal) **rate &gt;5%**. Outputs under `tables/loose_freq_gate/` and `plots/dn_ab_vs_normal_freq_gate/`; does not overwrite the original set.
 - Aggregate at gene/panel burden; do not claim single-site pathogenicity.
+
+## DN-background abnormal vs normal (raw columns)
+
+Two parallel universes; same phenotype (**77** / **418** / **153**) and the same full-union FDR.
+
+After dual-filter, compare **abnormal vs normal** as case subtypes.
+
+Phenotype: `tables/suspect_abn/phenotype.tsv` (**77** abnormal = 47 label + 30 CpG/NC-cluster suspects; 418 normal).
+
+FDR: **full-union BH** for three pre-specified tests (sites and genes separate):
+(1) two-sided difference; (2) one-sided abnormal higher; (3) one-sided normal higher.
+Direction is not used to shrink the FDR family.
+
+```bash
+Rscript analyses/burden/scripts/export_gene_cds_length.R
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/analyze_dn_ab_vs_normal.py
+Rscript analyses/burden/scripts/plot_dn_ab_vs_normal.R
+# parallel freq-gate (does not overwrite original tables)
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/run_loose_freq_gate.py
+analyses/burden/.venv/Scripts/python.exe analyses/burden/scripts/analyze_dn_ab_vs_normal.py --universe freq_gate --cand analyses/burden/tables/loose_freq_gate/loose_candidates.tsv --out analyses/burden/tables/loose_freq_gate
+Rscript analyses/burden/scripts/plot_dn_ab_vs_normal.R analyses/burden/tables/loose_freq_gate analyses/burden/plots/dn_ab_vs_normal_freq_gate "Freq-gate: ctrl<5%, case(ab+norm)>5%; abnormal=77 vs normal"
+```
+
+Outputs: `tables/loose_dual_filter/dn_*.tsv`, `plots/dn_ab_vs_normal/` (site-pattern Venn). Freq-gate: `tables/loose_freq_gate/`, `plots/dn_ab_vs_normal_freq_gate/`.
+Long carrier matrices are gitignored (regenerate with the Python script).
 
 ## Run
 

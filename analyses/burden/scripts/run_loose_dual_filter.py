@@ -179,9 +179,7 @@ def main() -> None:
     # Pass 3: apply control-absent + decide / stratum
     strata = Counter()
     cons_ct = Counter()
-    group_carrier_sites = Counter()  # sites with >=1 carrier in group
     kept_rows: list[dict] = []
-    case_only_genes: Counter = Counter()
     n_keep = 0
     n_drop_ctrl = 0
     n_no_carrier = 0
@@ -216,17 +214,6 @@ def main() -> None:
         st = stratum_label(d)
         strata[st] += 1
         cons_ct[meta["consequence"]] += 1
-        if ab_n:
-            group_carrier_sites["abnormal"] += 1
-        if norm_n:
-            group_carrier_sites["normal"] += 1
-        if ctrl_n:
-            group_carrier_sites["control"] += 1  # should be 0 for kept
-        if ab_n and ctrl_n == 0:
-            for g in str(meta["gene"]).replace(";", ",").split(","):
-                g = g.strip()
-                if g and g not in {".", "NA"}:
-                    case_only_genes[g] += 1
         sf = d.score
         kept_rows.append(
             {
@@ -261,13 +248,6 @@ def main() -> None:
         w.writeheader()
         w.writerows(kept_rows)
 
-    ab_present = [r for r in kept_rows if r["n_abnormal"] > 0]
-    out_ab = OUT_DIR / "loose_candidates_in_abnormal.tsv"
-    with open(out_ab, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(ab_present[0].keys()) if ab_present else ["chrom"], delimiter="\t")
-        w.writeheader()
-        w.writerows(ab_present)
-
     summary_path = OUT_DIR / "loose_filter_summary.tsv"
     with open(summary_path, "w", encoding="utf-8") as f:
         f.write("metric\tvalue\n")
@@ -282,7 +262,10 @@ def main() -> None:
         f.write(f"drop_present_in_control\t{n_drop_ctrl}\n")
         f.write(f"prefilter_no_cohort_carrier\t{n_no_carrier}\n")
         f.write(f"kept_loose_candidates\t{n_keep}\n")
-        f.write(f"kept_with_abnormal_carrier\t{len(ab_present)}\n")
+        f.write(
+            f"kept_with_ab_or_normal_carrier\t"
+            f"{sum(1 for r in kept_rows if int(r['n_abnormal']) + int(r['n_normal']) > 0)}\n"
+        )
         for k, v in cons_ct.most_common():
             f.write(f"consequence_{k}\t{v}\n")
         for k, v in strata.most_common():
@@ -290,13 +273,10 @@ def main() -> None:
 
     print("RESULT", flush=True)
     print(f"  kept_loose_candidates\t{n_keep}", flush=True)
-    print(f"  kept_with_abnormal_carrier\t{len(ab_present)}", flush=True)
     print(f"  drop_present_in_control (of prefilter)\t{n_drop_ctrl}", flush=True)
     print("CONSEQUENCE", dict(cons_ct), flush=True)
     print("STRATA_TOP", strata.most_common(12), flush=True)
-    print("TOP_GENES_with_abnormal_and_control_absent", case_only_genes.most_common(20), flush=True)
     print(f"WROTE {out_all}", flush=True)
-    print(f"WROTE {out_ab}", flush=True)
     print(f"WROTE {summary_path}", flush=True)
 
 

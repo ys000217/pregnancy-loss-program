@@ -1,0 +1,8 @@
+chrom	pos	ref	alt	gene	clnsig	gnomad_af	func_class	pattern	n_abnormal	n_normal
+chr1	84479372	G	A	RPF1	.	6.568e-06	missense	normal_only	0	1
+chr1	180945475	C	T	KIAA1614	.	1.971e-05	missense	normal_only	0	4
+chr12	54962477	C	T	TESPA1	.	5.911e-05	missense	normal_only	0	3
+chr15	52061359	A	C	MAPK6	.	4.598e-05	missense	normal_only	0	1
+chr15	66703944	T	C	SMAD6	.		missense	normal_only	0	1
+chr19	51416009	G	T	SIGLEC10	.	0.0027	missense	normal_only	0	4
+chr5	178713241	G	A	ZNF354A	.	0.0008	missense	normal_only	0	1

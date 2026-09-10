@@ -1,0 +1,8 @@
+subset	n_sites	abnormal_enriched	normal_enriched	shared	abnormal_only	normal_only	frac_clnsig_blank
+all_union	58960	0	0	4922	6759	47279	0.907276119402985
+af_missing_or_zero	21508	0	0	746	2849	17913	0.9743816254416962
+func_lof_or_splicing	3723	0	0	272	427	3024	0.9258662369057212
+func_missense	55237	0	0	4650	6332	44255	0.9060231366656408
+revel_ge_0.5	7357	0	0	543	868	5946	0.8451814598341716
+clnsig_blank	53493	0	0	4270	6213	43010	1.0
+clnsig_annotated	5467	0	0	652	546	4269	0.0

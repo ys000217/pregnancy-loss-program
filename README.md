@@ -28,7 +28,7 @@ pregnancy-loss-program/
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试（阴性） |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；流水线已写，队列结果待跑 |
 | **高变 CpG** | [`analyses/highvar_cpg/`](analyses/highvar_cpg/) | abnormal 枝 + 30 例 abnormal-like；步骤 3（8/9/10 周）待跑 |
-| **SNV/SV burden** | [`analyses/burden/`](analyses/burden/) | mut/Mb、P/LP 负担；PASS SV 位点富集；strict abnormal-specific = 0 |
+| **SNV/SV burden** | [`analyses/burden/`](analyses/burden/) | mut/Mb、P/LP、SV 位点富集；DN-like SNV（ab vs normal；对照=0 与频率门槛两套） |
 | **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS、Liu 2026 GWS 子集、胎盘 meQTL；外部 hit gsMap 探索 |
 | **PMD** | [`analyses/pmd/`](analyses/pmd/) | 部分甲基化结构域（PMD）计算、统计与队列整理 |
 

@@ -1,0 +1,2 @@
+query_gene	query_hgvs	query_chrom	query_pos	query_ref	query_alt	annovar_chrom	annovar_pos	annovar_ref	annovar_alt	pos_delta	GeneName	Gene	Func	ExonicFunc	CLNSIG	AAChange	FILTER
+DHCR7	NM_001360.2:c.964-1G>C	chr11	71435840	C	G	chr11	71435841	T	C	1	DHCR7	NM_001163817,NM_001360	splicing	.	.	.	PASS
