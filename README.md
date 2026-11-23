@@ -2,7 +2,7 @@
 
 妊娠丢失（pregnancy loss）研究项目的**主仓库**。
 
-本仓库按分析模块组织；各模块目录内自带说明与脚本。原始测序数据、参考基因组、AnnotSV 注释库等大文件**不纳入**本仓库（见 `.gitignore`）。
+本仓库按分析模块组织；各模块目录内自带说明与脚本。原始测序数据、参考基因组、AnnotSV 注释库等大文件**不纳入**本仓库（见 `.gitignore`）。ONT 上机原始数据的处理脚本（fast5 → pod5 → dorado modbam → merge）在 [`analyses/ont_raw_pipeline/`](analyses/ont_raw_pipeline/)，这是**原始数据 pipeline**，与下游甲基化 / SV / CNV 分析分开。
 
 ## 仓库结构
 
@@ -11,6 +11,7 @@ pregnancy-loss-program/
 ├── README.md                 # 本说明（总项目）
 ├── .gitignore
 └── analyses/
+    ├── ont_raw_pipeline/     # 原始数据 pipeline：fast5 → pod5 → dorado modbam → merge
     ├── sv/                   # 结构变异（SV）× 甲基化、致病元件富集
     ├── gwas/                 # RPL GWAS 再分析 × gsMap 定位
     ├── cnv/                  # 10x 配对 ONT + WGS germline CNV
@@ -24,6 +25,7 @@ pregnancy-loss-program/
 
 | 模块 | 路径 | 说明 |
 |------|------|------|
+| **ONT 原始数据** | [`analyses/ont_raw_pipeline/`](analyses/ont_raw_pipeline/) | **原始数据 pipeline**：fast5 → pod5 → dorado modbam → merge。不是下游甲基化 / SV / CNV |
 | **SV 分析** | [`analyses/sv/`](analyses/sv/) | SV–甲基化关联；致病断点×染色质富集；abnormal×DMR 阴性；结果在 `results/` |
 | **GWAS × gsMap** | [`analyses/gwas/`](analyses/gwas/) | 中国 RPL GWAS suggestive 再分析、λ_GC、gsMap 细胞定位尝试（阴性） |
 | **CNV（配对）** | [`analyses/cnv/`](analyses/cnv/) | ~10x ONT + Illumina WGS 配对 germline CNV；流水线已写，队列结果待跑 |
@@ -31,6 +33,17 @@ pregnancy-loss-program/
 | **SNV/SV burden** | [`analyses/burden/`](analyses/burden/) | mut/Mb、P/LP 负担；PASS SV 位点富集；strict abnormal-specific = 0 |
 | **外部数据** | [`analyses/external_data/`](analyses/external_data/) | 流产/RPL GWAS、Liu 2026 GWS 子集、胎盘 meQTL；外部 hit gsMap 探索 |
 | **PMD** | [`analyses/pmd/`](analyses/pmd/) | 部分甲基化结构域（PMD）计算、统计与队列整理 |
+
+## ONT 原始数据 pipeline
+
+这是 **原始数据（RawData）** 处理（fast5 → pod5 → dorado modbam → merge），不是下游甲基化 / SV / CNV。说明与注意事项见 [`analyses/ont_raw_pipeline/README.md`](analyses/ont_raw_pipeline/README.md)。
+
+```bash
+export SAMPLE=样本ID
+jsub < /data/home/4250160/convert_fast5_to_pod5_by_sample_ont_trio.sh
+jsub < /data/home/4250160/run_dorado_modbam_gpu_by_sample.sh
+jsub < /data/home/4250160/run_merge_modbam_by_sample.sh
+```
 
 ## SV 模块快速入口
 
